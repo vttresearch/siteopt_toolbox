@@ -7,6 +7,8 @@ using ArgParse
 # Try from command line with
 # julia --project=@. conv_hp_units.jl testinputs/hp-input.xlsx 
 
+include("common.jl")
+
 function parse_commandline()
     s = ArgParseSettings()
 
@@ -111,10 +113,12 @@ function add_hp_units(hp_file)
     c0 = transform(c0, [:block_identifier] => ByRow(x->"n_"*string(x)*"_elec") => :inputnode )
     c0 = transform(c0, [:block_identifier] => ByRow(x->"n_"*string(x)*"_dheat") => :outputnode )
 
+    c1 =  add_unit_param2(c0, [:unit_investment_cost])
+
     # units excel file
     XLSX.writetable(outfile1, 
                 "unit" => add_unit(c0), 
-                "unit_param" => add_unit_param(c0),
+                "unit_param" => c1,
                 "unit__to_node" => add_unit_to_node(c0),
                 "unit__node_param" => add_unit_node_param(c0),
                 "unit__node__node" => add_unit_node_node(c0),

@@ -7,6 +7,8 @@ using ArgParse
 # Try from command line with
 # julia --project=@. conv_pv_units.jl testinputs/pv-input.xlsx 
 
+include("common.jl")
+
 function parse_commandline()
     s = ArgParseSettings()
 
@@ -33,7 +35,7 @@ function add_unit(c0)
 end
 
 # the object parameters
-function add_unit_param(c0)
+function add_unit_param_old(c0)
 
     c01 = subset(c0, :unit_investment_cost => ByRow(!ismissing))
     c1 = select(c01, :unit)
@@ -46,10 +48,12 @@ function add_unit_param(c0)
     return c1
 end
 
+
+
 # the unit-node relationships
 function add_unit_to_node(c0)
 
-    c1 = c11 = select(c0, :unit)
+    c1 = select(c0, :unit)
     c1.node = c0.basenode
  
     insertcols!(c1, 1, :relationshipclass => "unit__to_node")
@@ -90,13 +94,15 @@ function add_pv_units(pv_file)
     #read basic info
     c0 = DataFrame(XLSX.readtable(pv_file, "Sheet1") )
 
-    c0 = transform(c0, [:block_identifier] => ByRow(x->"u_"*string(x)*"_PV") => :unit )
+    c0 = transform(c0, [:block_identifier, :type] => ByRow((x,y)->"u_"*string(x)*"_"*string(y)) => :unit )
     c0 = transform(c0, [:block_identifier] => ByRow(x->"n_"*string(x)*"_elec") => :basenode )
+
+    c1 = add_unit_param2(c0, [:unit_investment_cost])
 
     # units excel file
     XLSX.writetable(outfile1, 
                 "unit" => add_unit(c0), 
-                "unit_param" => add_unit_param(c0),
+                "unit_param" => c1,
                 "unit__to_node" => add_unit_to_node(c0),
                 "unit__node_param" => add_unit_node_param(c0),
                 "unit__node__node" => DataFrame(no_data = []),

@@ -28,6 +28,25 @@ function add_connection(c0)
     return c1
 end
 
+# object parameters
+function add_param_connection(c0, paramcols)
+    
+    c1 = select(c0, :connection, paramcols)            
+
+    # add candidate connections
+    insertcols!(c1, :candidate_connections => missings(Float64, nrow(c1)))
+    c1[(!ismissing).(c1.connection_investment_cost), :candidate_connections] .= 40
+    
+    c1 = stack(c1, Not(:connection))
+    c1 = subset(c1, :value => ByRow(!ismissing))
+
+    insertcols!(c1, 1, :Objectclass1 => "connection")
+    rename!(c1, :variable => :parameter_name)
+    insertcols!(c1, 4, :alternative_name => "Base")
+    
+    return c1
+end
+
 function add_to_from_node(c0)
     c1 = select(c0, :connection, :node1)
     insertcols!(c1, 1, :relationshipclass => "connection__from_node")
@@ -68,6 +87,7 @@ function add_conn_node_node(c0)
 
 end
 
+#=
 function add_param_from_node(c0, c1, valcol)
     c1 = subset(c1, :relationshipclass => ByRow(==("connection__from_node")))
     c1 = innerjoin(c1, c0, on = :connection)
@@ -78,6 +98,26 @@ function add_param_from_node(c0, c1, valcol)
     insertcols!(c1, 2, :Objectclass1 => "connection")
     insertcols!(c1, 3, :Objectclass2 => "node")
     
+end
+=#
+"""
+    c0: dataframe with connections and their parameters
+    c1: dataframe with connection__from_node relatioships (including node)
+    paramcols: column titles which are taken from c0
+"""
+function add_param_from_node(c0, c1, paramcols)
+    c0 = select(c0, :connection, paramcols)
+
+    c0 = stack(c0, Not(:connection))
+    c0 = subset(c0, :value => ByRow(!ismissing))
+    rename!(c0, :variable => :parameter_name)
+
+    c1 = subset(c1, :relationshipclass => ByRow(==("connection__from_node")))
+    c1 = innerjoin(c1, c0, on = :connection)
+
+    insertcols!(c1, :alternative_name => "Base")
+    c1 = select(c1, :relationshipclass, :Objectclass1, :Objectclass2, 
+                :connection, :node, :parameter_name, :alternative_name, :value)
 end
 
 function add_param_node_node(c0, parameter_name, parameter_value)
@@ -96,19 +136,25 @@ function add_connections(conn_file)
     # connection object name
     c0 = transform(c0, [:node1, :node2] => ByRow((x,y)->"c_"*x*"__"*y) => :connection )
 
-    # relationship parameters
-    c1 = add_to_from_node(c0)
-    c2 = add_conn_node_node(c0)
+    # object parameters
+    c1 = add_param_connection(c0, [:connection_investment_cost,
+                                :connection_investment_variable_type])
 
-    c3 = add_param_from_node(select(c0, :connection, :connection_flow_cost), c1, :connection_flow_cost)
-    c4 = add_param_node_node(c2, "fix_ratio_out_in_connection_flow", 1)
+    # relationships
+    c2 = add_to_from_node(c0)
+    c3 = add_conn_node_node(c0)
+
+    # relationship parameters
+    #c3 = add_param_from_node(select(c0, :connection, :connection_flow_cost), c1, :connection_flow_cost)
+    c4 = add_param_from_node(c0, c2, [:connection_flow_cost, :connection_capacity])
+    c5 = add_param_node_node(c3, "fix_ratio_out_in_connection_flow", 1)
 
     XLSX.writetable(outfile, "unit" => add_connection(c0),
-                            "unit_param" => DataFrame(no_data = []),
-                            "unit__to_node" => c1,
-                            "unit__node__node" => c2, 
-                            "unit__node_param" => c3, 
-                            "unit__node__node_parameter" => c4, overwrite = true )
+                            "unit_param" => c1,
+                            "unit__to_node" => c2,
+                            "unit__node__node" => c3, 
+                            "unit__node_param" => c4, 
+                            "unit__node__node_parameter" => c5, overwrite = true )
     
 end
 

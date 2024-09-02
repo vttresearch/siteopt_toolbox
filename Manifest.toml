@@ -121,9 +121,9 @@ version = "2.4.1"
 
 [[deps.Conda]]
 deps = ["Downloads", "JSON", "VersionParsing"]
-git-tree-sha1 = "51cab8e982c5b598eea9c8ceaced4b58d9dd37c9"
+git-tree-sha1 = "0e478ca71a128294c268e386369ea578abbe7fab"
 uuid = "8f4d0f93-b110-5947-807f-2305c1781a2d"
-version = "1.10.0"
+version = "1.10.1"
 
 [[deps.Crayons]]
 git-tree-sha1 = "249fe38abf76d48563e2f4556bebd215aa317e15"
@@ -256,15 +256,15 @@ uuid = "9fa8497b-333b-5362-9e8d-4d0656e87820"
 
 [[deps.HiGHS]]
 deps = ["HiGHS_jll", "MathOptInterface", "PrecompileTools", "SparseArrays"]
-git-tree-sha1 = "a216e32299172b83abfe699604584f413ffbb045"
+git-tree-sha1 = "1042e72e93e5916bbfe034576f2fc2fae73d5ec7"
 uuid = "87dc4568-4c63-4d18-b0c0-bb2238e4078b"
-version = "1.9.0"
+version = "1.9.1"
 
 [[deps.HiGHS_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl", "Zlib_jll"]
-git-tree-sha1 = "9a550d55c49334beb538c5ad9504f07fc29a13dc"
+git-tree-sha1 = "656db2048ed731484df16fc91e7232a190e330fb"
 uuid = "8fd58aa0-07eb-5a78-9b36-339c94fd15ea"
-version = "1.7.0+0"
+version = "1.7.1+0"
 
 [[deps.HypergeometricFunctions]]
 deps = ["DualNumbers", "LinearAlgebra", "OpenLibm_jll", "SpecialFunctions"]
@@ -274,15 +274,19 @@ version = "0.3.23"
 
 [[deps.Infiltrator]]
 deps = ["InteractiveUtils", "Markdown", "REPL", "UUIDs"]
-git-tree-sha1 = "663ecbf362df6a7775bbb56b4bddcea0b291cb01"
+git-tree-sha1 = "38298a8eabe09e49e6f60927c9e1ca3481688ba0"
 uuid = "5903a43b-9cc3-4c30-8d17-598619ec4e9b"
-version = "1.8.2"
+version = "1.8.3"
 
 [[deps.InlineStrings]]
 deps = ["Parsers"]
-git-tree-sha1 = "9cc2baf75c6d09f9da536ddf58eb2f29dedaf461"
+git-tree-sha1 = "86356004f30f8e737eff143d57d41bd580e437aa"
 uuid = "842dd82b-1e85-43dc-bf29-5d0ee9dffc48"
-version = "1.4.0"
+version = "1.4.1"
+weakdeps = ["ArrowTypes"]
+
+    [deps.InlineStrings.extensions]
+    ArrowTypesExt = "ArrowTypes"
 
 [[deps.InteractiveUtils]]
 deps = ["Markdown"]
@@ -317,9 +321,9 @@ version = "0.21.4"
 
 [[deps.JuMP]]
 deps = ["LinearAlgebra", "MacroTools", "MathOptInterface", "MutableArithmetics", "OrderedCollections", "PrecompileTools", "Printf", "SparseArrays"]
-git-tree-sha1 = "28f9313ba6603e0d2850fc3eae617e769c99bf83"
+git-tree-sha1 = "7e10a0d8b534f2d8e9f712b33488584254624fb1"
 uuid = "4076af6c-e467-56ae-b986-b466b2749572"
-version = "1.22.1"
+version = "1.22.2"
 
     [deps.JuMP.extensions]
     JuMPDimensionalDataExt = "DimensionalData"
@@ -442,9 +446,9 @@ version = "2023.1.10"
 
 [[deps.MutableArithmetics]]
 deps = ["LinearAlgebra", "SparseArrays", "Test"]
-git-tree-sha1 = "a3589efe0005fc4718775d8641b2de9060d23f73"
+git-tree-sha1 = "898c56fbf8bf71afb0c02146ef26f3a454e88873"
 uuid = "d8a4904e-b15c-11e9-3269-09a3773c0cb0"
-version = "1.4.4"
+version = "1.4.5"
 
 [[deps.NaNMath]]
 deps = ["OpenLibm_jll"]
@@ -626,15 +630,15 @@ uuid = "0cda1612-498a-11e9-3c92-77fa82595a4f"
 version = "0.14.3"
 
 [[deps.SpineOpt]]
-deps = ["Arrow", "DataStructures", "Dates", "Distributions", "HiGHS", "JSON", "JuMP", "LibGit2", "LinearAlgebra", "Printf", "Requires", "SpineInterface", "TOML"]
+deps = ["Arrow", "DataStructures", "Dates", "Distributions", "HiGHS", "JSON", "JuMP", "LibGit2", "LinearAlgebra", "Printf", "Random", "Requires", "SpineInterface", "TOML"]
 path = "/home/jube/data/spine/versions/v08/SpineOpt.jl"
 uuid = "0d8fc150-4032-4b6e-9540-20efcb304861"
 version = "0.8.2"
 
 [[deps.StaticArraysCore]]
-git-tree-sha1 = "36b3d696ce6366023a0ea192b4cd442268995a0d"
+git-tree-sha1 = "192954ef1208c7019899fbf8049e717f92959682"
 uuid = "1e83bf80-4336-4d27-bf5d-d5a4f845583c"
-version = "1.4.2"
+version = "1.4.3"
 
 [[deps.Statistics]]
 deps = ["LinearAlgebra", "SparseArrays"]
@@ -732,9 +736,9 @@ version = "1.17.0"
     RecipesBase = "3cdcf5f2-1ef4-517c-9805-6587b60abb01"
 
 [[deps.TranscodingStreams]]
-git-tree-sha1 = "a947ea21087caba0a798c5e494d0bb78e3a1a3a0"
+git-tree-sha1 = "d73336d81cafdc277ff45558bb7eaa2b04a8e472"
 uuid = "3bb67fe8-82b1-5028-8e26-92a6c54297fa"
-version = "0.10.9"
+version = "0.10.10"
 weakdeps = ["Random", "Test"]
 
     [deps.TranscodingStreams.extensions]

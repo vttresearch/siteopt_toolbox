@@ -1,6 +1,8 @@
 using DataFrames, CSV, XLSX
 using ArgParse
 
+include("common.jl")
+
 function parse_commandline()
     s = ArgParseSettings()
 
@@ -107,7 +109,7 @@ function add_unit_node_node_param(c0)
     c1 = add_unit_node_node(c0)
     insertcols!(c1, 8, :parameter_name => "fix_ratio_out_in_unit_flow")
     insertcols!(c1, 9, :alternative_name => "Base")
-    insertcols!(c1, 10, :parameter_value => 1.0)
+    insertcols!(c1, 10, :parameter_value => 0.95)
 
     return c1
 end
@@ -124,13 +126,35 @@ function add_storage_node_param(c0)
     insertcols!(c1, 5, :parameter_value => "true")
     c11 = c1
 
-    c1 = select(c0, :stornode => :object)
-    insertcols!(c1, 1, :objectclass => "node")
-    insertcols!(c1, 3, :parameter_name => "node_state_cap")
-    insertcols!(c1, 4, :alternative_name => "Base")
-    insertcols!(c1, 5, :parameter_value => 10)
+    # node state cap
+    c1 = select(c0, :stornode => :object, :node_state_cap => :parameter_value)
+    insertcols!(c1, :objectclass => "node")
+    insertcols!(c1, :parameter_name => "node_state_cap")
+    insertcols!(c1, :alternative_name => "Base")
+    select!(c1, :objectclass, :object, :parameter_name, :alternative_name, :parameter_value)
 
     vcat(c11,c1)
+
+end
+
+function add_storage_node_param2(c0, paramcols)
+
+    c1 = select(c0, :stornode, paramcols)
+
+     # add candidate storages
+     insertcols!(c1, :candidate_storages => missings(Float64, nrow(c1)))
+     c1[(!ismissing).(c1.storage_investment_cost), :candidate_storages] .= 40
+     
+     insertcols!(c1, :has_state => "true")
+
+     c1 = stack(c1, Not(:stornode))
+     c1 = subset(c1, :value => ByRow(!ismissing))
+
+    insertcols!(c1, :objectclass => "node")
+    rename!(c1, :variable => :parameter_name)
+    insertcols!(c1, :alternative_name => "Base")
+
+    c1 = select(c1, :objectclass, :stornode, :parameter_name, :alternative_name, :value)
 
 end
 
@@ -147,15 +171,17 @@ function add_storages(stor_file)
     
     #read basic info
     c0 = DataFrame(XLSX.readtable(stor_file, "Sheet1") )
-
+   
     c0 = transform(c0, [:block_identifier] => ByRow(x->"u_"*string(x)*"_stor") => :unit )
     c0 = transform(c0, [:block_identifier] => ByRow(x->"n_"*string(x)*"_elecstor") => :stornode )
     c0 = transform(c0, [:block_identifier] => ByRow(x->"n_"*string(x)*"_elec") => :basenode )
 
+    c1 =  add_unit_param2(c0, [:unit_investment_cost])
+
     # units excel file
     XLSX.writetable(outfile1, 
                 "unit" => add_unit(c0), 
-                "unit_param" => DataFrame(no_data = []),
+                "unit_param" => c1,
                 "unit__to_node" => add_unit_to_node(c0),
                 "unit__node_param" => add_unit_node_param(c0),
                 "unit__node__node" => add_unit_node_node(c0), 
@@ -163,10 +189,14 @@ function add_storages(stor_file)
                 overwrite = true
     )
 
-    # nodes excel file
+    c1 = add_storage_node_param2(c0, [:node_state_cap, 
+                                    :storage_investment_cost,
+                                    :storage_investment_variable_type]) 
+
+    # Storage nodes excel file
     XLSX.writetable(outfile2, 
         "object" => add_stornode(c0), 
-        "object_parameter" => add_storage_node_param(c0),
+        "object_parameter" => c1,
         overwrite = true
     )
 
