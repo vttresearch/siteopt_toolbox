@@ -31,18 +31,18 @@ end
 # object parameters
 function add_param_connection(c0, paramcols)
     
-    c1 = select(c0, :connection, paramcols)            
+    c1 = select(c0, :connection, :alternative_name, paramcols)            
 
-    # add candidate connections
+    # add parameter "candidate_connections"
     insertcols!(c1, :candidate_connections => missings(Float64, nrow(c1)))
     c1[(!ismissing).(c1.connection_investment_cost), :candidate_connections] .= 40
     
-    c1 = stack(c1, Not(:connection))
+    c1 = stack(c1, Not([:connection, :alternative_name]))
     c1 = subset(c1, :value => ByRow(!ismissing))
 
     insertcols!(c1, 1, :Objectclass1 => "connection")
     rename!(c1, :variable => :parameter_name)
-    insertcols!(c1, 4, :alternative_name => "Base")
+    c1 = select(c1, :Objectclass1, :connection, :parameter_name, :alternative_name, :value)
     
     return c1
 end
@@ -106,16 +106,16 @@ end
     paramcols: column titles which are taken from c0
 """
 function add_param_from_node(c0, c1, paramcols)
-    c0 = select(c0, :connection, paramcols)
+    c0 = select(c0, :connection, :alternative_name, paramcols)
 
-    c0 = stack(c0, Not(:connection))
+    c0 = stack(c0, Not([:connection, :alternative_name]))
     c0 = subset(c0, :value => ByRow(!ismissing))
     rename!(c0, :variable => :parameter_name)
 
     c1 = subset(c1, :relationshipclass => ByRow(==("connection__from_node")))
     c1 = innerjoin(c1, c0, on = :connection)
 
-    insertcols!(c1, :alternative_name => "Base")
+    #insertcols!(c1, :alternative_name => "Base")
     c1 = select(c1, :relationshipclass, :Objectclass1, :Objectclass2, 
                 :connection, :node, :parameter_name, :alternative_name, :value)
 end
@@ -126,6 +126,21 @@ function add_param_node_node(c0, parameter_name, parameter_value)
     c1 = insertcols(c1, :parameter_value => parameter_value)
 end
 
+function add_param_node_node2(c0, c1, paramcols)
+    c0 = select(c0, :connection, :alternative_name, paramcols)
+
+    c0 = stack(c0, Not([:connection, :alternative_name]))
+    c0 = subset(c0, :value => ByRow(!ismissing))
+    rename!(c0, :variable => :parameter_name)
+
+    c1 = innerjoin(c1, c0, on = :connection)
+
+    c1 = select(c1, :relationshipclass, :Objectclass1, :Objectclass2, :Objectclass3, 
+                :connection, :node1, :node2, :parameter_name, :alternative_name, :value)
+end
+
+
+
 function add_connections(conn_file)
 
     #output file
@@ -135,6 +150,16 @@ function add_connections(conn_file)
     c0 = DataFrame(XLSX.readtable(conn_file, "Sheet1") )
     # connection object name
     c0 = transform(c0, [:node1, :node2] => ByRow((x,y)->"c_"*x*"__"*y) => :connection )
+
+    # add alternative name if not present
+    if !hasproperty(c0, :alternative_name)
+        insertcols!(c0, :alternative_name => "Base")
+    end
+
+    # add alternative name if not present
+    if !hasproperty(c0, :fix_ratio_out_in_connection_flow)
+        insertcols!(c0, :fix_ratio_out_in_connection_flow => 1.0)
+    end
 
     # object parameters
     c1 = add_param_connection(c0, [:connection_investment_cost,
@@ -147,7 +172,8 @@ function add_connections(conn_file)
     # relationship parameters
     #c3 = add_param_from_node(select(c0, :connection, :connection_flow_cost), c1, :connection_flow_cost)
     c4 = add_param_from_node(c0, c2, [:connection_flow_cost, :connection_capacity])
-    c5 = add_param_node_node(c3, "fix_ratio_out_in_connection_flow", 1)
+    #c5 = add_param_node_node(c3, "fix_ratio_out_in_connection_flow", 1)
+    c5 = add_param_node_node2(c0, c3, [:fix_ratio_out_in_connection_flow] )
 
     XLSX.writetable(outfile, "unit" => add_connection(c0),
                             "unit_param" => c1,

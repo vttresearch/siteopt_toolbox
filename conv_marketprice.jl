@@ -8,10 +8,6 @@ function parse_commandline()
         "arg1"
             help = "a positional argument: connections input table"
             required = true
-        "arg2"
-            help = "a positional argument: price time series file"
-            required = true
-      
     end
 
     return parse_args(s)
@@ -20,7 +16,7 @@ end
 function main()
     parsed_args = parse_commandline()
 
-    add_connection_flow_cost(parsed_args["arg1"], parsed_args["arg2"])
+    add_connection_flow_cost(parsed_args["arg1"])
 end
 
 """
@@ -53,7 +49,7 @@ function readprices(folder, types)
 end
 
 
-function add_connection_flow_cost(conn_file, price_file)
+function add_connection_flow_cost(conn_file)
 
     #output file
     outfile = "connection_flow_cost_toolbox.xlsx"

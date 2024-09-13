@@ -66,14 +66,20 @@ end
 function add_unit_node_param(c0)
 
     c01 = subset(c0, :capacity => ByRow(!ismissing))
+    # add alternative name if not present
+    if !hasproperty(c01, :alternative_name)
+        insertcols!(c01, :alternative_name => "Base")
+    end
+
     c1 = select(c01, :unit)
     c1.node = c01.basenode
-    
+
+    # unit capacity
     insertcols!(c1, 1, :relationshipclass => "unit__to_node")
     insertcols!(c1, 2, :Objectclass1 => "unit")
     insertcols!(c1, 3, :Objectclass2 => "node")
     insertcols!(c1, 6, :parameter_name => "unit_capacity")
-    insertcols!(c1, 7, :alternative_name => "Base")
+    insertcols!(c1, 7, :alternative_name => c01[:, :alternative_name])
     insertcols!(c1, 8, :parameter_value => c01[:, :capacity])
 
     return c1
@@ -97,7 +103,7 @@ function add_pv_units(pv_file)
     c0 = transform(c0, [:block_identifier, :type] => ByRow((x,y)->"u_"*string(x)*"_"*string(y)) => :unit )
     c0 = transform(c0, [:block_identifier] => ByRow(x->"n_"*string(x)*"_elec") => :basenode )
 
-    c1 = add_unit_param2(c0, [:unit_investment_cost])
+    c1 = add_unit_param2(c0, [:unit_investment_cost, :candidate_units])
 
     # units excel file
     XLSX.writetable(outfile1, 
