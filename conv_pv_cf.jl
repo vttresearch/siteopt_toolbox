@@ -33,26 +33,7 @@ function main()
     add_pv_availability(parsed_args["arg1"])
 end
 
-function readcf(folder, types)
 
-    cf0 = nothing
-
-    for type in types
-        cf_file = joinpath(folder, "ts_" * type * ".csv")
-        if !isfile(cf_file)
-            println("The file $cf_file does not exist.")
-        end
-        cf = DataFrame(CSV.File(cf_file, dateformat="yyyy-mm-ddTHH:MM", missingstring = "NA") )
-        insertcols!(cf, :type => type)
-        if isnothing(cf0)
-            cf0 = copy(cf)
-        else
-            cf0 = vcat(cf0,cf)
-        end
-    end
-
-    return cf0
-end
 
 function add_pv_availability(pv_file)
 

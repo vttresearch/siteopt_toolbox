@@ -159,12 +159,13 @@ function add_storage_node_param2(c0, paramcols; directory="")
     insertcols!(c1, :objectclass => "node")
     rename!(c1, :variable => :parameter_name)
 
-    # use only numeric values
-    c1_num = subset(c1, :value => ByRow(x->x isa Number))
+    # use only numeric or string values
+    #c1_num = subset(c1, :value => ByRow(x->x isa Number))
+    c1_num = subset(c1, :value => ByRow(x -> !(isa(x, String) && startswith(x, "ts:")) ))
 
     c1_num = select(c1_num, :objectclass, :stornode, :parameter_name, :alternative_name, :value)
 
-    # use only text values which start with ts:
+    # use only text values which start with ts: indicating a timeseries
     c1_str = subset(c1, :value => ByRow(x -> isa(x, String) && startswith(x, "ts:")))
 
     c1_str = add_storage_node_param_timeser(c1_str, directory)
@@ -188,6 +189,7 @@ function add_storage_node_param_timeser(c1_str, directory)
     # assign the time series for parameters
     c1_str = innerjoin(c1_str, timeser, on = :type)
 
+    # create the final object parameter timeseries table
     c1_str = select(c1_str, :objectclass, :stornode, :parameter_name, :alternative_name, :time, :value)
 
 end
@@ -242,7 +244,8 @@ function add_storages(stor_file)
         overwrite = true
     )
 
-    # Storage nodes object parameter timeseries file
+    # Storage nodes object parameter timeseries file in the format which can 
+    # be read by toolbox importer
     CSV.write(outfile3, objpar_ts, dateformat="yyyy-mm-ddTHH:MM")
 end
 
