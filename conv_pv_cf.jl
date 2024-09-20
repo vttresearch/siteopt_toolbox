@@ -1,6 +1,8 @@
 using DataFrames, CSV, XLSX
 using ArgParse
 
+include("common.jl")
+
 function parse_commandline()
     s = ArgParseSettings()
 
