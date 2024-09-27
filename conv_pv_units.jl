@@ -14,7 +14,10 @@ function parse_commandline()
 
     @add_arg_table! s begin
         "arg1"
-            help = "a positional argument: pv units input table"
+            help = "a positional argument: pv units input table filename"
+            required = true
+        "arg2"
+            help = "a positional argument: model spec input table filename"
             required = true
     end
 
@@ -23,7 +26,8 @@ end
 
 function main()
     parsed_args = parse_commandline()
-    add_pv_units(parsed_args["arg1"])
+    model_length = calc_model_len(parsed_args["arg2"])
+    add_pv_units(parsed_args["arg1"], model_length)
 end
 
 # just the unit
@@ -92,7 +96,7 @@ Overall function for adding pv units
 
     Output: excel tables of pv units
 """
-function add_pv_units(pv_file)
+function add_pv_units(pv_file::String, model_length::Period)
 
     #output file names
     outfile1 = "pv_units.xlsx"
@@ -100,9 +104,13 @@ function add_pv_units(pv_file)
     #read basic info
     c0 = DataFrame(XLSX.readtable(pv_file, "Sheet1") )
 
+    # unit and node names
     c0 = transform(c0, [:block_identifier, :type] => ByRow((x,y)->"u_"*string(x)*"_"*string(y)) => :unit )
     c0 = transform(c0, [:block_identifier] => ByRow(x->"n_"*string(x)*"_elec") => :basenode )
 
+    # adjust investment costs 
+    c0.unit_investment_cost .=  c0.unit_investment_cost * (model_length / Hour(8760) )
+     
     c1 = add_unit_param2(c0, [:unit_investment_cost, :candidate_units])
 
     # units excel file

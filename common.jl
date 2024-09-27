@@ -1,3 +1,6 @@
+using XLSX
+using Dates
+
 # creates the "unit_param" sheet for the unit input excel file for importer
 # used for hp, pv and storage units
 function add_unit_param2(c0, paramcols)
@@ -53,4 +56,24 @@ function readcf(folder, types)
     else
         return cf0
     end
+end
+
+function calc_model_len(modelspecfile)
+    #read model info
+    df = DataFrame(XLSX.readtable(modelspecfile, "params_1d_datetimes") )
+    df.parameter_value = DateTime.(df.parameter_value, DateFormat("yyyy-mm-ddTHH:MM:SS")) 
+    wide_df = unstack(df, [:objectclass, :object, :alternative_name], :parameter_name, :parameter_value)
+    	
+    wide_df = subset(wide_df, :alternative_name => ByRow(==("Base")),
+                                :model_start => ByRow(!ismissing), 
+                                :model_end => ByRow(!ismissing))
+    if isempty(wide_df)
+        throw(ArgumentError("Base alternative for model start/end not found."))
+    end
+        
+    wide_df = transform(wide_df, [:model_start, :model_end] => 
+        ByRow((x,y) -> convert(Hour, y - x) )
+        => :model_length)
+
+    return 	wide_df[1, :model_length]
 end

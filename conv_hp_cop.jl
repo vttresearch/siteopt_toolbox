@@ -44,9 +44,11 @@ function add_hp_cop_timeseries(hp_file, cop_file)
     c0 = subset(c0, :cop_profile => ByRow(!ismissing))
 
     # prepare unit and node names
-    c0 = transform(c0, [:block_identifier] => ByRow(x->"u_"*string(x)*"_hp") => :unit )
+    c0 = transform(c0, [:type, :block_identifier] => 
+        ByRow((a,b)->ifelse(a=="cool","u_"*string(b)*"_chiller","u_"*string(b)*"_hp")) => :unit )
     c0 = transform(c0, [:block_identifier] => ByRow(x->"n_"*string(x)*"_elec") => :inputnode )
-    c0 = transform(c0, [:block_identifier] => ByRow(x->"n_"*string(x)*"_dheat") => :outputnode )
+    c0 = transform(c0, [:type, :block_identifier] => 
+        ByRow((a,b)->ifelse(a=="cool", "n_"*string(b)*"_cool", "n_"*string(b)*"_dheat")) => :outputnode )
 
     c1 = select(c0, :unit => :Object1, 
                     :outputnode => :Object2, 
@@ -71,7 +73,7 @@ function add_hp_cop_timeseries(hp_file, cop_file)
     select!(c1, Not(:cop_profile))
 
     CSV.write("hp_cop.csv", c1, dateformat="yyyy-mm-ddTHH:MM")
-
+    println(first(c1, 8))
 end
 
 

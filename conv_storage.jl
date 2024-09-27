@@ -10,6 +10,9 @@ function parse_commandline()
         "arg1"
             help = "a positional argument: storages input table"
             required = true
+        "arg2"
+            help = "a positional argument: model spec input table filename"
+            required = true
     end
 
     return parse_args(s)
@@ -17,7 +20,8 @@ end
 
 function main()
     parsed_args = parse_commandline()
-    add_storages(parsed_args["arg1"])
+    model_length = calc_model_len(parsed_args["arg2"])
+    add_storages(parsed_args["arg1"], model_length)
 end
 
 # just the yunit
@@ -199,7 +203,7 @@ Overall function for adding electrical storages
 
     Output: excel tables of electrical storage units and electrical storage nodes
 """
-function add_storages(stor_file)
+function add_storages(stor_file, model_length::Period)
 
     #output file names
     outfile1 = "storage_units.xlsx"
@@ -217,6 +221,10 @@ function add_storages(stor_file)
     if !hasproperty(c0, :alternative_name)
         insertcols!(c0, :alternative_name => "Base")
     end
+
+    # adjust investment costs 
+    c0.unit_investment_cost =  c0.unit_investment_cost * (model_length / Hour(8760) )
+    c0.storage_investment_cost = c0.storage_investment_cost * (model_length / Hour(8760) )
 
     c1 =  add_unit_param2(c0, [:unit_investment_cost, :candidate_units])
 

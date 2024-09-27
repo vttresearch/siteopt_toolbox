@@ -2,7 +2,7 @@
 
 julia_version = "1.10.3"
 manifest_format = "2.0"
-project_hash = "81a8b4ea15363636056db38ab63c732f92ac0145"
+project_hash = "9030b44e54910b61b2440dbd21d86295f024b062"
 
 [[deps.AliasTables]]
 deps = ["PtrArrays", "Random"]
@@ -627,13 +627,13 @@ version = "2.4.0"
 deps = ["DataStructures", "Dates", "JSON", "LinearAlgebra", "PyCall", "Requires", "Sockets", "Statistics", "Test", "URIs"]
 path = "/home/jube/data/spine/versions/v08/SpineInterface.jl"
 uuid = "0cda1612-498a-11e9-3c92-77fa82595a4f"
-version = "0.14.3"
+version = "0.14.8"
 
 [[deps.SpineOpt]]
 deps = ["Arrow", "DataStructures", "Dates", "Distributions", "HiGHS", "JSON", "JuMP", "LibGit2", "LinearAlgebra", "Printf", "Random", "Requires", "SpineInterface", "TOML"]
 path = "/home/jube/data/spine/versions/v08/SpineOpt.jl"
 uuid = "0d8fc150-4032-4b6e-9540-20efcb304861"
-version = "0.8.2"
+version = "0.8.3"
 
 [[deps.StaticArraysCore]]
 git-tree-sha1 = "192954ef1208c7019899fbf8049e717f92959682"

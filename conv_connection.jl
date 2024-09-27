@@ -1,6 +1,8 @@
 using DataFrames, CSV, XLSX
 using ArgParse
 
+include("common.jl")
+
 function parse_commandline()
     s = ArgParseSettings()
 
@@ -8,7 +10,9 @@ function parse_commandline()
         "arg1"
             help = "a positional argument: connections input table"
             required = true
-      
+        "arg2"
+            help = "a positional argument: model spec input table filename"
+            required = true
     end
 
     return parse_args(s)
@@ -16,8 +20,8 @@ end
 
 function main()
     parsed_args = parse_commandline()
-
-    add_connections(parsed_args["arg1"])
+    model_length = calc_model_len(parsed_args["arg2"])
+    add_connections(parsed_args["arg1"], model_length)
 end
 
 
@@ -141,7 +145,7 @@ end
 
 
 
-function add_connections(conn_file)
+function add_connections(conn_file, model_length::Period)
 
     #output file
     outfile = "connections.xlsx"
@@ -161,6 +165,9 @@ function add_connections(conn_file)
         insertcols!(c0, :fix_ratio_out_in_connection_flow => 1.0)
     end
 
+    # adjust investment costs 
+    c0.connection_investment_cost =  c0.connection_investment_cost * (model_length / Hour(8760) )
+     
     # object parameters
     c1 = add_param_connection(c0, [:connection_investment_cost,
                                 :connection_investment_variable_type])

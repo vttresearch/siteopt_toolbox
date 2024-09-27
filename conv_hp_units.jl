@@ -16,6 +16,9 @@ function parse_commandline()
         "arg1"
             help = "a positional argument: hp units input table"
             required = true
+        "arg2"
+            help = "a positional argument: model spec input table filename"
+            required = true
     end
 
     return parse_args(s)
@@ -23,7 +26,8 @@ end
 
 function main()
     parsed_args = parse_commandline()
-    add_hp_units(parsed_args["arg1"])
+    model_length = calc_model_len(parsed_args["arg2"])
+    add_hp_units(parsed_args["arg1"], model_length)
 end
 
 function add_unit(c0)
@@ -105,7 +109,7 @@ Overall function for adding hp units
 
     Output: excel tables of hp units
 """
-function add_hp_units(hp_file)
+function add_hp_units(hp_file, model_length::Period)
 
     #output file names
     outfile1 = "hp_units.xlsx"
@@ -113,10 +117,21 @@ function add_hp_units(hp_file)
     #read basic info
     c0 = DataFrame(XLSX.readtable(hp_file, "Sheet1") )
 
-    c0 = transform(c0, [:block_identifier] => ByRow(x->"u_"*string(x)*"_hp") => :unit )
-    c0 = transform(c0, [:block_identifier] => ByRow(x->"n_"*string(x)*"_elec") => :inputnode )
-    c0 = transform(c0, [:block_identifier] => ByRow(x->"n_"*string(x)*"_dheat") => :outputnode )
+    # create unit and node names
+    #c0 = transform(c0, [:block_identifier] => ByRow(x->"u_"*string(x)*"_hp") => :unit )
+    c0 = transform(c0, [:type, :block_identifier] => 
+        ByRow((a,b)->ifelse(a=="cool","u_"*string(b)*"_chiller","u_"*string(b)*"_hp")) => :unit )
 
+    c0 = transform(c0, [:block_identifier] => ByRow(x->"n_"*string(x)*"_elec") => :inputnode )
+    
+    #c0 = transform(c0, [:block_identifier] => ByRow(x->"n_"*string(x)*"_dheat") => :outputnode )
+    c0 = transform(c0, [:type, :block_identifier] => 
+        ByRow((a,b)->ifelse(a=="cool", "n_"*string(b)*"_cool", "n_"*string(b)*"_dheat")) => :outputnode )
+
+    # adjust investment costs 
+    c0.unit_investment_cost .=  c0.unit_investment_cost * (model_length / Hour(8760) )
+     
+    # object parameters
     c1 =  add_unit_param2(c0, [:unit_investment_cost])
 
     # units excel file
