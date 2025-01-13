@@ -35,12 +35,22 @@ end
 # object parameters
 function add_param_connection(c0, paramcols)
     
-    c1 = select(c0, :connection, :alternative_name, paramcols)            
+    # candidate connections when not specified
+    default_candi_conn = 100
+
+    # Check if required columns exist in c0 and select what is present
+    requested_cols = vcat(paramcols, [:alternative_name])
+    existing_columns = intersect(requested_cols, Symbol.(names(c0)))
+    c1 = select(c0, :connection, existing_columns)  
+
+    #c1 = select(c0, :connection, :alternative_name, paramcols)            
 
     # add parameter "candidate_connections"
-    insertcols!(c1, :candidate_connections => missings(Float64, nrow(c1)))
-    c1[(!ismissing).(c1.connection_investment_cost), :candidate_connections] .= 40
-    
+    if !hasproperty(c1, :candidate_connections)
+        insertcols!(c1, :candidate_connections => missings(Float64, nrow(c1)))
+        c1[(!ismissing).(c1.connection_investment_cost), :candidate_connections] .= default_candi_conn
+    end
+
     c1 = stack(c1, Not([:connection, :alternative_name]))
     c1 = subset(c1, :value => ByRow(!ismissing))
 
@@ -170,7 +180,8 @@ function add_connections(conn_file, model_length::Period)
      
     # object parameters
     c1 = add_param_connection(c0, [:connection_investment_cost,
-                                :connection_investment_variable_type])
+                                :connection_investment_variable_type,
+                                :candidate_connections])
 
     # relationships
     c2 = add_to_from_node(c0)

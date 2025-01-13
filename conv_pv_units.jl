@@ -89,8 +89,6 @@ function add_unit_node_param(c0)
     return c1
 end
 
-
-
 """
 Overall function for adding pv units
 

@@ -2,7 +2,7 @@
 
 julia_version = "1.10.3"
 manifest_format = "2.0"
-project_hash = "9030b44e54910b61b2440dbd21d86295f024b062"
+project_hash = "631eb9f34588c12891ac3a44b926d329fc3d8123"
 
 [[deps.AliasTables]]
 deps = ["PtrArrays", "Random"]
@@ -635,6 +635,12 @@ path = "/home/jube/data/spine/versions/v08/SpineOpt.jl"
 uuid = "0d8fc150-4032-4b6e-9540-20efcb304861"
 version = "0.8.3"
 
+[[deps.SpinePeriods]]
+deps = ["Dates", "HiGHS", "JSON", "JuMP", "LinearAlgebra", "PyCall", "SpineInterface", "SpineOpt", "StatsBase", "URIs", "UnPack"]
+path = "/home/jube/data/spine/SpinePeriods.jl/"
+uuid = "163584a9-52e1-4a4e-9262-a8c2d5456af4"
+version = "0.1.1"
+
 [[deps.StaticArraysCore]]
 git-tree-sha1 = "192954ef1208c7019899fbf8049e717f92959682"
 uuid = "1e83bf80-4336-4d27-bf5d-d5a4f845583c"
@@ -752,6 +758,11 @@ version = "1.5.1"
 [[deps.UUIDs]]
 deps = ["Random", "SHA"]
 uuid = "cf7118a7-6976-5b1a-9a39-7adc72f591a4"
+
+[[deps.UnPack]]
+git-tree-sha1 = "387c1f73762231e86e0c9c5443ce3b4a0a9a0c2b"
+uuid = "3a884ed6-31ef-47d7-9d2a-63182c4928ed"
+version = "1.0.2"
 
 [[deps.Unicode]]
 uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
