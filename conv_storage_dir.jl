@@ -2,6 +2,7 @@ using DataFrames, CSV, XLSX
 using ArgParse
 
 include("common.jl")
+include("db.jl")
 
 function parse_commandline()
     s = ArgParseSettings()
@@ -13,6 +14,9 @@ function parse_commandline()
         "arg2"
             help = "a positional argument: model spec input table filename"
             required = true
+        "arg3"
+            help = "model database url"
+            required = true
     end
 
     return parse_args(s)
@@ -21,7 +25,7 @@ end
 function main()
     parsed_args = parse_commandline()
     model_length = calc_model_len(parsed_args["arg2"])
-    add_storages(parsed_args["arg1"], model_length)
+    add_storages(parsed_args["arg1"],  parsed_args["arg3"], model_length)
 end
 
 # just the yunit
@@ -33,7 +37,7 @@ end
 
 # just the storage node
 function add_stornode(c0)
-    c1 = select(c0, :stornode => :node)
+    c1 = select(c0, :stornode => :Object1)
     insertcols!(c1, 1, :Objectclass1 => "node")
     return c1
 end
@@ -114,18 +118,18 @@ end
 # the unit-node-node relationships
 function add_unit_node_node(c0)
 
-    c1 = select(c0, :unit)
-    c1.node1 = c0.stornode
-    c1.node2 = c0.basenode
+    c1 = select(c0, :unit => :Object1)
+    c1.Object2 = c0.stornode
+    c1.Object3 = c0.basenode
 
     insertcols!(c1, 1, :relationshipclass => "unit__node__node")
     insertcols!(c1, 2, :Objectclass1 => "unit")
     insertcols!(c1, 3, :Objectclass2 => "node")
     insertcols!(c1, 4, :Objectclass3 => "node")
 
-    c2 = select(c0, :unit)
-    c2.node1 = c0.basenode
-    c2.node2 = c0.stornode
+    c2 = select(c0, :unit => :Object1)
+    c2.Object2 = c0.basenode
+    c2.Object3 = c0.stornode
 
     insertcols!(c2, 1, :relationshipclass => "unit__node__node")
     insertcols!(c2, 2, :Objectclass1 => "unit")
@@ -140,7 +144,7 @@ function add_unit_node_node_param(c0)
     c1 = add_unit_node_node(c0)
     insertcols!(c1, 8, :parameter_name => "fix_ratio_out_in_unit_flow")
     insertcols!(c1, 9, :alternative_name => "Base")
-    insertcols!(c1, 10, :parameter_value => 0.95)
+    insertcols!(c1, 10, :value => 0.95)
 
     return c1
 end
@@ -150,26 +154,26 @@ function add_storage_node_param2(c0, paramcols; directory="")
 
     c1 = select(c0, :stornode, :alternative_name, paramcols)
 
-    insertcols!(c1, :has_state => "true")
+    insertcols!(c1, :has_state => true)
 
     c1 = stack(c1, Not([:stornode, :alternative_name]))
     c1 = subset(c1, :value => ByRow(!ismissing))
 
-    insertcols!(c1, :objectclass => "node")
+    insertcols!(c1, :Objectclass1 => "node")
     rename!(c1, :variable => :parameter_name)
 
     # use only numeric or string values
     #c1_num = subset(c1, :value => ByRow(x->x isa Number))
     c1_num = subset(c1, :value => ByRow(x -> !(isa(x, String) && startswith(x, "ts:")) ))
 
-    c1_num = select(c1_num, :objectclass, :stornode, :parameter_name, :alternative_name, :value)
+    c1_num = select(c1_num, :Objectclass1, :stornode => :Object1, :parameter_name, :alternative_name, :value)
 
     # use only text values which start with ts: indicating a timeseries
     c1_str = subset(c1, :value => ByRow(x -> isa(x, String) && startswith(x, "ts:")))
 
     c1_str = add_storage_node_param_timeser(c1_str, directory)
 
-    return c1_num, c1_str
+    vcat(c1_num, c1_str)
 end
 
 function add_storage_node_param_timeser(c1_str, directory)
@@ -179,17 +183,17 @@ function add_storage_node_param_timeser(c1_str, directory)
 
     # Remove the substring from the beginning of each string
     c1_str[:,:value] = [startswith(x, prefix) ? x[length(prefix)+1:end] : x for x in c1_str[:,:value]]
-    rename!(c1_str, :value => :type)
-    types = unique(c1_str[:,:type])
+    rename!(c1_str, :value => :tstype)
+    types = unique(c1_str[:,:tstype])
 
     #load timeseries
-    timeser = readcf(directory, types)
+    timeser = readcf2(directory, types)
 
     # assign the time series for parameters
-    c1_str = innerjoin(c1_str, timeser, on = :type)
+    c1_str = transform(c1_str, :tstype => ByRow(x -> timeser[x] ) =>  :value )
 
     # create the final object parameter timeseries table
-    c1_str = select(c1_str, :objectclass, :stornode, :parameter_name, :alternative_name, :time, :value)
+    c1_str = select(c1_str, :Objectclass1, :stornode => :Object1, :parameter_name, :alternative_name, :value)
 
 end
 
@@ -198,7 +202,7 @@ Overall function for adding electrical storages
 
     Output: excel tables of electrical storage units and electrical storage nodes
 """
-function add_storages(stor_file, model_length::Period)
+function add_storages(stor_file, url_in, model_length::Period)
 
     #output file names
     outfile1 = "storage_units.xlsx"
@@ -222,36 +226,29 @@ function add_storages(stor_file, model_length::Period)
     c0.storage_investment_cost = c0.storage_investment_cost * (model_length / Hour(8760) )
 
     c1 =  add_unit_param2(c0, [:unit_investment_cost, :candidate_units])
+    c1_sto = add_storage_node_param2(c0, [:node_state_cap, 
+                    :demand,
+                    :storage_investment_cost,
+                    :candidate_storages,
+                    :storage_investment_variable_type],
+                    directory=dirname(stor_file)) 
 
-    println(add_unit_node_param_storage(c0, directory=dirname(stor_file)))
-    # units excel file
-    XLSX.writetable(outfile1, 
-                "unit" => add_unit(c0), 
-                "unit_param" => c1,
-                "unit__to_node" => add_unit_to_node(c0),
-                "unit__node_param" => add_unit_node_param(c0),
-                "unit__node__node" => add_unit_node_node(c0), 
-                "unit__node__node_parameter" => add_unit_node_node_param(c0),
-                overwrite = true
-    )
+    println(c1_sto)
 
-    c1, objpar_ts = add_storage_node_param2(c0, [:node_state_cap, 
-                                :demand,
-                                :storage_investment_cost,
-                                :candidate_storages,
-                                :storage_investment_variable_type],
-                                directory=dirname(stor_file)) 
+    import_objects(url_in, add_unit(c0))
+    import_object_param(url_in, c1)
+    import_objects(url_in, add_stornode(c0))
+    import_object_param(url_in, c1_sto)
 
-    # Storage nodes excel file
-    XLSX.writetable(outfile2, 
-        "object" => add_stornode(c0), 
-        "object_parameter" => c1,
-        overwrite = true
-    )
+    import_relations_2dim(url_in, add_unit_to_node(c0))
+    import_rel_param_2dim(url_in, 
+        add_unit_node_param_storage(c0, directory=dirname(stor_file)))
 
-    # Storage nodes object parameter timeseries file in the format which can 
-    # be read by toolbox importer
-    CSV.write(outfile3, objpar_ts, dateformat="yyyy-mm-ddTHH:MM")
+    #unit-node-node relationships
+    import_relations_3dim(url_in, add_unit_node_node(c0))
+    import_rel_param_3dim(url_in, add_unit_node_node_param(c0))
+
+
 end
 
 main()
