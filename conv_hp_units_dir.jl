@@ -8,6 +8,7 @@ using ArgParse
 # julia --project=@. conv_hp_units.jl testinputs/hp-input.xlsx 
 
 include("common.jl")
+include("db.jl")
 
 function parse_commandline()
     s = ArgParseSettings()
@@ -19,6 +20,9 @@ function parse_commandline()
         "arg2"
             help = "a positional argument: model spec input table filename"
             required = true
+        "arg3"
+            help = "model database url"
+            required = true
     end
 
     return parse_args(s)
@@ -27,7 +31,7 @@ end
 function main()
     parsed_args = parse_commandline()
     model_length = calc_model_len(parsed_args["arg2"])
-    add_hp_units(parsed_args["arg1"], model_length)
+    add_hp_units(parsed_args["arg1"], parsed_args["arg3"], model_length)
 end
 
 function add_unit(c0)
@@ -36,38 +40,30 @@ function add_unit(c0)
     return c1
 end
 
-# the object parameters
-function add_unit_param(c0)
-
-    c01 = subset(c0, :unit_investment_cost => ByRow(!ismissing))
-    c1 = select(c01, :unit)
-    
-    insertcols!(c1, 1, :Objectclass => "unit")
-    insertcols!(c1, 3, :parameter_name => "unit_investment_cost")
-    insertcols!(c1, 4, :alternative_name => "Base")
-    insertcols!(c1, 5, :parameter_value => c01[:, :unit_investment_cost])
-
-    return c1
-end
-
 # the unit-node relationships
 function add_unit_to_node(c0)
 
-    c1 = select(c0, :unit)
-    c1.node = c0.outputnode
+    vcat(add_unit_to_node(c0, "unit__to_node", :basenode),
+        add_unit_to_node(c0, "unit__from_node", :inputnode)
+    )
+
+    #=
+    c1 = select(c0, :unit => :Object1)
+    c1.Object2 = c0.outputnode
  
     insertcols!(c1, 1, :relationshipclass => "unit__to_node")
     insertcols!(c1, 2, :Objectclass1 => "unit")
     insertcols!(c1, 3, :Objectclass2 => "node")
 
-    c2 = select(c0, :unit)
-    c2.node = c0.inputnode
+    c2 = select(c0, :unit => :Object1)
+    c2.Object2  = c0.inputnode
 
     insertcols!(c2, 1, :relationshipclass => "unit__from_node")
     insertcols!(c2, 2, :Objectclass1 => "unit")
     insertcols!(c2, 3, :Objectclass2 => "node")
 
     vcat(c1,c2)
+    =#
 end
 
 # the unit-node relationship parameters
@@ -94,9 +90,9 @@ end
 # the unit-node-node relationships for output-input relationship
 function add_unit_node_node(c0)
 
-    c1 = select(c0, :unit)
-    c1.node1 = c0.outputnode
-    c1.node2 = c0.inputnode
+    c1 = select(c0, :unit => :Object1)
+    c1.Object2 = c0.basenode
+    c1.Object3 = c0.inputnode
 
     insertcols!(c1, 1, :relationshipclass => "unit__node__node")
     insertcols!(c1, 2, :Objectclass1 => "unit")
@@ -109,7 +105,7 @@ Overall function for adding hp units
 
     Output: excel tables of hp units
 """
-function add_hp_units(hp_file, model_length::Period)
+function add_hp_units(hp_file, url_in, model_length::Period)
 
     #output file names
     outfile1 = "hp_units.xlsx"
@@ -122,24 +118,30 @@ function add_hp_units(hp_file, model_length::Period)
         ByRow((a,b)->ifelse(a=="cool","u_"*string(b)*"_chiller","u_"*string(b)*"_hp")) => :unit )
     c0 = transform(c0, [:block_identifier] => ByRow(x->"n_"*string(x)*"_elec") => :inputnode )
     c0 = transform(c0, [:type, :block_identifier] => 
-        ByRow((a,b)->ifelse(a=="cool", "n_"*string(b)*"_cool", "n_"*string(b)*"_dheat")) => :outputnode )
+        ByRow((a,b)->ifelse(a=="cool", "n_"*string(b)*"_cool", "n_"*string(b)*"_dheat")) => :basenode )
+    c0 = transform(c0, [:emissionnode] => ByRow(x -> ismissing(x) ?  missing : "n_" * string(x) ) 
+        => :emissionnode )
 
     # adjust investment costs 
     c0.unit_investment_cost .=  c0.unit_investment_cost * (model_length / Hour(8760) )
      
     # object parameters
-    c1 =  add_unit_param2(c0, [:unit_investment_cost])
+    c1 =  add_unit_param2(c0, [:unit_investment_cost, :candidate_units])
+    import_objects(url_in, add_unit(c0))
+    import_object_param(url_in, c1)
 
-    # units excel file
-    XLSX.writetable(outfile1, 
-                "unit" => add_unit(c0), 
-                "unit_param" => c1,
-                "unit__to_node" => add_unit_to_node(c0),
-                "unit__node_param" => add_unit_node_param(c0),
-                "unit__node__node" => add_unit_node_node(c0),
-                "unit__node__node_parameter" =>  DataFrame(no_data = []),
-                overwrite = true
-    )
+    # unit-node relationship parameters
+    c3 = add_unit_node_param(c0, [:unit_capacity], directory = dirname(hp_file) )
+    import_relations_2dim(url_in, add_unit_to_node(c0))
+    import_rel_param_2dim(url_in, c3)
+
+    #unit-node-node relationships
+    import_relations_3dim(url_in, add_unit_node_node(c0))
+    c4 = add_unit_node_node_param(rename(c0, :cop_profile => :fix_ratio_out_in_unit_flow), 
+            :inputnode, [:fix_ratio_out_in_unit_flow], directory = dirname(hp_file))
+    import_rel_param_3dim(url_in, c4)
+
+
 end
 
 main()

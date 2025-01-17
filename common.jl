@@ -1,6 +1,89 @@
 using XLSX
 using Dates
 
+"""
+    add_unit_node_param(c0, paramcols; directory = "")
+
+    Produces the unit-node parameters table
+"""
+function add_unit_node_param(c0, paramcols; directory = "")
+
+    # Check if required columns exist in c0 and select what is present
+    requested_cols = vcat(paramcols, [:alternative_name])
+    existing_columns = intersect(requested_cols, Symbol.(names(c0)))
+    c1 = select(c0, :unit, :basenode, existing_columns)
+
+    # add alternative name if not present
+    if !hasproperty(c1, :alternative_name)
+        insertcols!(c1, :alternative_name => "Base")
+    end
+
+    c1 = stack(c1, Not([:unit, :basenode, :alternative_name]))
+    c1 = subset(c1, :value => ByRow(!ismissing))
+
+    rename!(c1, :variable => :parameter_name)
+
+    # text values which start with ts: indicating a timeseries
+    # load the corresponding timeseries into value clumn
+    c1_str = subset(c1, :value => ByRow(x -> isa(x, String) && startswith(x, "ts:")))
+    c1_str = add_unit_node_param_timeser(c1_str, directory)
+
+    # only numeric or string values; combine with timeseries
+    c1 = subset(c1, :value => ByRow(x -> !(isa(x, String) && startswith(x, "ts:")) ))
+    c1 = vcat(c1, c1_str)
+
+    # final dataframe
+    insertcols!(c1, 1, :relationshipclass => "unit__to_node")
+    insertcols!(c1, 2, :Objectclass1 => "unit")
+    insertcols!(c1, 3, :Objectclass2 => "node")
+    c1 = select(c1, :relationshipclass, :Objectclass1, :Objectclass2, 
+                :unit => :Object1, :basenode => :Object2, :parameter_name, 
+                :alternative_name, :value)
+    return c1
+end
+
+function add_unit_node_param_timeser(c1_str, directory)
+    
+    # define time series file names
+    prefix = "ts:"
+
+    # Remove the substring from the beginning of each string
+    c1_str[:,:value] = [startswith(x, prefix) ? x[length(prefix)+1:end] : x for x in c1_str[:,:value]]
+    rename!(c1_str, :value => :tstype)
+    types = unique(c1_str[:,:tstype])
+
+    #load timeseries
+    timeser = readcf2(directory, types)
+
+    # assign the time series for parameters
+    #c1_str = innerjoin(c1_str, timeser, on = :tstype)
+    c1_str = transform(c1_str, :tstype => ByRow(x -> timeser[x] ) =>  :value )
+
+    select!(c1_str, Not(:tstype))
+    return c1_str
+
+end
+
+"""
+    add_unit_node_node_param(c0, paramcols; directory = "")
+
+    Produces the unit-node-node parameters table assuming that there is an
+    unique second node for every unit.
+"""
+function add_unit_node_node_param(c0, node2, paramcols; directory = "")
+
+    c1 = add_unit_node_param(c0, paramcols, directory = directory)
+    c1[:, :relationshipclass] .= "unit__node__node"
+    c2 = select(c0, :unit => :Object1, node2 => :Object3)
+    c1 = innerjoin(c1, c2, on = :Object1)
+    insertcols!(c1, 4, :Objectclass3 => "node")
+    c1 = select(c1, :relationshipclass, :Objectclass1, :Objectclass2, :Objectclass3,
+                :Object1, :Object2, :Object3, :parameter_name, 
+                :alternative_name, :value)
+
+    return c1
+end
+
 # creates the "unit_param" sheet for the unit input excel file for importer
 # used for hp, pv and storage units
 function add_unit_param2(c0, paramcols)
@@ -28,8 +111,7 @@ function add_unit_param2(c0, paramcols)
 
     insertcols!(c1, 1, :Objectclass1 => "unit")
     rename!(c1, :variable => :parameter_name)
-    #insertcols!(c1, 4, :alternative_name => "Base")
-    c1 = select(c1, :Objectclass1, :unit, :parameter_name, :alternative_name, :value)
+    c1 = select(c1, :Objectclass1, :unit => :Object1, :parameter_name, :alternative_name, :value)
     return c1
 end
 
@@ -58,6 +140,58 @@ function readcf(folder, types)
     end
 end
 
+
+function readcf2(folder, types)
+
+    cfs = Dict()
+
+    for type in types
+        cfs[type] = read_timeseries(folder, type)
+    end
+
+    return cfs
+end
+
+""""
+    Reads a timeseries from CSV as SpineInterface.TimeSeries. The CSV must have a
+    "time" column. Several non-timezone-aware formats are accepted. 
+    id: timeseries name
+    col: column name to be used. default is "value"
+"""
+function read_timeseries(folder, id, col=nothing)
+
+    formats = ["yyyy-mm-dd HH:MM:SS", "yyyy-mm-ddTHH:MM:SS"]
+
+    cf_file = joinpath(folder, "ts_" * id * ".csv")
+    if !isfile(cf_file)
+        println("The file $cf_file does not exist.")
+    end
+
+    # read file
+    cf = DataFrame(CSV.File(cf_file, missingstring = "NA", types = Dict(:time => String))) 
+    
+    # convert time column
+    for fmt in formats
+        try
+            cf.time = DateTime.(cf.time, DateFormat(fmt))
+            break   # if success, exit the loop
+        catch e
+            if isa(e, ArgumentError) || isa(e, MethodError)
+                continue
+            else
+                rethrow(e)  # Re-throw the exception if it's not the type I expected
+            end
+        end
+    end
+    
+    if !isnothing(col)
+        return convert_timeseries(cf, col)
+    else
+        return convert_timeseries(cf)
+    end
+end
+
+
 function calc_model_len(modelspecfile)
     #read model info
     df = DataFrame(XLSX.readtable(modelspecfile, "params_1d_datetimes") )
@@ -76,4 +210,40 @@ function calc_model_len(modelspecfile)
         => :model_length)
 
     return 	wide_df[1, :model_length]
+end
+
+"""
+    add_unit_node_param_emission(c0, paramcolsmapping)
+
+    function for adding investment-based emission parameters
+"""
+function add_unit_node_param_emission(c0, paramcolsmapping)
+
+    c1 = select(c0, :unit, :alternative_name, :emissionnode, collect(keys(paramcolsmapping)))
+    rename!(c1, paramcolsmapping)
+    rename!(c1, :emissionnode => :basenode)
+
+    return add_unit_node_param(c1, collect(values(paramcolsmapping)) )
+end
+
+function add_units_on_temporal_block(c0, temporal_block)
+    c1 = unique(select(c0, :unit => :Object1))
+    insertcols!(c1, :Object2 => temporal_block)
+    insertcols!(c1, 1, :relationshipclass => "units_on__temporal_block")
+    insertcols!(c1, 2, :Objectclass1 => "unit")
+    insertcols!(c1, 3, :Objectclass2 => "temporal_block")
+    return c1
+end
+
+function add_unit_to_node(c0, relclass::String, col::Symbol)
+    c1 = select(c0, :unit => :Object1, col => :Object2)
+    insertcols!(c1, 1, :relationshipclass => relclass)
+    insertcols!(c1, 2, :Objectclass1 => "unit")
+    insertcols!(c1, 3, :Objectclass2 => "node")
+    return c1
+end
+
+function convert_timeseries(x::DataFrame, valcol = :value)
+    x.time = DateTime.(x.time)
+    y = TimeSeries(x[:,:time], x[:,valcol], false, false)     
 end

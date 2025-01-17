@@ -151,14 +151,10 @@ function add_storage_node_param2(c0, paramcols; directory="")
 
     c1 = select(c0, :stornode, :alternative_name, paramcols)
 
-     # add candidate storages
-     insertcols!(c1, :candidate_storages => missings(Float64, nrow(c1)))
-     c1[(!ismissing).(c1.storage_investment_cost), :candidate_storages] .= 40
-     
-     insertcols!(c1, :has_state => "true")
+    insertcols!(c1, :has_state => "true")
 
-     c1 = stack(c1, Not([:stornode, :alternative_name]))
-     c1 = subset(c1, :value => ByRow(!ismissing))
+    c1 = stack(c1, Not([:stornode, :alternative_name]))
+    c1 = subset(c1, :value => ByRow(!ismissing))
 
     insertcols!(c1, :objectclass => "node")
     rename!(c1, :variable => :parameter_name)
@@ -242,6 +238,7 @@ function add_storages(stor_file, model_length::Period)
     c1, objpar_ts = add_storage_node_param2(c0, [:node_state_cap, 
                                 :demand,
                                 :storage_investment_cost,
+                                :candidate_storages,
                                 :storage_investment_variable_type],
                                 directory=dirname(stor_file)) 
 

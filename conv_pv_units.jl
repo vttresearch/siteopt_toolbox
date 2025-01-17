@@ -8,6 +8,7 @@ using ArgParse
 # julia --project=@. conv_pv_units.jl testinputs/pv-input.xlsx 
 
 include("common.jl")
+include("db.jl")
 
 function parse_commandline()
     s = ArgParseSettings()
