@@ -96,7 +96,7 @@ function add_pv_units(pv_file::String, url_in, model_length::Period)
     c4 = add_unit_node_param_emission(c0, Dict(:investment_emission => :minimum_operating_point,
                                                 :emission_cost => :vom_cost,
                                                 :emission_flow_capacity => :unit_capacity))
-    println(first(c4,3))
+    
     import_rel_param_2dim(url_in, c4)
     c5 = add_units_on_temporal_block(c0, "myinvestmentblock")
     import_relations_2dim(url_in, c5)

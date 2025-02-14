@@ -74,6 +74,7 @@ end
 function add_unit_to_node(c0)
     vcat(add_unit_to_node(c0, "unit__to_node", :stornode),
         add_unit_to_node(c0, "unit__to_node", :basenode),
+        add_unit_to_node(c0, "unit__to_node", :emissionnode),
         add_unit_to_node(c0, "unit__from_node", :stornode),
         add_unit_to_node(c0, "unit__from_node", :basenode)
     )
@@ -111,7 +112,13 @@ function add_unit_node_param_storage(c0; directory = "")
              [:unit_capacity]; directory = directory)
     
     c2 = add_unit_node_param(rename(c0, :max_discharging => :unit_capacity), [:unit_capacity]; directory = directory)
-    vcat(c1,c2)
+    
+    # emissions
+    c3 = add_unit_node_param_emission(c0, Dict(:investment_emission => :minimum_operating_point,
+                                                :emission_cost => :vom_cost,
+                                                :emission_flow_capacity => :unit_capacity))
+
+    vcat(c1,c2,c3)
 end
 
 
@@ -204,17 +211,15 @@ Overall function for adding electrical storages
 """
 function add_storages(stor_file, url_in, model_length::Period)
 
-    #output file names
-    outfile1 = "storage_units.xlsx"
-    outfile2 = "storage_nodes.xlsx"
-    outfile3 = "storage_nodes_timeser.csv"
-    
+   
     #read basic info
     c0 = DataFrame(XLSX.readtable(stor_file, "Sheet1") )
    
     c0 = transform(c0, [:block_identifier] => ByRow(x->"u_"*string(x)*"_stor") => :unit )
     c0 = transform(c0, [:block_identifier] => ByRow(x->"n_"*string(x)*"_elecstor") => :stornode )
     c0 = transform(c0, [:block_identifier] => ByRow(x->"n_"*string(x)*"_elec") => :basenode )
+    c0 = transform(c0, [:emissionnode] => ByRow(x -> ismissing(x) ?  missing : "n_" * string(x) ) 
+            => :emissionnode )
 
     # add alternative name if not present
     if !hasproperty(c0, :alternative_name)
@@ -233,7 +238,6 @@ function add_storages(stor_file, url_in, model_length::Period)
                     :storage_investment_variable_type],
                     directory=dirname(stor_file)) 
 
-    println(c1_sto)
 
     import_objects(url_in, add_unit(c0))
     import_object_param(url_in, c1)
@@ -243,6 +247,15 @@ function add_storages(stor_file, url_in, model_length::Period)
     import_relations_2dim(url_in, add_unit_to_node(c0))
     import_rel_param_2dim(url_in, 
         add_unit_node_param_storage(c0, directory=dirname(stor_file)))
+
+    #emissions
+    #c4 = add_unit_node_param_emission(c0, Dict(:investment_emission => :minimum_operating_point,
+    #                                            :emission_cost => :vom_cost,
+    #                                            :emission_flow_capacity => :unit_capacity))
+    #                                        
+    #import_rel_param_2dim(url_in, c4)
+    c5 = add_units_on_temporal_block(c0, "myinvestmentblock")
+    import_relations_2dim(url_in, c5)
 
     #unit-node-node relationships
     import_relations_3dim(url_in, add_unit_node_node(c0))
