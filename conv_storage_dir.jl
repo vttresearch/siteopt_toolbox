@@ -105,6 +105,9 @@ function add_unit_node_param(c0)
     vcat(c1,c2)
 end
 
+"""
+    Adding the unit-node relationship parameters for storage units
+"""
 function add_unit_node_param_storage(c0; directory = "")
 
     c1 = select(c0, Not(:basenode))
@@ -215,9 +218,18 @@ function add_storages(stor_file, url_in, model_length::Period)
     #read basic info
     c0 = DataFrame(XLSX.readtable(stor_file, "Sheet1") )
    
-    c0 = transform(c0, [:block_identifier] => ByRow(x->"u_"*string(x)*"_stor") => :unit )
-    c0 = transform(c0, [:block_identifier] => ByRow(x->"n_"*string(x)*"_elecstor") => :stornode )
-    c0 = transform(c0, [:block_identifier] => ByRow(x->"n_"*string(x)*"_elec") => :basenode )
+    #c0 = transform(c0, [:block_identifier] => ByRow(x->"u_"*string(x)*"_stor") => :unit )
+    c0 = transform(c0, [:type, :block_identifier] => 
+        ByRow((a,b) -> ifelse(a=="elec", "u_"*string(b)*"_stocharger", "u_"*string(b)*"_heatstocharger")) => :unit )
+
+    #c0 = transform(c0, [:block_identifier] => ByRow(x->"n_"*string(x)*"_elecstor") => :stornode )
+    c0 = transform(c0, [:type, :block_identifier] => 
+        ByRow((a,b) -> ifelse(a=="elec", "n_"*string(b)*"_elecstor", "n_"*string(b)*"_heatstor")) => :stornode )
+
+    #c0 = transform(c0, [:block_identifier] => ByRow(x->"n_"*string(x)*"_elec") => :basenode )
+    c0 = transform(c0, [:type, :block_identifier] => 
+        ByRow((a,b) -> ifelse(a=="elec", "n_"*string(b)*"_elec", "n_"*string(b)*"_dheat")) => :basenode )
+
     c0 = transform(c0, [:emissionnode] => ByRow(x -> ismissing(x) ?  missing : "n_" * string(x) ) 
             => :emissionnode )
 
@@ -230,6 +242,7 @@ function add_storages(stor_file, url_in, model_length::Period)
     c0.unit_investment_cost =  c0.unit_investment_cost * (model_length / Hour(8760) )
     c0.storage_investment_cost = c0.storage_investment_cost * (model_length / Hour(8760) )
 
+    # object parameters
     c1 =  add_unit_param2(c0, [:unit_investment_cost, :candidate_units])
     c1_sto = add_storage_node_param2(c0, [:node_state_cap, 
                     :demand,
@@ -248,12 +261,7 @@ function add_storages(stor_file, url_in, model_length::Period)
     import_rel_param_2dim(url_in, 
         add_unit_node_param_storage(c0, directory=dirname(stor_file)))
 
-    #emissions
-    #c4 = add_unit_node_param_emission(c0, Dict(:investment_emission => :minimum_operating_point,
-    #                                            :emission_cost => :vom_cost,
-    #                                            :emission_flow_capacity => :unit_capacity))
-    #                                        
-    #import_rel_param_2dim(url_in, c4)
+    # required for emissions to work
     c5 = add_units_on_temporal_block(c0, "myinvestmentblock")
     import_relations_2dim(url_in, c5)
 
