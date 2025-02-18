@@ -116,7 +116,7 @@ function add_unit_node_param_storage(c0; directory = "")
     
     c2 = add_unit_node_param(rename(c0, :max_discharging => :unit_capacity), [:unit_capacity]; directory = directory)
     
-    # emissions
+    # emissions parameters (emitted to :emissionnode)
     c3 = add_unit_node_param_emission(c0, Dict(:investment_emission => :minimum_operating_point,
                                                 :emission_cost => :vom_cost,
                                                 :emission_flow_capacity => :unit_capacity))
@@ -214,7 +214,6 @@ Overall function for adding electrical storages
 """
 function add_storages(stor_file, url_in, model_length::Period)
 
-   
     #read basic info
     c0 = DataFrame(XLSX.readtable(stor_file, "Sheet1") )
    
@@ -242,8 +241,12 @@ function add_storages(stor_file, url_in, model_length::Period)
     c0.unit_investment_cost =  c0.unit_investment_cost * (model_length / Hour(8760) )
     c0.storage_investment_cost = c0.storage_investment_cost * (model_length / Hour(8760) )
 
+    # add min share of online units for emissions to work
+    # see also add_unit_node_param_storage()
+    insertcols!(c0, :min_units_on_share => 1.0)
+
     # object parameters
-    c1 =  add_unit_param2(c0, [:unit_investment_cost, :candidate_units])
+    c1 =  add_unit_param2(c0, [:unit_investment_cost, :candidate_units, :min_units_on_share])
     c1_sto = add_storage_node_param2(c0, [:node_state_cap, 
                     :demand,
                     :storage_investment_cost,
@@ -262,8 +265,8 @@ function add_storages(stor_file, url_in, model_length::Period)
         add_unit_node_param_storage(c0, directory=dirname(stor_file)))
 
     # required for emissions to work
-    c5 = add_units_on_temporal_block(c0, "myinvestmentblock")
-    import_relations_2dim(url_in, c5)
+    #c5 = add_units_on_temporal_block(c0, "myinvestmentblock")
+    #import_relations_2dim(url_in, c5)
 
     #unit-node-node relationships
     import_relations_3dim(url_in, add_unit_node_node(c0))

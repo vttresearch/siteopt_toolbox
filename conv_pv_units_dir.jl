@@ -83,7 +83,10 @@ function add_pv_units(pv_file::String, url_in, model_length::Period)
     # adjust investment costs 
     c0.unit_investment_cost .=  c0.unit_investment_cost * (model_length / Hour(8760) )
      
-    c1 = add_unit_param2(c0, [:unit_investment_cost, :candidate_units])
+      # add min share of online units for emissions to work
+    insertcols!(c0, :min_units_on_share => 1.0)
+
+    c1 = add_unit_param2(c0, [:unit_investment_cost, :candidate_units, :min_units_on_share])
 
     import_objects(url_in, add_unit(c0))
     import_relations_2dim(url_in, add_unit_to_node(c0))
@@ -98,8 +101,9 @@ function add_pv_units(pv_file::String, url_in, model_length::Period)
                                                 :emission_flow_capacity => :unit_capacity))
     
     import_rel_param_2dim(url_in, c4)
-    c5 = add_units_on_temporal_block(c0, "myinvestmentblock")
-    import_relations_2dim(url_in, c5)
+    
+    #c5 = add_units_on_temporal_block(c0, "myinvestmentblock")
+    #import_relations_2dim(url_in, c5)
 
 end
 
