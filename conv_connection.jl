@@ -41,9 +41,7 @@ function add_param_connection(c0, paramcols)
     # Check if required columns exist in c0 and select what is present
     requested_cols = vcat(paramcols, [:alternative_name])
     existing_columns = intersect(requested_cols, Symbol.(names(c0)))
-    c1 = select(c0, :connection, existing_columns)  
-
-    #c1 = select(c0, :connection, :alternative_name, paramcols)            
+    c1 = select(c0, :connection, existing_columns)            
 
     # add parameter "candidate_connections"
     if !hasproperty(c1, :candidate_connections)
@@ -101,19 +99,6 @@ function add_conn_node_node(c0)
 
 end
 
-#=
-function add_param_from_node(c0, c1, valcol)
-    c1 = subset(c1, :relationshipclass => ByRow(==("connection__from_node")))
-    c1 = innerjoin(c1, c0, on = :connection)
-    insertcols!(c1, :parameter_name => String(valcol))
-    insertcols!(c1, :alternative_name => "Base")
-    c1 = select(c1, :relationshipclass, :connection, :node, :parameter_name, :alternative_name,
-                valcol => :parameter_value)
-    insertcols!(c1, 2, :Objectclass1 => "connection")
-    insertcols!(c1, 3, :Objectclass2 => "node")
-    
-end
-=#
 """
     c0: dataframe with connections and their parameters
     c1: dataframe with connection__from_node relatioships (including node)

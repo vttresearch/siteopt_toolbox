@@ -41,10 +41,19 @@ function select_repr_periods(url_in, repr_template, repr_settings, url_out)
 
     json_out = "output.json" 
 
-     @info "creating augmented DB..."
-    loadmodel(url_in, repr_template)
-    loadmodel(url_in, repr_settings)
+    @info "Purgin the old DB..."
+    # Call the Python function from Julia
+    purge_db = pyimport("__main__").purge_db
+    purge_db(url_out)
+
+    @info "Creating DB with representative periods data..."
+    #loadmodel(url_in, repr_template)
+    #loadmodel(url_in, repr_settings)
     create_copy_db(url_in, url_out)
+
+    # Add repr setting data to the DB
+    loadmodel(url_out, repr_template)
+    loadmodel(url_out, repr_settings)
 
     # run SpinePeriods to get the actual repr periods mapping
     run_spine_periods(url_out, json_out, alternative="Base")
@@ -64,6 +73,20 @@ function create_copy_db(url_in, url_out)
     SpineInterface.import_data(url_out, input_data, "Copy input db")
     @info "new database copied to $url_out"
 end
+
+py"""
+def purge_db(db_url):
+   
+    import spinedb_api as api
+    from spinedb_api import DatabaseMapping
+    from spinedb_api import purge
+
+    # Removes all items of selected types from the database at a given URL.
+    purge.purge_url(db_url, None)
+    
+"""
+
+
 
 function remove_entity(db_url)
 
