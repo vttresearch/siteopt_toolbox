@@ -42,6 +42,37 @@ function add_unit_node_param(c0, paramcols; directory = "")
     return c1
 end
 
+function add_object_object_param(c0, object1, object2, paramcols; directory = "")
+
+    # Check if required columns exist in c0 and select what is present
+    requested_cols = vcat(paramcols, [:alternative_name])
+    existing_columns = intersect(requested_cols, Symbol.(names(c0)))
+    c1 = select(c0, object1, object2, existing_columns)
+
+    # add alternative name if not present
+    if !hasproperty(c1, :alternative_name)
+        insertcols!(c1, :alternative_name => "Base")
+    end
+
+    c1 = stack(c1, Not([object1, object2, :alternative_name]))
+    c1 = subset(c1, :value => ByRow(!ismissing))
+
+    rename!(c1, :variable => :parameter_name)
+
+    # text values which start with ts: indicating a timeseries
+    # load the corresponding timeseries into value clumn
+    c1_str = subset(c1, :value => ByRow(x -> isa(x, String) && startswith(x, "ts:")))
+    c1_str = add_unit_node_param_timeser(c1_str, directory)
+
+    # only numeric or string values; combine with timeseries
+    c1 = subset(c1, :value => ByRow(x -> !(isa(x, String) && startswith(x, "ts:")) ))
+    c1 = vcat(c1, c1_str)
+
+    rename!(c1, object1 => :Object1, object2 => :Object2)
+   
+    return c1
+end
+
 function add_unit_node_param_timeser(c1_str, directory)
     
     # define time series file names
@@ -112,6 +143,37 @@ function add_unit_param2(c0, paramcols)
     insertcols!(c1, 1, :Objectclass1 => "unit")
     rename!(c1, :variable => :parameter_name)
     c1 = select(c1, :Objectclass1, :unit => :Object1, :parameter_name, :alternative_name, :value)
+    return c1
+end
+
+function add_object_param(c0, object1, paramcols; directory = "")
+    
+    # Check if required columns exist in c0 and select what is present
+    requested_cols = vcat(paramcols, [:alternative_name])
+    existing_columns = intersect(requested_cols, Symbol.(names(c0)))
+    c1 = select(c0, object1, existing_columns)
+
+    # add alternative name if not present
+    if !hasproperty(c1, :alternative_name)
+        insertcols!(c1, :alternative_name => "Base")
+    end
+
+    c1 = stack(c1, Not([object1, :alternative_name]))
+    c1 = subset(c1, :value => ByRow(!ismissing))
+
+    rename!(c1, :variable => :parameter_name)
+
+    # text values which start with ts: indicating a timeseries
+    # load the corresponding timeseries into value clumn
+    c1_str = subset(c1, :value => ByRow(x -> isa(x, String) && startswith(x, "ts:")))
+    c1_str = add_unit_node_param_timeser(c1_str, directory)
+
+    # only numeric or string values; combine with timeseries
+    c1 = subset(c1, :value => ByRow(x -> !(isa(x, String) && startswith(x, "ts:")) ))
+    c1 = vcat(c1, c1_str)
+
+    rename!(c1, object1 => :Object1)
+   
     return c1
 end
 
@@ -240,6 +302,14 @@ function add_unit_to_node(c0, relclass::String, col::Symbol)
     insertcols!(c1, 1, :relationshipclass => relclass)
     insertcols!(c1, 2, :Objectclass1 => "unit")
     insertcols!(c1, 3, :Objectclass2 => "node")
+    return c1
+end
+
+function add_object_object(c0, relclass::String, oc1, oc2, object1::Symbol, object2::Symbol)
+    c1 = select(c0, object1 => :Object1, object2 => :Object2)
+    insertcols!(c1, 1, :relationshipclass => relclass)
+    insertcols!(c1, 2, :Objectclass1 => oc1)
+    insertcols!(c1, 3, :Objectclass2 => oc2)
     return c1
 end
 
