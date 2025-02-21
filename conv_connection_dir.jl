@@ -28,7 +28,6 @@ function main()
     add_connections(parsed_args["arg1"], parsed_args["arg3"], model_length)
 end
 
-
 # just the object
 function add_connection(c0)
     c1 = select(c0, :connection => :Object1)
@@ -57,6 +56,11 @@ function add_param_connection(c0, paramcols)
     return c1
 end
 
+"""
+    add_to_from_node(c0)
+
+    Adds the relationships connection__from_node and connection__to_node
+"""
 function add_to_from_node(c0)
     c1 = add_object_object(c0, "connection__from_node", "connection", "node", :connection, :node1)
     c11 = add_object_object(c0, "connection__to_node", "connection", "node", :connection, :node2)
@@ -69,6 +73,11 @@ function add_to_from_node(c0)
     vcat(c1,c11,c2,c22)
 end
 
+"""
+    add_to_from_node(c0)
+
+    Adds the relationships connection__node__node
+"""
 function add_conn_node_node(c0)
 
     c1 = select(c0, :connection => :Object1, :node1 => :Object2, :node2 => :Object3)
@@ -87,39 +96,17 @@ end
 
 """
     c0: dataframe with connections and their parameters
-    c1: dataframe with connection__from_node relatioships (including node)
     paramcols: column titles which are taken from c0
 """
-function add_param_from_node_old(c0, c1, paramcols)
-    c0 = select(c0, :connection, :alternative_name, paramcols)
-
-    c0 = stack(c0, Not([:connection, :alternative_name]))
-    c0 = subset(c0, :value => ByRow(!ismissing))
-    rename!(c0, :variable => :parameter_name)
-
-    c1 = subset(c1, :relationshipclass => ByRow(==("connection__from_node")))
-    c1 = innerjoin(c1, c0, on = :connection)
-
-    #insertcols!(c1, :alternative_name => "Base")
-    c1 = select(c1, :relationshipclass, :Objectclass1, :Objectclass2, 
-                :connection, :node, :parameter_name, :alternative_name, :value)
-end
-
 function add_param_from_node(c0, paramcols; directory = "")
 
-    c1 = add_object_object_param(c0, :connection, :node1, paramcols; directory = directory)
+    c1 = add_object_object_param_wmuls(c0, :connection, :node1, paramcols; directory = directory)
 
     insertcols!(c1, 1, :relationshipclass => "connection__from_node")
     insertcols!(c1, 2, :Objectclass1 => "connection")
     insertcols!(c1, 3, :Objectclass2 => "node")
     c1 = select(c1, :relationshipclass, :Objectclass1, :Objectclass2, 
                 :Object1, :Object2, :parameter_name, :alternative_name, :value)
-end
-
-function add_param_node_node(c0, parameter_name, parameter_value)
-    c1 = insertcols(c0, :parameter_name => parameter_name)
-    c1 = insertcols(c1, :alternative_name => "Base")
-    c1 = insertcols(c1, :parameter_value => parameter_value)
 end
 
 function add_param_node_node2(c0, c_rels, paramcols)
@@ -131,7 +118,6 @@ function add_param_node_node2(c0, c_rels, paramcols)
                 :Object1, :Object2, :Object3, 
                 :parameter_name, :alternative_name, :value)
 end
-
 
 
 function add_connections(conn_file, url_in, model_length::Period)
@@ -161,7 +147,6 @@ function add_connections(conn_file, url_in, model_length::Period)
     c1 = add_param_connection(c0, [:connection_investment_cost,
                                 :connection_investment_variable_type,
                                 :candidate_connections])
-
     # relationships
     c2 = add_to_from_node(c0)
     c3 = add_conn_node_node(c0)
@@ -170,7 +155,6 @@ function add_connections(conn_file, url_in, model_length::Period)
     import_relations_2dim(url_in, c2)
     import_object_param(url_in, c1)
     import_relations_3dim(url_in, c3)
-
     
     # relationship parameters
     c4 = add_param_from_node(c0, [:connection_flow_cost, :connection_capacity], 
@@ -179,14 +163,7 @@ function add_connections(conn_file, url_in, model_length::Period)
 
     c5 = add_param_node_node2(c0, c3, [:fix_ratio_out_in_connection_flow] )
     import_rel_param_3dim(url_in, c5)
-    """
-    XLSX.writetable(outfile, "unit" => add_connection(c0),
-                            "unit_param" => c1,
-                            "unit__to_node" => c2,
-                            "unit__node__node" => c3, 
-                            "unit__node_param" => c4, 
-                            "unit__node__node_parameter" => c5, overwrite = true )
-    """
+  
 end
 
 main()

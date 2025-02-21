@@ -42,6 +42,30 @@ function add_unit_node_param(c0, paramcols; directory = "")
     return c1
 end
 
+function add_object_object_param_wmuls(c0, object1, object2, paramcols; directory = "")
+
+    c1 = add_object_object_param(c0, object1, object2, paramcols, directory = directory)
+
+    # select the multiplier columns of input and rename them
+    a = Dict(Symbol(name) => col for col in paramcols for name in names(c0)
+            if isequal(name, String(col) * ".mul")
+        )
+    
+    c2 = select(c0, object1 => :Object1, object2 => :Object2, :alternative_name, collect(keys(a)))
+    rename!(c2, a)
+    
+    # stack multipliers and join
+    c2 = stack(c2, Not([:Object1, :Object2, :alternative_name]))
+    c2 = subset(c2, :value => ByRow(!ismissing))
+    rename!(c2, :variable => :parameter_name, :value => :multiplier)           
+    
+    c1 = leftjoin(c1, c2, on = [:Object1, :Object2, :alternative_name, :parameter_name])
+    
+    c1 = transform(c1, [:value, :multiplier] => ByRow((a,b) -> ismissing(b) ? a : a * b) => :value)
+    
+end
+
+
 function add_object_object_param(c0, object1, object2, paramcols; directory = "")
 
     # Check if required columns exist in c0 and select what is present
