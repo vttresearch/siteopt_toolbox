@@ -28,12 +28,14 @@ function main()
     add_storages(parsed_args["arg1"],  parsed_args["arg3"], model_length)
 end
 
+#=
 # just the yunit
 function add_unit(c0)
     c1 = select(c0, :unit => :Object1)
     insertcols!(c1, 1, :Objectclass1 => "unit")
     return c1
 end
+=#
 
 # just the storage node
 function add_stornode(c0)

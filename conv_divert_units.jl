@@ -27,11 +27,13 @@ function main()
     add_diverting_units(parsed_args["arg1"])
 end
 
+#=
 function add_unit(c0)
     c1 = select(c0, :unit)
     insertcols!(c1, 1, :Objectclass1 => "unit")
     return unique(c1)
 end
+=#
 
 # the unit-node relationships 
 function add_unit_to_node(c0)
@@ -43,22 +45,8 @@ function add_unit_to_node(c0)
     )
 end
 
-function add_unit_node_node(c0, outputnode::Symbol, inputnode::Symbol)
-    c1 = select(c0, :unit, outputnode => :outputnode, inputnode => :inputnode)
-    insertcols!(c1, 1, :relationshipclass => "unit__node__node")
-    insertcols!(c1, 2, :Objectclass1 => "unit")
-    insertcols!(c1, 3, :Objectclass2 => "node")
-    insertcols!(c1, 4, :Objectclass3 => "node")
-    return c1
-end
 
-# the unit-node-node relationships for output-input relationship
-function add_unit_node_node(c0)
-    vcat(add_unit_node_node(c0, :outputnode, :inputnode),
-        add_unit_node_node(c0, :inputnode, :outputnode),
-        add_unit_node_node(c0, :divertingnode, :inputnode)
-    )
-end
+
 
 function add_unit_node_param(c0, nodecol, paramcols)
 
@@ -125,8 +113,12 @@ function add_diverting_units(filename)
     # create unit names
     c0 = transform(c0, [:name] => ByRow((b)->"u_"*string(b)*"_div") => :unit )
 
-    # object parameters
-    #c1 =  add_unit_param2(c0, [:unit_investment_cost])
+    # unit-node-node relshipts
+    c1 = vcat(add_unit_node_node(c0, :outputnode, :inputnode),
+            add_unit_node_node(c0, :inputnode, :outputnode),
+            add_unit_node_node(c0, :divertingnode, :inputnode)
+        )
+
 
     # units excel file
     XLSX.writetable(outfile1, 
@@ -134,7 +126,7 @@ function add_diverting_units(filename)
                 "unit_param" =>  DataFrame(no_data = []),
                 "unit__to_node" => add_unit_to_node(c0),
                 "unit__node_param" => add_unit_node_param(c0, :divertingnode, [:vom_cost]),
-                "unit__node__node" => add_unit_node_node(c0),
+                "unit__node__node" => c1,
                 "unit__node__node_parameter" =>  add_unit_node_node_param(c0),
                 overwrite = true
     )

@@ -65,7 +65,11 @@ function add_object_object_param_wmuls(c0, object1, object2, paramcols; director
     
 end
 
+"""
+    add_object_object_param(c0, object1, object2, paramcols; directory = "")
 
+    Add 2-dim object parameters from the dataframe c0
+"""
 function add_object_object_param(c0, object1, object2, paramcols; directory = "")
 
     # Check if required columns exist in c0 and select what is present
@@ -120,7 +124,7 @@ function add_unit_node_param_timeser(c1_str, directory)
 end
 
 """
-    add_unit_node_node_param(c0, paramcols; directory = "")
+    add_unit_node_node_param(c0, node2, paramcols; directory = "")
 
     Produces the unit-node-node parameters table assuming that there is an
     unique second node for every unit.
@@ -230,11 +234,9 @@ end
 function readcf2(folder, types)
 
     cfs = Dict()
-
     for type in types
         cfs[type] = read_timeseries(folder, type)
     end
-
     return cfs
 end
 
@@ -321,6 +323,13 @@ function add_units_on_temporal_block(c0, temporal_block)
     return c1
 end
 
+# just the unit
+function add_unit(c0)
+    c1 = select(c0, :unit => :Object1)
+    insertcols!(c1, 1, :Objectclass1 => "unit")
+    return unique(c1)
+end
+
 function add_unit_to_node(c0, relclass::String, col::Symbol)
     c1 = select(c0, :unit => :Object1, col => :Object2)
     insertcols!(c1, 1, :relationshipclass => relclass)
@@ -335,6 +344,20 @@ function add_object_object(c0, relclass::String, oc1, oc2, object1::Symbol, obje
     insertcols!(c1, 2, :Objectclass1 => oc1)
     insertcols!(c1, 3, :Objectclass2 => oc2)
     return c1
+end
+
+function add_object_object_object(c0, relclass::String, oc1, oc2, oc3, object1::Symbol, object2::Symbol, object3::Symbol)
+    c1 = select(c0, object1 => :Object1, object2 => :Object2, object3 => :Object3)
+    insertcols!(c1, 1, :relationshipclass => relclass)
+    insertcols!(c1, 2, :Objectclass1 => oc1)
+    insertcols!(c1, 3, :Objectclass2 => oc2)
+    insertcols!(c1, 3, :Objectclass3 => oc3)
+    return c1
+end
+
+function add_unit_node_node(c0, node1::Symbol, node2::Symbol)
+    add_object_object_object(c0, "unit__node__node", "unit", "node", "node", :unit, node1, node2)
+  
 end
 
 function convert_timeseries(x::DataFrame, valcol = :value)

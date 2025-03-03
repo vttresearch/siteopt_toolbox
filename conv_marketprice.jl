@@ -73,7 +73,6 @@ function add_connection_flow_cost(conn_file)
     insertcols!(c2, 3, :Objectclass2 => "node")
     insertcols!(c2, 6, :parameter_name => "connection_flow_cost")
     insertcols!(c2, 7, :alternative_name => "Base")
-    
 
     XLSX.writetable(outfile, "connection_node_parameter" => c2, 
                            overwrite = true )

@@ -34,11 +34,13 @@ function main()
     add_hp_units(parsed_args["arg1"], parsed_args["arg3"], model_length)
 end
 
+#=
 function add_unit(c0)
     c1 = unique(select(c0, :unit => :Object1))
     insertcols!(c1, 1, :Objectclass1 => "unit")
     return c1
 end
+=#
 
 # the unit-node relationships
 function add_unit_to_node(c0)
@@ -46,24 +48,6 @@ function add_unit_to_node(c0)
     vcat(add_unit_to_node(c0, "unit__to_node", :basenode),
         add_unit_to_node(c0, "unit__from_node", :inputnode)
     )
-
-    #=
-    c1 = select(c0, :unit => :Object1)
-    c1.Object2 = c0.outputnode
- 
-    insertcols!(c1, 1, :relationshipclass => "unit__to_node")
-    insertcols!(c1, 2, :Objectclass1 => "unit")
-    insertcols!(c1, 3, :Objectclass2 => "node")
-
-    c2 = select(c0, :unit => :Object1)
-    c2.Object2  = c0.inputnode
-
-    insertcols!(c2, 1, :relationshipclass => "unit__from_node")
-    insertcols!(c2, 2, :Objectclass1 => "unit")
-    insertcols!(c2, 3, :Objectclass2 => "node")
-
-    vcat(c1,c2)
-    =#
 end
 
 # the unit-node relationship parameters
@@ -87,6 +71,7 @@ function add_unit_node_param(c0)
     return c1
 end
 
+#=
 # the unit-node-node relationships for output-input relationship
 function add_unit_node_node(c0)
 
@@ -99,6 +84,7 @@ function add_unit_node_node(c0)
     insertcols!(c1, 3, :Objectclass2 => "node")
     insertcols!(c1, 4, :Objectclass3 => "node")
 end
+=#
 
 """
 Overall function for adding hp units
@@ -136,7 +122,7 @@ function add_hp_units(hp_file, url_in, model_length::Period)
     import_rel_param_2dim(url_in, c3)
 
     #unit-node-node relationships
-    import_relations_3dim(url_in, add_unit_node_node(c0))
+    import_relations_3dim(url_in, add_unit_node_node(c0, :basenode, :inputnode))
     c4 = add_unit_node_node_param(rename(c0, :cop_profile => :fix_ratio_out_in_unit_flow), 
             :inputnode, [:fix_ratio_out_in_unit_flow], directory = dirname(hp_file))
     import_rel_param_3dim(url_in, c4)
