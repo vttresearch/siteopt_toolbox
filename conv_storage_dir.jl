@@ -73,7 +73,7 @@ end
 =#
 
 # the unit-node relationships 
-function add_unit_to_node(c0)
+function add_unit_to_node_storage(c0)
     vcat(add_unit_to_node(c0, "unit__to_node", :stornode),
         add_unit_to_node(c0, "unit__to_node", :basenode),
         add_unit_to_node(c0, "unit__to_node", :emissionnode),
@@ -129,7 +129,7 @@ end
 
 # the unit-node-node relationships
 function add_unit_node_node(c0)
-
+    #=
     c1 = select(c0, :unit => :Object1)
     c1.Object2 = c0.stornode
     c1.Object3 = c0.basenode
@@ -149,6 +149,9 @@ function add_unit_node_node(c0)
     insertcols!(c2, 4, :Objectclass3 => "node")
 
     vcat(c1,c2)
+    =#
+    vcat(add_unit_node_node(c0, :stornode, :basenode),
+        add_unit_node_node(c0, :basenode, :stornode))
 end
 
 function add_unit_node_node_param(c0)
@@ -159,6 +162,13 @@ function add_unit_node_node_param(c0)
     insertcols!(c1, 10, :value => 0.95)
 
     return c1
+end
+
+function add_storage_node_param3(c0, paramcols; directory="")
+
+    c1 = insertcols(c0, :has_state => true)
+    c2 = add_object_param(c1, :stornode, paramcols, directory = directory)
+    return insertcols(c2, 1, :Objectclass1 => "node")
 end
 
 
@@ -249,20 +259,21 @@ function add_storages(stor_file, url_in, model_length::Period)
 
     # object parameters
     c1 =  add_unit_param2(c0, [:unit_investment_cost, :candidate_units, :min_units_on_share])
-    c1_sto = add_storage_node_param2(c0, [:node_state_cap, 
+    c1_sto = add_storage_node_param3(c0, [:node_state_cap, 
                     :demand,
                     :storage_investment_cost,
                     :candidate_storages,
                     :storage_investment_variable_type],
                     directory=dirname(stor_file)) 
 
+    println(c1_sto)
 
     import_objects(url_in, add_unit(c0))
     import_object_param(url_in, c1)
     import_objects(url_in, add_stornode(c0))
     import_object_param(url_in, c1_sto)
 
-    import_relations_2dim(url_in, add_unit_to_node(c0))
+    import_relations_2dim(url_in, add_unit_to_node_storage(c0))
     import_rel_param_2dim(url_in, 
         add_unit_node_param_storage(c0, directory=dirname(stor_file)))
 

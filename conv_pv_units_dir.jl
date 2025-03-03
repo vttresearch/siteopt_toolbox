@@ -34,16 +34,8 @@ function main()
     add_pv_units(parsed_args["arg1"], parsed_args["arg3"], model_length)
 end
 
+
 #=
-# just the unit
-function add_unit(c0)
-    c1 = select(c0, :unit => :Object1)
-    insertcols!(c1, 1, :Objectclass1 => "unit")
-    return c1
-end
-=#
-
-
 # the unit-node relationships
 function add_unit_to_node(c0)
 
@@ -60,7 +52,7 @@ function add_unit_to_node(c0)
     insertcols!(c1, 3, :Objectclass2 => "node")
 
 end
-
+=#
 
 """
 Overall function for adding pv units
@@ -90,9 +82,12 @@ function add_pv_units(pv_file::String, url_in, model_length::Period)
     c1 = add_unit_param2(c0, [:unit_investment_cost, :candidate_units, :min_units_on_share])
 
     import_objects(url_in, add_unit(c0))
-    import_relations_2dim(url_in, add_unit_to_node(c0))
     import_object_param(url_in, c1)
     
+    import_relations_2dim(url_in, 
+        vcat(add_unit_to_node(c0, "unit__to_node", :basenode),
+            add_unit_to_node(c0, "unit__to_node", :emissionnode))    )
+
     c3 = add_unit_node_param(c0, [:unit_capacity, :vom_cost], directory = dirname(pv_file) )
     import_rel_param_2dim(url_in, c3)
     

@@ -343,7 +343,7 @@ function add_object_object(c0, relclass::String, oc1, oc2, object1::Symbol, obje
     insertcols!(c1, 1, :relationshipclass => relclass)
     insertcols!(c1, 2, :Objectclass1 => oc1)
     insertcols!(c1, 3, :Objectclass2 => oc2)
-    return c1
+    return unique(dropmissing(c1))
 end
 
 function add_object_object_object(c0, relclass::String, oc1, oc2, oc3, object1::Symbol, object2::Symbol, object3::Symbol)
@@ -357,7 +357,6 @@ end
 
 function add_unit_node_node(c0, node1::Symbol, node2::Symbol)
     add_object_object_object(c0, "unit__node__node", "unit", "node", "node", :unit, node1, node2)
-  
 end
 
 function convert_timeseries(x::DataFrame, valcol = :value)

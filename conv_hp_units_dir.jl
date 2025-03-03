@@ -50,26 +50,6 @@ function add_unit_to_node(c0)
     )
 end
 
-# the unit-node relationship parameters
-function add_unit_node_param(c0)
-
-    c01 = subset(c0, :capacity => ByRow(!ismissing))
-    # add alternative name if not present
-    if !hasproperty(c01, :alternative_name)
-        insertcols!(c01, :alternative_name => "Base")
-    end
-    c1 = select(c01, :unit)
-    c1.node = c01.outputnode
-    
-    insertcols!(c1, 1, :relationshipclass => "unit__to_node")
-    insertcols!(c1, 2, :Objectclass1 => "unit")
-    insertcols!(c1, 3, :Objectclass2 => "node")
-    insertcols!(c1, 6, :parameter_name => "unit_capacity")
-    insertcols!(c1, 7, :alternative_name => c01[:, :alternative_name])
-    insertcols!(c1, 8, :parameter_value => c01[:, :capacity])
-
-    return c1
-end
 
 #=
 # the unit-node-node relationships for output-input relationship
