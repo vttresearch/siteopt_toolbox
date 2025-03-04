@@ -82,6 +82,7 @@ function add_unit_to_node_storage(c0)
     )
 end
 
+#=
 # the unit-node relationship parameters
 function add_unit_node_param(c0)
 
@@ -106,6 +107,7 @@ function add_unit_node_param(c0)
 
     vcat(c1,c2)
 end
+=#
 
 """
     Adding the unit-node relationship parameters for storage units
@@ -154,7 +156,7 @@ function add_unit_node_node(c0)
         add_unit_node_node(c0, :basenode, :stornode))
 end
 
-function add_unit_node_node_param(c0)
+function add_unit_node_node_param_storage(c0)
 
     c1 = add_unit_node_node(c0)
     insertcols!(c1, 8, :parameter_name => "fix_ratio_out_in_unit_flow")
@@ -283,7 +285,7 @@ function add_storages(stor_file, url_in, model_length::Period)
 
     #unit-node-node relationships
     import_relations_3dim(url_in, add_unit_node_node(c0))
-    import_rel_param_3dim(url_in, add_unit_node_node_param(c0))
+    import_rel_param_3dim(url_in, add_unit_node_node_param_storage(c0))
 
 
 end

@@ -1,12 +1,26 @@
 using XLSX
 using Dates
 
+function add_unit_node_param(c0, paramcols; directory = "")
+
+    c1 = add_object_object_param(c0, :unit, :basenode, paramcols, directory = directory)
+
+    # final dataframe
+    insertcols!(c1, 1, :relationshipclass => "unit__to_node")
+    insertcols!(c1, 2, :Objectclass1 => "unit")
+    insertcols!(c1, 3, :Objectclass2 => "node")
+    c1 = select(c1, :relationshipclass, :Objectclass1, :Objectclass2, 
+                :Object1, :Object2, :parameter_name, :alternative_name, :value)
+
+end
+
+
 """
     add_unit_node_param(c0, paramcols; directory = "")
 
     Produces the unit-node parameters table
 """
-function add_unit_node_param(c0, paramcols; directory = "")
+function add_unit_node_param_old(c0, paramcols; directory = "")
 
     # Check if required columns exist in c0 and select what is present
     requested_cols = vcat(paramcols, [:alternative_name])
