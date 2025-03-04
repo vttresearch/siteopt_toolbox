@@ -1,6 +1,11 @@
 using XLSX
 using Dates
 
+"""
+    add_unit_node_param(c0, paramcols; directory = "")
+
+    Produces the unit-node parameters table
+"""
 function add_unit_node_param(c0, paramcols; directory = "")
 
     c1 = add_object_object_param(c0, :unit, :basenode, paramcols, directory = directory)
@@ -11,50 +16,8 @@ function add_unit_node_param(c0, paramcols; directory = "")
     insertcols!(c1, 3, :Objectclass2 => "node")
     c1 = select(c1, :relationshipclass, :Objectclass1, :Objectclass2, 
                 :Object1, :Object2, :parameter_name, :alternative_name, :value)
-
 end
 
-
-"""
-    add_unit_node_param(c0, paramcols; directory = "")
-
-    Produces the unit-node parameters table
-"""
-function add_unit_node_param_old(c0, paramcols; directory = "")
-
-    # Check if required columns exist in c0 and select what is present
-    requested_cols = vcat(paramcols, [:alternative_name])
-    existing_columns = intersect(requested_cols, Symbol.(names(c0)))
-    c1 = select(c0, :unit, :basenode, existing_columns)
-
-    # add alternative name if not present
-    if !hasproperty(c1, :alternative_name)
-        insertcols!(c1, :alternative_name => "Base")
-    end
-
-    c1 = stack(c1, Not([:unit, :basenode, :alternative_name]))
-    c1 = subset(c1, :value => ByRow(!ismissing))
-
-    rename!(c1, :variable => :parameter_name)
-
-    # text values which start with ts: indicating a timeseries
-    # load the corresponding timeseries into value clumn
-    c1_str = subset(c1, :value => ByRow(x -> isa(x, String) && startswith(x, "ts:")))
-    c1_str = add_unit_node_param_timeser(c1_str, directory)
-
-    # only numeric or string values; combine with timeseries
-    c1 = subset(c1, :value => ByRow(x -> !(isa(x, String) && startswith(x, "ts:")) ))
-    c1 = vcat(c1, c1_str)
-
-    # final dataframe
-    insertcols!(c1, 1, :relationshipclass => "unit__to_node")
-    insertcols!(c1, 2, :Objectclass1 => "unit")
-    insertcols!(c1, 3, :Objectclass2 => "node")
-    c1 = select(c1, :relationshipclass, :Objectclass1, :Objectclass2, 
-                :unit => :Object1, :basenode => :Object2, :parameter_name, 
-                :alternative_name, :value)
-    return c1
-end
 
 function add_object_object_param_wmuls(c0, object1, object2, paramcols; directory = "")
 
@@ -74,9 +37,7 @@ function add_object_object_param_wmuls(c0, object1, object2, paramcols; director
     rename!(c2, :variable => :parameter_name, :value => :multiplier)           
     
     c1 = leftjoin(c1, c2, on = [:Object1, :Object2, :alternative_name, :parameter_name])
-    
     c1 = transform(c1, [:value, :multiplier] => ByRow((a,b) -> ismissing(b) ? a : a * b) => :value)
-    
 end
 
 """
@@ -141,7 +102,7 @@ end
     add_unit_node_node_param(c0, node2, paramcols; directory = "")
 
     Produces the unit-node-node parameters table assuming that there is an
-    unique second node for every unit.
+    unique second node for every unit. Assumes that the first node is "basenode".
 """
 function add_unit_node_node_param(c0, node2, paramcols; directory = "")
 
@@ -215,7 +176,6 @@ function add_object_param(c0, object1, paramcols; directory = "")
     c1 = vcat(c1, c1_str)
 
     rename!(c1, object1 => :Object1)
-   
     return c1
 end
 

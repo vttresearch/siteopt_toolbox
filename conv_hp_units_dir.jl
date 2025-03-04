@@ -34,13 +34,6 @@ function main()
     add_hp_units(parsed_args["arg1"], parsed_args["arg3"], model_length)
 end
 
-#=
-function add_unit(c0)
-    c1 = unique(select(c0, :unit => :Object1))
-    insertcols!(c1, 1, :Objectclass1 => "unit")
-    return c1
-end
-=#
 
 # the unit-node relationships
 function add_unit_to_node(c0)
@@ -51,20 +44,6 @@ function add_unit_to_node(c0)
 end
 
 
-#=
-# the unit-node-node relationships for output-input relationship
-function add_unit_node_node(c0)
-
-    c1 = select(c0, :unit => :Object1)
-    c1.Object2 = c0.basenode
-    c1.Object3 = c0.inputnode
-
-    insertcols!(c1, 1, :relationshipclass => "unit__node__node")
-    insertcols!(c1, 2, :Objectclass1 => "unit")
-    insertcols!(c1, 3, :Objectclass2 => "node")
-    insertcols!(c1, 4, :Objectclass3 => "node")
-end
-=#
 
 """
 Overall function for adding hp units

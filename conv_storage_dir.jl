@@ -131,33 +131,11 @@ end
 
 # the unit-node-node relationships
 function add_unit_node_node(c0)
-    #=
-    c1 = select(c0, :unit => :Object1)
-    c1.Object2 = c0.stornode
-    c1.Object3 = c0.basenode
-
-    insertcols!(c1, 1, :relationshipclass => "unit__node__node")
-    insertcols!(c1, 2, :Objectclass1 => "unit")
-    insertcols!(c1, 3, :Objectclass2 => "node")
-    insertcols!(c1, 4, :Objectclass3 => "node")
-
-    c2 = select(c0, :unit => :Object1)
-    c2.Object2 = c0.basenode
-    c2.Object3 = c0.stornode
-
-    insertcols!(c2, 1, :relationshipclass => "unit__node__node")
-    insertcols!(c2, 2, :Objectclass1 => "unit")
-    insertcols!(c2, 3, :Objectclass2 => "node")
-    insertcols!(c2, 4, :Objectclass3 => "node")
-
-    vcat(c1,c2)
-    =#
     vcat(add_unit_node_node(c0, :stornode, :basenode),
         add_unit_node_node(c0, :basenode, :stornode))
 end
 
 function add_unit_node_node_param_storage(c0)
-
     c1 = add_unit_node_node(c0)
     insertcols!(c1, 8, :parameter_name => "fix_ratio_out_in_unit_flow")
     insertcols!(c1, 9, :alternative_name => "Base")
@@ -169,36 +147,10 @@ end
 function add_storage_node_param3(c0, paramcols; directory="")
 
     c1 = insertcols(c0, :has_state => true)
-    c2 = add_object_param(c1, :stornode, paramcols, directory = directory)
+    c2 = add_object_param(c1, :stornode, [paramcols; :has_state], directory = directory)
     return insertcols(c2, 1, :Objectclass1 => "node")
 end
 
-
-function add_storage_node_param2(c0, paramcols; directory="")
-
-    c1 = select(c0, :stornode, :alternative_name, paramcols)
-
-    insertcols!(c1, :has_state => true)
-
-    c1 = stack(c1, Not([:stornode, :alternative_name]))
-    c1 = subset(c1, :value => ByRow(!ismissing))
-
-    insertcols!(c1, :Objectclass1 => "node")
-    rename!(c1, :variable => :parameter_name)
-
-    # use only numeric or string values
-    #c1_num = subset(c1, :value => ByRow(x->x isa Number))
-    c1_num = subset(c1, :value => ByRow(x -> !(isa(x, String) && startswith(x, "ts:")) ))
-
-    c1_num = select(c1_num, :Objectclass1, :stornode => :Object1, :parameter_name, :alternative_name, :value)
-
-    # use only text values which start with ts: indicating a timeseries
-    c1_str = subset(c1, :value => ByRow(x -> isa(x, String) && startswith(x, "ts:")))
-
-    c1_str = add_storage_node_param_timeser(c1_str, directory)
-
-    vcat(c1_num, c1_str)
-end
 
 function add_storage_node_param_timeser(c1_str, directory)
     
@@ -267,8 +219,6 @@ function add_storages(stor_file, url_in, model_length::Period)
                     :candidate_storages,
                     :storage_investment_variable_type],
                     directory=dirname(stor_file)) 
-
-    println(c1_sto)
 
     import_objects(url_in, add_unit(c0))
     import_object_param(url_in, c1)
