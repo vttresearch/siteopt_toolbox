@@ -44,33 +44,6 @@ function add_stornode(c0)
     return c1
 end
 
-# the unit-node relationships
-#=
-function add_unit_to_node(c0)
-
-    c1  = select(c0, :unit)
-    c11 = copy(c1)
-    c1.node = c0.stornode
-    c11.node = c0.basenode 
-    c1 = vcat(c1,c11)
-
-    insertcols!(c1, 1, :relationshipclass => "unit__to_node")
-    insertcols!(c1, 2, :Objectclass1 => "unit")
-    insertcols!(c1, 3, :Objectclass2 => "node")
-
-    c2 =  select(c0, :unit)
-    c21 = copy(c2)
-    c2.node = c0.basenode
-    c21.node = c0.stornode
-    c2 = vcat(c2,c21)
-
-    insertcols!(c2, 1, :relationshipclass => "unit__from_node")
-    insertcols!(c2, 2, :Objectclass1 => "unit")
-    insertcols!(c2, 3, :Objectclass2 => "node")
-
-    vcat(c1,c2)
-end
-=#
 
 # the unit-node relationships 
 function add_unit_to_node_storage(c0)
@@ -130,13 +103,13 @@ end
 
 
 # the unit-node-node relationships
-function add_unit_node_node(c0)
+function add_unit_node_node_storage(c0)
     vcat(add_unit_node_node(c0, :stornode, :basenode),
         add_unit_node_node(c0, :basenode, :stornode))
 end
 
 function add_unit_node_node_param_storage(c0)
-    c1 = add_unit_node_node(c0)
+    c1 = add_unit_node_node_storage(c0)
     insertcols!(c1, 8, :parameter_name => "fix_ratio_out_in_unit_flow")
     insertcols!(c1, 9, :alternative_name => "Base")
     insertcols!(c1, 10, :value => 0.95)
@@ -174,24 +147,26 @@ function add_storage_node_param_timeser(c1_str, directory)
 end
 
 """
-Overall function for adding electrical storages
+    add_storages(stor_file, url_in, model_length::Period)
 
-    Output: excel tables of electrical storage units and electrical storage nodes
+    Overall function for adding energy storages.
+
+    stor_file: storages input table file path (excel)
+    url_in: DB url
+    model_length: model horizon length
+    
 """
 function add_storages(stor_file, url_in, model_length::Period)
 
     #read basic info
     c0 = DataFrame(XLSX.readtable(stor_file, "Sheet1") )
    
-    #c0 = transform(c0, [:block_identifier] => ByRow(x->"u_"*string(x)*"_stor") => :unit )
     c0 = transform(c0, [:type, :block_identifier] => 
         ByRow((a,b) -> ifelse(a=="elec", "u_"*string(b)*"_stocharger", "u_"*string(b)*"_heatstocharger")) => :unit )
 
-    #c0 = transform(c0, [:block_identifier] => ByRow(x->"n_"*string(x)*"_elecstor") => :stornode )
     c0 = transform(c0, [:type, :block_identifier] => 
         ByRow((a,b) -> ifelse(a=="elec", "n_"*string(b)*"_elecstor", "n_"*string(b)*"_heatstor")) => :stornode )
 
-    #c0 = transform(c0, [:block_identifier] => ByRow(x->"n_"*string(x)*"_elec") => :basenode )
     c0 = transform(c0, [:type, :block_identifier] => 
         ByRow((a,b) -> ifelse(a=="elec", "n_"*string(b)*"_elec", "n_"*string(b)*"_dheat")) => :basenode )
 
@@ -234,9 +209,8 @@ function add_storages(stor_file, url_in, model_length::Period)
     #import_relations_2dim(url_in, c5)
 
     #unit-node-node relationships
-    import_relations_3dim(url_in, add_unit_node_node(c0))
+    import_relations_3dim(url_in, add_unit_node_node_storage(c0))
     import_rel_param_3dim(url_in, add_unit_node_node_param_storage(c0))
-
 
 end
 

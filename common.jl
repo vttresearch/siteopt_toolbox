@@ -337,3 +337,16 @@ function convert_timeseries(x::DataFrame, valcol = :value)
     x.time = DateTime.(x.time)
     y = TimeSeries(x[:,:time], x[:,valcol], false, false)     
 end
+
+# Function to rename DataFrame columns based on a dictionary
+function rename_columns(df::DataFrame, rename_dict::Dict{Symbol, Symbol})
+    for (old_name, new_name) in rename_dict
+        if old_name in propertynames(df)
+            if new_name in propertynames(df)
+                df = select(df, Not(new_name))
+            end
+            rename!(df, old_name => new_name)
+        end
+    end
+    return df
+end

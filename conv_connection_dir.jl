@@ -43,6 +43,7 @@ function add_param_connection(c0, paramcols)
     default_candi_conn = 100
 
     # add parameter "candidate_connections"
+    # TBC if this is needed
     if !hasproperty(c1, :candidate_connections)
         insertcols!(c1, :candidate_connections => missings(Float64, nrow(c1)))
         c1[(!ismissing).(c1.connection_investment_cost), :candidate_connections] .= default_candi_conn
@@ -109,6 +110,26 @@ function add_param_from_node(c0, paramcols; directory = "")
                 :Object1, :Object2, :parameter_name, :alternative_name, :value)
 end
 
+function add_param_connection_node(c0::DataFrame, nodecol, paramcols::Array{Symbol, 1}; directory = "")
+
+    c1 = add_object_object_param_wmuls(c0, :connection, nodecol, paramcols; directory = directory)
+
+    insertcols!(c1, 1, :relationshipclass => "connection__from_node")
+    insertcols!(c1, 2, :Objectclass1 => "connection")
+    insertcols!(c1, 3, :Objectclass2 => "node")
+    c1 = select(c1, :relationshipclass, :Objectclass1, :Objectclass2, 
+                :Object1, :Object2, :parameter_name, :alternative_name, :value)
+end
+
+function add_param_connection_node(c0::DataFrame, nodecol, paramcols::Dict; directory = "")
+
+    c1 = rename_columns(c0, paramcols)
+    paramcols2 = collect(values(paramcols))
+   
+    add_param_connection_node(c1, nodecol, paramcols2; directory = directory)
+end
+
+
 function add_param_node_node2(c0, c_rels, paramcols)
  
     c1 = add_object_param(c0, :connection, paramcols)
@@ -124,6 +145,10 @@ function add_connections(conn_file, url_in, model_length::Period)
 
     #output file
     outfile = "connections.xlsx"
+
+    #definitions for reverse connection flow cost
+    reverse_cost_names_mapping = Dict(:connection_flow_cost_reverse => :connection_flow_cost,
+        Symbol("connection_flow_cost_reverse.mul") => Symbol("connection_flow_cost.mul"))
 
     #read basic connection info
     c0 = DataFrame(XLSX.readtable(conn_file, "Sheet1") )
@@ -157,8 +182,17 @@ function add_connections(conn_file, url_in, model_length::Period)
     import_relations_3dim(url_in, c3)
     
     # relationship parameters
-    c4 = add_param_from_node(c0, [:connection_flow_cost, :connection_capacity], 
-                            directory = dirname(conn_file))
+    #c4 = add_param_from_node(c0, [:connection_flow_cost, :connection_capacity], 
+     #                       directory = dirname(conn_file)),
+
+    c4 = vcat(add_param_connection_node(c0, :node1, 
+                            [:connection_flow_cost, :connection_capacity], 
+                            directory = dirname(conn_file)),
+            add_param_connection_node(c0, :node2, 
+                            reverse_cost_names_mapping, directory = dirname(conn_file) )
+    )
+    
+    
     import_rel_param_2dim(url_in, c4)
 
     c5 = add_param_node_node2(c0, c3, [:fix_ratio_out_in_connection_flow] )
