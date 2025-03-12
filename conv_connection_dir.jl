@@ -143,10 +143,7 @@ end
 
 function add_connections(conn_file, url_in, model_length::Period)
 
-    #output file
-    outfile = "connections.xlsx"
-
-    #definitions for reverse connection flow cost
+     #definitions for reverse connection flow cost
     reverse_cost_names_mapping = Dict(:connection_flow_cost_reverse => :connection_flow_cost,
         Symbol("connection_flow_cost_reverse.mul") => Symbol("connection_flow_cost.mul"))
 
@@ -189,15 +186,15 @@ function add_connections(conn_file, url_in, model_length::Period)
                             [:connection_flow_cost, :connection_capacity], 
                             directory = dirname(conn_file)),
             add_param_connection_node(c0, :node2, 
-                            reverse_cost_names_mapping, directory = dirname(conn_file) )
+                            reverse_cost_names_mapping, directory = dirname(conn_file) ),
+            add_param_connection_node(c0, :node2, 
+                            [:connection_capacity], directory = dirname(conn_file))
     )
-    
-    
+     
     import_rel_param_2dim(url_in, c4)
 
     c5 = add_param_node_node2(c0, c3, [:fix_ratio_out_in_connection_flow] )
     import_rel_param_3dim(url_in, c5)
-  
 end
 
 main()

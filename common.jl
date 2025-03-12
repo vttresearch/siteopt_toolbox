@@ -1,5 +1,5 @@
 using XLSX
-using Dates
+using Dates, TimeZones
 
 """
     add_unit_node_param(c0, paramcols; directory = "")
@@ -28,16 +28,20 @@ function add_object_object_param_wmuls(c0, object1, object2, paramcols; director
             if isequal(name, String(col) * ".mul")
         )
     
-    c2 = select(c0, object1 => :Object1, object2 => :Object2, :alternative_name, collect(keys(a)))
-    rename!(c2, a)
-    
-    # stack multipliers and join
-    c2 = stack(c2, Not([:Object1, :Object2, :alternative_name]))
-    c2 = subset(c2, :value => ByRow(!ismissing))
-    rename!(c2, :variable => :parameter_name, :value => :multiplier)           
-    
-    c1 = leftjoin(c1, c2, on = [:Object1, :Object2, :alternative_name, :parameter_name])
-    c1 = transform(c1, [:value, :multiplier] => ByRow((a,b) -> ismissing(b) ? a : a * b) => :value)
+    if length(a) > 0
+        c2 = select(c0, object1 => :Object1, object2 => :Object2, :alternative_name, collect(keys(a)))
+        rename!(c2, a)
+        
+        # stack multipliers and join
+        c2 = stack(c2, Not([:Object1, :Object2, :alternative_name]))
+        c2 = subset(c2, :value => ByRow(!ismissing))
+        rename!(c2, :variable => :parameter_name, :value => :multiplier)           
+        
+        c1 = leftjoin(c1, c2, on = [:Object1, :Object2, :alternative_name, :parameter_name])
+        c1 = transform(c1, [:value, :multiplier] => ByRow((a,b) -> ismissing(b) ? a : a * b) => :value)
+    end
+
+    return c1
 end
 
 """
@@ -222,7 +226,10 @@ end
 """
 function read_timeseries(folder, id, col=nothing)
 
-    formats = ["yyyy-mm-dd HH:MM:SS", "yyyy-mm-ddTHH:MM:SS"]
+    #formats = ["yyyy-mm-dd HH:MM:SS", "yyyy-mm-ddTHH:MM:SS"]
+    formats = Dict{String, Union{Function, Type}}("yyyy-mm-dd HH:MM:SS" => DateTime, 
+        "yyyy-mm-ddTHH:MM:SS" => DateTime,
+        "yyyy-mm-ddTHH:MM:SSz" => ZonedDateTime)
 
     cf_file = joinpath(folder, "ts_" * id * ".csv")
     if !isfile(cf_file)
@@ -233,9 +240,10 @@ function read_timeseries(folder, id, col=nothing)
     cf = DataFrame(CSV.File(cf_file, missingstring = "NA", types = Dict(:time => String))) 
     
     # convert time column
-    for fmt in formats
+    for (fmt, fun) in formats
         try
-            cf.time = DateTime.(cf.time, DateFormat(fmt))
+            #cf.time = DateTime.(cf.time, DateFormat(fmt))
+            cf.time = fun.(cf.time, DateFormat(fmt))
             break   # if success, exit the loop
         catch e
             if isa(e, ArgumentError) || isa(e, MethodError)
@@ -246,6 +254,12 @@ function read_timeseries(folder, id, col=nothing)
         end
     end
     
+    #convert to unzoned datetime if needed
+    if eltype(cf.time) == ZonedDateTime
+        # convert to UTC+1
+        cf.time = DateTime.(astimezone.(cf.time, TimeZone("UTC+1")))
+    end
+
     if !isnothing(col)
         return convert_timeseries(cf, col)
     else
