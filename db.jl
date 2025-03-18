@@ -33,6 +33,13 @@ function replace_timeseries(d::Vector, dirname)
     return d
 end
 
+function loadmodel_nofilter(url_in, filename)
+    # load data 
+    mdict = JSON.parsefile(filename)
+    SpineInterface.import_data(url_in, mdict, "loadmodel_nofilter")
+    return url_in
+end
+
 function loadmodel(url_in, filename)
     # load model definition
     mdict = JSON.parsefile(filename)
@@ -47,9 +54,7 @@ function loadmodel(url_in, filename)
     if haskey(mdict, "entities")
         data1[:entities] = mdict["entities"]
     end
-    #if haskey(mdict, "parameter_values")
-    #    data1[:parameter_values] = mdict["parameter_values"]
-    #end
+    
     if haskey(mdict, "alternatives")
         data1[:alternatives] = mdict["alternatives"]
     end
@@ -200,6 +205,18 @@ function unparse_some_value_types(v::AbstractVector)
         v[i] = unparse_db_value(v[i])
     end
 end
+
+
+function get_entities(db_url::String, entityclass::String)
+
+    entities = SpineInterface.run_request(db_url, "call_method", ("get_items","entity"),
+        Dict("entity_class_name" => entityclass)
+    )
+
+    a = [r["name"] for r in entities] 
+    
+end
+
 
 """
     get_parameter_value(db_url, entityclass, entityelements, paramname)
@@ -393,5 +410,20 @@ function export_data(db_url; filters=Dict(), kwargs::Dict=Dict())
         SpineInterface._run_server_request(db, "clear_filters")
         isempty(old_filters) || SpineInterface._run_server_request(db, "apply_filters", (old_filters,))
         data
+    end
+end
+
+function remove_entity(db_url, entities::Tuple{Vararg{String}})
+
+	e = run_request(db_url, "query", ("entity_sq",))["entity_sq"]
+    
+    entity_id_by_name = Dict(x["name"] => x["id"] for x in e)
+	to_rm_entity_ids = unique(entity_id_by_name[name] for name in intersect(entities, keys(entity_id_by_name)))
+	
+    println(to_rm_entity_ids)
+
+    if !isempty(to_rm_entity_ids)
+		a = run_request(db_url, "call_method", ("remove_items", "entity", to_rm_entity_ids...))
+        run_request(db_url, "call_method", ("commit_session", "removed item"))
     end
 end

@@ -8,6 +8,7 @@ using PyCall
 # Try from command line with
 # julia --project=@. conv_hp_units.jl testinputs/hp-input.xlsx 
 
+include("db.jl")
 
 function parse_commandline()
     s = ArgParseSettings()
@@ -47,25 +48,18 @@ function select_repr_periods(url_in, repr_template, repr_settings, url_out)
     purge_db(url_out)
 
     @info "Creating DB with representative periods data..."
-    #loadmodel(url_in, repr_template)
-    #loadmodel(url_in, repr_settings)
     create_copy_db(url_in, url_out)
 
     # Add repr setting data to the DB
-    loadmodel(url_out, repr_template)
-    loadmodel(url_out, repr_settings)
+    loadmodel_nofilter(url_out, repr_template)
+    loadmodel_nofilter(url_out, repr_settings)
 
     # run SpinePeriods to get the actual repr periods mapping
     run_spine_periods(url_out, json_out, alternative="Base")
-    loadmodel(url_out, json_out)
-end
+    loadmodel_nofilter(url_out, json_out)
 
-function loadmodel(url_in, filename)
-    # load data 
-    mdict = JSON.parsefile(filename)
-
-    SpineInterface.import_data(url_in, mdict, "testing")
-    return url_in
+    @info "Removing the old temporal block..."
+    remove_entity(url_out, ("myblock",))
 end
 
 function create_copy_db(url_in, url_out)
@@ -87,19 +81,5 @@ def purge_db(db_url):
 """
 
 
-
-function remove_entity(db_url)
-
-    py"""
-    import spinedb_api as api
-    from spinedb_api import DatabaseMapping
-
-    url = "sqlite:///first.sqlite"
-
-    with DatabaseMapping(url, create=True) as db_map:
-        # Do something with db_map
-        pass
-    """
-end
 
 main()

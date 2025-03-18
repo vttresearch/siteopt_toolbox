@@ -1,5 +1,6 @@
 using XLSX
 using Dates, TimeZones
+using SpineInterface #for TimeSeries
 
 """
     add_unit_node_param(c0, paramcols; directory = "")
@@ -351,6 +352,11 @@ function convert_timeseries(x::DataFrame, valcol = :value)
     x.time = DateTime.(x.time)
     y = TimeSeries(x[:,:time], x[:,valcol], false, false)     
 end
+
+function tssum(x::TimeSeries)
+    return sum(x.values)
+end
+
 
 # Function to rename DataFrame columns based on a dictionary
 function rename_columns(df::DataFrame, rename_dict::Dict{Symbol, Symbol})

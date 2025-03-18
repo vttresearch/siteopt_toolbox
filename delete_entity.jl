@@ -48,7 +48,6 @@ function remove_entity(db_url, entities::Tuple{Vararg{String}})
         run_request(db_url, "call_method", ("commit_session", "added item"))
       
     end
-	
 end
 
 main()
