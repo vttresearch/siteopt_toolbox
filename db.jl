@@ -1,5 +1,6 @@
 
 using SpineInterface
+using Dates
 
 function _db_url(dbname::String)
     file_path =  abspath(joinpath("dbs", dbname))
@@ -217,6 +218,11 @@ function get_entities(db_url::String, entityclass::String)
     
 end
 
+function get_entities(db::Dict, entityclass::String)
+
+    entities = [v[2] for v in db["entities"] if v[1] == entityclass ] 
+    return deepcopy(entities)
+end
 
 """
     get_parameter_value(db_url, entityclass, entityelements, paramname)
@@ -251,6 +257,34 @@ function get_parameter_values(db_url::String, entityclass::String, entityelement
         a = subset(a, :entity => ByRow(==(collect(entityelements2) )))
     end
         
+    return a
+end
+
+
+function get_parameter_values(db_url::Dict, entityclass::String, entityelements, paramname::String)
+
+	pval = [(entity=v[2], value=parse_db_value(deepcopy(v[4])), value2 = copy(v[4]), alternative =v[5])
+        for v in db_url["parameter_values"]
+            if v[1] == entityclass && v[3] == paramname] 
+    
+    #pval2 = [u for u in pval if u.entity == entityelements]
+    #println(pval2[1])
+    #println(length(pval2[1].value2[1] ))
+    #temp = deepcopy(pval2[1].value2)
+    #q = parse_db_value(temp)
+    #println(length(pval2[1].value2[1] ))
+
+    if length(pval) > 0
+        a = DataFrame(copy(pval))
+    else
+        a = DataFrame(entity = [], alternative=[], value=[])
+    end
+   
+    # filter according to the given entity
+    a = subset(a, :entity => ByRow(==(entityelements) ))
+   
+    #insertcols!(a, :value => TimeSeries([DateTime(2020,1,1)],[5]))
+    println(a)
     return a
 end
 
@@ -296,31 +330,7 @@ function get_parameter_values_scenario(db_url::String, entityclass::String,
     return a
 end
 
-function get_parameter_values2(db_url::String, entityclass::String, entityelements, paramname::String)
 
-    a = Dict()
-    if entityelements isa Vector{String}
-        entityelements2 = tuple(entityelements...)
-    else
-        entityelements2 = tuple(entityelements,)
-    end
-   
-    alternative_items = run_request(db_url, "call_method", ("get_alternative_items",))
-		for alternative in alternative_items
-			# Get the param value for certain alternative
-			pval = SpineInterface.run_request(db_url, "call_method", ("get_parameter_value_item",), Dict(
-				"entity_class_name" => entityclass, 
-				"parameter_definition_name" => paramname, 
-				"entity_byname" => entityelements2, 
-				"alternative_name" => alternative["name"])
-			)     
-            if length(pval) > 0
-                a[alternative["name"]] = parse_db_value(pval["value"], pval["type"])
-            end
-    end
-
-    return a
-end
 
 """
     get_parameter_values(db_url, entityclass, paramname)
@@ -343,33 +353,22 @@ function get_parameter_values(db_url::String, entityclass::String, paramname::St
         
     return a
 end
-function get_parameter_values2(db_url::String, entityclass::String, paramname::String)
 
-    a = DataFrame(entity = [], alternative=[], value=[])
+function get_parameter_values(db_url::Dict, entityclass::String, paramname::String)
 
-    entities = SpineInterface.run_request(db_url, "call_method", ("get_items","entity"),
-        Dict("entity_class_name" => entityclass)
-    )
-
-    alternative_items = run_request(db_url, "call_method", ("get_alternative_items",))
-	for ent in entities
-        for alternative in alternative_items
-			# Get the parameter value for certain alternative and entity
-			pval = SpineInterface.run_request(db_url, "call_method", ("get_parameter_value_item",), Dict(
-				"entity_class_name" => entityclass, 
-				"parameter_definition_name" => paramname, 
-                "entity_byname" => ent["element_name_list"], 
-				"alternative_name" => alternative["name"])
-			)    
-            if length(pval) > 0
-                push!(a, (entity=ent["element_name_list"], alternative=alternative["name"], 
-                    value=parse_db_value(pval["value"], pval["type"]) ) )
-            end
-        end
+	pval = [(entity=v[2], value=parse_db_value(deepcopy(v[4])), value2 = copy(v[4]), alternative =v[5])
+        for v in db_url["parameter_values"]
+            if v[1] == entityclass && v[3] == paramname] 
+    
+    if length(pval) > 0
+        a = DataFrame(pval)
+    else
+        a = DataFrame(entity = [], alternative=[], value=[])
     end
-
+   
     return a
 end
+
 function get_parameter_values_scenario(db_url::String, entityclass::String, paramname::String,
                 scenario::String)
 
@@ -402,11 +401,11 @@ function export_data(db_url; filters=Dict(), kwargs::Dict=Dict())
         isempty(filters) && return SpineInterface._run_server_request(db, "export_data", kwargs...)
         old_filters = SpineInterface._current_filters(db)
         SpineInterface._run_server_request(db, "apply_filters", (filters,))
-        #data = SpineInterface._run_server_request(db, "export_data", kwargs...)
-        data = SpineInterface._run_server_request(db, "call_method", ("get_parameter_value_items",), Dict(
-				"entity_class_name" => "connection__to_node", 
-				"parameter_definition_name" => "connection_flow_cost")
-			)  
+        data = SpineInterface._run_server_request(db, "export_data", kwargs...)
+        #data = SpineInterface._run_server_request(db, "call_method", ("get_parameter_value_items",), Dict(
+	    #			"entity_class_name" => "connection__to_node", 
+	    #			"parameter_definition_name" => "connection_flow_cost")
+		#    	)  
         SpineInterface._run_server_request(db, "clear_filters")
         isempty(old_filters) || SpineInterface._run_server_request(db, "apply_filters", (old_filters,))
         data

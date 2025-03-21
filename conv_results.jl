@@ -42,6 +42,10 @@ Overall function for adding hp units
 """
 function conv_results(url_in, url_out, recipe_file, output_file = "results.xlsx")
 
+  
+    #b = get_parameter_values(test, "report__unit__stochastic_scenario", 
+    #    ["report1","u_1_pvroof", "parent"], "units_invested")
+
 
     a = summarizeresults(url_in, url_out, recipe_file, nothing)
 

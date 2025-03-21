@@ -34,10 +34,22 @@ end
 function main()
     parsed_args = parse_commandline()
 
-    select_repr_periods(parsed_args["arg1"], parsed_args["arg2"], parsed_args["arg3"], parsed_args["arg4"])
+    select_repr_periods(parsed_args["arg1"], parsed_args["arg2"], parsed_args["arg3"], parsed_args["arg4"]) 
     return nothing
 end
 
+"""
+    select_repr_periods(url_in, repr_template, repr_settings, url_out)
+
+    This function makes a new database with representative temporal blocks
+
+# Arguments
+- `url_in::String`: input DB url.
+- `repr_template::String`: file path of representative periods data template JSON
+- `repr_settings::String`: file path of representative periods settings JSON
+
+
+"""
 function select_repr_periods(url_in, repr_template, repr_settings, url_out)
 
     json_out = "output.json" 
