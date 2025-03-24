@@ -19,6 +19,9 @@ function parse_commandline()
             help = "model output database url"
             required = true
         "arg2"
+            help = "model input database url"
+            required = true
+        "arg3"
             help = "output recipe file"
             required = true
     end
@@ -31,7 +34,7 @@ function main()
     outfile1 = "res1.xlsx"
 
     parsed_args = parse_commandline()
-    conv_results(nothing, parsed_args["arg1"], parsed_args["arg2"])
+    conv_results(parsed_args["arg3"], parsed_args["arg1"], parsed_args["arg2"] )
 end
 
 

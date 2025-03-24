@@ -11,6 +11,13 @@ function summarizeresults(url_in::Union{String, Nothing},
 
     println(get_entities(url_out, "stochastic_scenario") )
 
+    @time y = get_entities(url_in, "model__default_temporal_block")
+    println(y)
+    @time y =get_parameter_values_scenario2(url_in, "temporal_block", 
+        ["block_start", "block_end", "weight"],
+               "Base")
+    println(y)
+
     #load output DB to memory
     db_out = export_data(url_out)
 
@@ -36,7 +43,7 @@ function summarizeresults(url_in::Union{String, Nothing},
                 elseif val2["type"] == "unit_investment"
                     a = result_unit_investment(db_out, val2["unit"], "parent", scenario)
                 elseif val2["type"] == "node_investment"
-                    a = result_node_investment(url_out, val2["node"], scenario)
+                    a = result_node_investment(db_out, val2["node"], "parent", scenario)
                 else
                     println("Unknown value type $(val2["type"])")
                 end
@@ -245,7 +252,6 @@ function result_unit_investment(db::Union{String, Dict},
 
     units = get_entities(db, "unit")
     units = filter(x -> occursin(unit, x), units)
-    println(units)
     entityelementsvec = [["report1", u, stoch_scen] for u in units]
 
     #b = get_parameter_values(db, "report__unit__stochastic_scenario", 
@@ -257,17 +263,23 @@ function result_unit_investment(db::Union{String, Dict},
     if !isnothing(scenario)
         b = subset(b, :alternative => ByRow(in(scenario)))
     end
-    transform!(b, :value => ByRow(b -> tssum(b) ) => :value)
+    transform!(b, :value => ByRow(x -> tssum(x) ) => :value)
     return select(b, :alternative => :scenario, :entity, :value)
 end
 
-function result_node_investment(url_out::String, 
-    node::String, scenario::Vector{String})
+function result_node_investment(db::Union{String, Dict}, 
+    node::String, stoch_scen::String, scenario::Union{Vector{String}, Nothing})
 
-    b = get_parameter_values(url_out, "report__node__stochastic_scenario", 
-        ["report1", node, "realization"], "storages_invested")
-    
-    b = subset(b, :alternative => ByRow(in(scenario)))
+    nodes = get_entities(db, "node")
+    nodes = filter(x -> occursin(node, x), nodes)
+    entityelementsvec = [["report1", n, stoch_scen] for n in nodes]
+
+    b = get_parameter_values(db, "report__node__stochastic_scenario", "storages_invested")
+    b = subset(b, :entity => ByRow(x->in(x, entityelementsvec) ))
+
+    if !isnothing(scenario)
+        b = subset(b, :alternative => ByRow(in(scenario)))
+    end
     transform!(b, :value => ByRow(b -> tssum(b) ) => :value)
     return select(b, :alternative => :scenario, :entity, :value)
 end
