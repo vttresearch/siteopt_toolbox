@@ -328,54 +328,8 @@ function get_parameter_values_scenario(db_url::String, entityclass::String,
     return a
 end
 
+
 function get_parameter_values_scenario(db_url::String, entityclass::String, paramname::Union{String,Vector{String}},
-                scenario::String)
-
-    a = DataFrame(entity = [], alternative=[], value=[])
-	filters = Dict("scenario" => scenario)
-
-    if paramname isa String
-        paramname = [paramname]
-    end
-
-
-    pval = SpineInterface._db(db_url) do db
-        old_filters = SpineInterface._current_filters(db)
-        SpineInterface._run_server_request(db, "apply_filters", (filters,))
-
-        data = nothing
-        for p in paramname
-            data1 = SpineInterface._run_server_request(db, "call_method", 
-                    ("get_parameter_value_items",), 
-                    Dict("entity_class_name" => entityclass, 
-                    "parameter_definition_name" => p)
-                )
-            if isnothing(data)
-                data = data1
-            else
-                data = vcat(data, data1)
-            end
-        end
-
-        SpineInterface._run_server_request(db, "clear_filters")
-        SpineInterface._run_server_request(db, "apply_filters", (old_filters,))
-        data
-    end
-
-    if length(pval) > 0
-        a = DataFrame( [(entity= ifelse(length(r["dimension_name_list"]) > 0, r["element_name_list"], r["entity_byname"][1]),
-                        alternative=r["alternative_name"], 
-                        parameter_name = r["parameter_definition_name"], 
-                        value=parse_db_value(r["value"], r["type"]) ) for r in pval] )
-    end
-
-    # filter according to the entity
-    a = subset(a, :parameter_name => ByRow(x -> in(x, paramname)))
-
-    return a
-end
-
-function get_parameter_values_scenario2(db_url::String, entityclass::String, paramname::Union{String,Vector{String}},
                 scenario::String)
 
     a = DataFrame(entity = [], alternative=[], value=[])
