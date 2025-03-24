@@ -1,6 +1,5 @@
 using JSON
 
-
 function summarizeresults(url_in::Union{String, Nothing}, 
                         url_out::String, 
                         recipe_file::String, 
@@ -11,12 +10,7 @@ function summarizeresults(url_in::Union{String, Nothing},
 
     println(get_entities(url_out, "stochastic_scenario") )
 
-    @time y = get_entities(url_in, "model__default_temporal_block")
-    println(y)
-    @time y =get_parameter_values_scenario2(url_in, "temporal_block", 
-        ["block_start", "block_end", "weight"],
-               "Base")
-    println(y)
+    weight = prepare_tb_weight(url_in)
 
     #load output DB to memory
     db_out = export_data(url_out)
@@ -29,7 +23,7 @@ function summarizeresults(url_in::Union{String, Nothing},
                 if val2["type"] == "unit_flow_cost"
                     a = result_unit_flow_costs(url_in, url_out, val2["unit"], val2["node"], scenario)
                 elseif val2["type"] == "unit_flow"
-                    a = result_unit_flow(db_out, val2["unit"], val2["node"], "parent", scenario)
+                    a = result_unit_flow(db_out, weight, val2["unit"], val2["node"], "parent", scenario)
                 elseif val2["type"] == "unit_flow_ts"
                     a = result_unit_flow(url_out, val2["unit"], val2["node"], "parent", scenario, _sum=false)
                 elseif val2["type"] == "connection_flow_cost"
@@ -144,7 +138,11 @@ function result_unit_flow_costs(url_in::String, url_out::String,
     return select(ab, :scenario, :entity, :value)
 end
 
-function result_unit_flow(url_out::Union{String, Dict}, 
+"""
+    Calculates the summed unit flow or just returns a unit flow from output DB
+"""
+function result_unit_flow(url_out::Union{String, Dict},
+    weight::Union{TimeSeries,Nothing}, 
     u::String, node::String, stoch_scen::String, 
     scenario::Union{Vector{String}, Nothing}; _sum=true)
 
@@ -154,11 +152,14 @@ function result_unit_flow(url_out::Union{String, Dict},
     if !isnothing(scenario)
         b = subset(b, :alternative => ByRow(in(scenario)))
     end
-   
   
     rename!(b, :alternative => :scenario)
     if _sum
-        transform!(b, :value => ByRow((a) -> tssum(a)) => :value)
+        if !isnothing(weight)
+            transform!(b, :value => ByRow((a) -> tssum(a * weight)) => :value)
+        else
+            transform!(b, :value => ByRow((a) -> tssum(a)) => :value)
+        end
     end
 
     return select(b, :scenario, :entity, :value)
@@ -282,4 +283,29 @@ function result_node_investment(db::Union{String, Dict},
     end
     transform!(b, :value => ByRow(b -> tssum(b) ) => :value)
     return select(b, :alternative => :scenario, :entity, :value)
+end
+
+function prepare_tb_weight(url_in::String)
+
+    a = get_entities(url_in, "model__default_temporal_block")
+    tbs = [r[2] for r in a]
+
+    a = get_parameter_values_scenario(url_in, "temporal_block", 
+        ["block_start", "block_end", "weight", "resolution"],"Base")
+
+    t = v = []
+    for tb in tbs
+        b = subset(a, :entity => ByRow(==(tb)))
+        
+        block_start = b[findfirst(b.parameter_name .== "block_start"), :value]
+        reso = b[findfirst(b.parameter_name .== "resolution"), :value]
+        block_end = b[findfirst(b.parameter_name .== "block_end"), :value] - reso
+        if isnothing(block_start) || isnothing(block_end) || isnothing(reso) return nothing end
+
+        t1 = collect(block_start:reso:block_end)
+      
+        t = vcat(t,t1)
+        v = vcat(v, ones(length(t1)) *  b[findfirst(b.parameter_name .== "weight"), :value])
+    end
+    return TimeSeries(t, v, false, false)
 end

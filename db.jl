@@ -328,7 +328,12 @@ function get_parameter_values_scenario(db_url::String, entityclass::String,
     return a
 end
 
+"""
+    get_parameter_values_scenario()
 
+    Read the parameter values for an all members of entityclass 
+    and parameter name(s) in a certain scenario.
+"""
 function get_parameter_values_scenario(db_url::String, entityclass::String, paramname::Union{String,Vector{String}},
                 scenario::String)
 
