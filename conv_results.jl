@@ -19,10 +19,10 @@ function parse_commandline()
             help = "model output database url"
             required = true
         "arg2"
-            help = "model input database url"
+            help = "output recipe file"
             required = true
         "arg3"
-            help = "output recipe file"
+            help = "model input database url"
             required = true
     end
 

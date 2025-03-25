@@ -281,8 +281,6 @@ function get_parameter_values(db_url::Dict, entityclass::String, entityelements,
     # filter according to the given entity
     a = subset(a, :entity => ByRow(==(entityelements) ))
    
-    #insertcols!(a, :value => TimeSeries([DateTime(2020,1,1)],[5]))
-    println(a)
     return a
 end
 

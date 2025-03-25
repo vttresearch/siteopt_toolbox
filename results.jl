@@ -325,9 +325,14 @@ function prepare_tb_weight(url_in::String)
     for tb in tbs
         b = subset(a, :entity => ByRow(==(tb)))
         
-        block_start = b[findfirst(b.parameter_name .== "block_start"), :value]
-        reso = b[findfirst(b.parameter_name .== "resolution"), :value]
-        block_end = b[findfirst(b.parameter_name .== "block_end"), :value] - reso
+        #block_start = b[findfirst(b.parameter_name .== "block_start"), :value]
+        #reso = b[findfirst(b.parameter_name .== "resolution"), :value]
+        #block_end = b[findfirst(b.parameter_name .== "block_end"), :value] - reso
+        block_start = return_element(b, b.parameter_name .== "block_start", :value)
+        reso = return_element(b, b.parameter_name .== "resolution", :value)
+        block_end = return_element(b, b.parameter_name .== "block_end", :value)
+        if !isnothing(block_end) block_end = block_end - reso end
+
         if isnothing(block_start) || isnothing(block_end) || isnothing(reso) return nothing end
 
         t1 = collect(block_start:reso:block_end)
@@ -336,4 +341,14 @@ function prepare_tb_weight(url_in::String)
         v = vcat(v, ones(length(t1)) *  b[findfirst(b.parameter_name .== "weight"), :value])
     end
     return TimeSeries(t, v, false, false)
+end
+
+function return_element(a::DataFrame, bitvector1, valcol)
+
+    i = findfirst(bitvector1)
+    if isnothing(i) 
+        return nothing 
+    else
+        return a[i, valcol]
+    end
 end
