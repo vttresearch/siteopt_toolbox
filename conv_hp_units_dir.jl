@@ -35,15 +35,6 @@ function main()
 end
 
 
-# the unit-node relationships
-function add_unit_to_node(c0)
-
-    vcat(add_unit_to_node(c0, "unit__to_node", :basenode),
-        add_unit_to_node(c0, "unit__from_node", :inputnode)
-    )
-end
-
-
 
 """
 Overall function for adding hp units
@@ -70,15 +61,30 @@ function add_hp_units(hp_file, url_in, model_length::Period)
     # adjust investment costs 
     c0.unit_investment_cost .=  c0.unit_investment_cost * (model_length / Hour(8760) )
      
+    # add min share of online units for emissions to work
+    insertcols!(c0, :min_units_on_share => 1.0)
+
     # object parameters
-    c1 =  add_unit_param2(c0, [:unit_investment_cost, :candidate_units])
+    c1 =  add_unit_param2(c0, [:unit_investment_cost, :candidate_units, :min_units_on_share])
     import_objects(url_in, add_unit(c0))
     import_object_param(url_in, c1)
 
     # unit-node relationship parameters
     c3 = add_unit_node_param(c0, [:unit_capacity], directory = dirname(hp_file) )
-    import_relations_2dim(url_in, add_unit_to_node(c0))
+    import_relations_2dim(url_in,  
+        vcat(add_unit_to_node(c0, "unit__to_node", :basenode),
+            add_unit_to_node(c0, "unit__from_node", :inputnode),
+            add_unit_to_node(c0, "unit__to_node", :emissionnode)
+        )
+    )
     import_rel_param_2dim(url_in, c3)
+
+    #emissions
+    c31 = add_unit_node_param_emission(c0, Dict(:investment_emission => :minimum_operating_point,
+                                                :emission_cost => :vom_cost,
+                                                :emission_flow_capacity => :unit_capacity))
+    
+    import_rel_param_2dim(url_in, c31)
 
     #unit-node-node relationships
     import_relations_3dim(url_in, add_unit_node_node(c0, :basenode, :inputnode))

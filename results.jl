@@ -26,6 +26,8 @@ function summarizeresults(url_in::Union{String, Nothing},
                     a = result_unit_flow(db_out, weight, val2["unit"], val2["node"], "parent", scenario)
                 elseif val2["type"] == "unit_flow_ts"
                     a = result_unit_flow(url_out, val2["unit"], val2["node"], "parent", scenario, _sum=false)
+                elseif val2["type"] == "connection_flow"
+                    a = result_connection_flow(db_out, weight, val2["connection"], val2["node"], "parent", scenario)
                 elseif val2["type"] == "connection_flow_cost"
                     a = result_connection_flow_costs(url_in, url_out, val2["connection"], val2["node"], scenario)
                 elseif val2["type"] == "unit_investment_cost"
@@ -77,6 +79,32 @@ function result_connection_flow_costs(url_in::String, url_out::String,
    
     return tssum(a.value[1] * b.value[1])
 end
+
+
+function result_connection_flow(url_out::Union{String, Dict},
+    weight::Union{TimeSeries,Nothing}, 
+    u::String, node::String, stoch_scen::String, 
+    scenario::Union{Vector{String}, Nothing}; _sum=true)
+
+    b = get_parameter_values(url_out, "report__connection__node__direction__stochastic_scenario", 
+        ["report1", u, node, "to_node", stoch_scen], "connection_flow")
+    
+    if !isnothing(scenario)
+        b = subset(b, :alternative => ByRow(in(scenario)))
+    end
+  
+    rename!(b, :alternative => :scenario)
+    if _sum
+        if !isnothing(weight)
+            transform!(b, :value => ByRow((a) -> tssum(a * weight)) => :value)
+        else
+            transform!(b, :value => ByRow((a) -> tssum(a)) => :value)
+        end
+    end
+
+    return select(b, :scenario, :entity, :value)
+end
+
 
 function result_connection_flow_costs(url_in::String, url_out::String, 
     con::String, node::String, scenario::Vector{String})
