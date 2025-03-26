@@ -85,31 +85,19 @@ function add_conn_node_node(c0)
     # reverse direction
     c2 = select(c0, :connection => :Object1, :node2 => :Object2, :node1 => :Object3)
     
-    c1 = vcat(c1,c2)
-    insertcols!(c1, 1, :relationshipclass => "connection__node__node")
+    c1 = unique(vcat(c1,c2))
 
+    insertcols!(c1, 1, :relationshipclass => "connection__node__node")
     # insert also the entity classes
     insertcols!(c1, 2, :Objectclass1 => "connection")
     insertcols!(c1, 3, :Objectclass2 => "node")
     insertcols!(c1, 4, :Objectclass3 => "node")
-
 end
 
 """
     c0: dataframe with connections and their parameters
     paramcols: column titles which are taken from c0
 """
-function add_param_from_node(c0, paramcols; directory = "")
-
-    c1 = add_object_object_param_wmuls(c0, :connection, :node1, paramcols; directory = directory)
-
-    insertcols!(c1, 1, :relationshipclass => "connection__from_node")
-    insertcols!(c1, 2, :Objectclass1 => "connection")
-    insertcols!(c1, 3, :Objectclass2 => "node")
-    c1 = select(c1, :relationshipclass, :Objectclass1, :Objectclass2, 
-                :Object1, :Object2, :parameter_name, :alternative_name, :value)
-end
-
 function add_param_connection_node(c0::DataFrame, nodecol, paramcols::Array{Symbol, 1}; directory = "")
 
     c1 = add_object_object_param_wmuls(c0, :connection, nodecol, paramcols; directory = directory)
@@ -125,15 +113,12 @@ function add_param_connection_node(c0::DataFrame, nodecol, paramcols::Dict; dire
 
     c1 = rename_columns(c0, paramcols)
     paramcols2 = collect(values(paramcols))
-   
     add_param_connection_node(c1, nodecol, paramcols2; directory = directory)
 end
 
 
 function add_param_node_node2(c0, c_rels, paramcols)
- 
     c1 = add_object_param(c0, :connection, paramcols)
-
     c1 = innerjoin(c1, c_rels, on = :Object1)
     c1 = select(c1, :relationshipclass, :Objectclass1, :Objectclass2, :Objectclass3, 
                 :Object1, :Object2, :Object3, 
@@ -178,10 +163,7 @@ function add_connections(conn_file, url_in, model_length::Period)
     import_object_param(url_in, c1)
     import_relations_3dim(url_in, c3)
     
-    # relationship parameters
-    #c4 = add_param_from_node(c0, [:connection_flow_cost, :connection_capacity], 
-     #                       directory = dirname(conn_file)),
-
+    # 2-dim relationship parameters
     c4 = vcat(add_param_connection_node(c0, :node1, 
                             [:connection_flow_cost, :connection_capacity], 
                             directory = dirname(conn_file)),

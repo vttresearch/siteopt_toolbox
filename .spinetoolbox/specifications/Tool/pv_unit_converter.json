@@ -3,15 +3,13 @@
     "tooltype": "julia",
     "includes": [
         "conv_pv_units_dir.jl",
-        "common.jl",
-        "db.jl"
+        "db.jl",
+        "common.jl"
     ],
     "description": "",
     "inputfiles": [],
     "inputfiles_opt": [],
-    "outputfiles": [
-        "pv_units.xlsx"
-    ],
+    "outputfiles": [],
     "cmdline_args": [],
-    "includes_main_path": "../../../../../Sines_additional"
+    "includes_main_path": "../../../code"
 }

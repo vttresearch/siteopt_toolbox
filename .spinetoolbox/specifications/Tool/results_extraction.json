@@ -3,8 +3,8 @@
     "tooltype": "julia",
     "includes": [
         "conv_results.jl",
-        "common.jl",
         "db.jl",
+        "common.jl",
         "results.jl"
     ],
     "description": "",
@@ -14,5 +14,5 @@
         "*.xlsx"
     ],
     "cmdline_args": [],
-    "includes_main_path": "../../../../../Sines_additional"
+    "includes_main_path": "../../../code"
 }
