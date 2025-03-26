@@ -1,0 +1,14 @@
+{
+    "name": "Represnetative periods selector",
+    "tooltype": "julia",
+    "includes": [
+        "select_repr_periods.jl",
+        "db.jl"
+    ],
+    "description": "create a new input DB with repr periods inputs",
+    "inputfiles": [],
+    "inputfiles_opt": [],
+    "outputfiles": [],
+    "cmdline_args": [],
+    "includes_main_path": "../../../../../Sines_additional"
+}

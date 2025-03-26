@@ -1,0 +1,97 @@
+{
+    "name": "rel param 2-dim timeseries",
+    "item_type": "Importer",
+    "mapping": {
+        "table_mappings": {
+            "connection_node_parameter": [
+                {
+                    "Mapping 1": {
+                        "mapping": [
+                            {
+                                "map_type": "EntityClass",
+                                "position": 0,
+                                "read_start_row": 1
+                            },
+                            {
+                                "map_type": "Dimension",
+                                "position": 1
+                            },
+                            {
+                                "map_type": "Dimension",
+                                "position": 2
+                            },
+                            {
+                                "map_type": "Entity",
+                                "position": 1
+                            },
+                            {
+                                "map_type": "Element",
+                                "position": 3
+                            },
+                            {
+                                "map_type": "Element",
+                                "position": 4
+                            },
+                            {
+                                "map_type": "EntityMetadata",
+                                "position": "hidden"
+                            },
+                            {
+                                "map_type": "ParameterDefinition",
+                                "position": 5
+                            },
+                            {
+                                "map_type": "Alternative",
+                                "position": 6
+                            },
+                            {
+                                "map_type": "ParameterValueMetadata",
+                                "position": "hidden"
+                            },
+                            {
+                                "map_type": "ParameterValueType",
+                                "position": "hidden",
+                                "value": "time_series"
+                            },
+                            {
+                                "map_type": "IndexName",
+                                "position": "hidden"
+                            },
+                            {
+                                "map_type": "ParameterValueIndex",
+                                "position": 7
+                            },
+                            {
+                                "map_type": "ExpandedValue",
+                                "position": 8
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        "selected_tables": [
+            "connection_node_parameter"
+        ],
+        "table_options": {
+            "connection_node_parameter": {}
+        },
+        "table_types": {
+            "connection_node_parameter": {
+                "0": "string",
+                "1": "string",
+                "2": "string",
+                "3": "string",
+                "4": "string",
+                "5": "string",
+                "6": "string",
+                "7": "datetime",
+                "8": "float"
+            }
+        },
+        "table_default_column_type": {},
+        "table_row_types": {},
+        "source_type": "ExcelReader"
+    },
+    "description": ""
+}

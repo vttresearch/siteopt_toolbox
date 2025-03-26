@@ -1,0 +1,17 @@
+{
+    "name": "pv unit converter",
+    "tooltype": "julia",
+    "includes": [
+        "conv_pv_units_dir.jl",
+        "common.jl",
+        "db.jl"
+    ],
+    "description": "",
+    "inputfiles": [],
+    "inputfiles_opt": [],
+    "outputfiles": [
+        "pv_units.xlsx"
+    ],
+    "cmdline_args": [],
+    "includes_main_path": "../../../../../Sines_additional"
+}

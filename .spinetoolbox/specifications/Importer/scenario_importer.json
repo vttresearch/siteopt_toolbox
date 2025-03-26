@@ -1,0 +1,82 @@
+{
+    "name": "scenario importer",
+    "item_type": "Importer",
+    "mapping": {
+        "table_mappings": {
+            "scenario": [
+                {
+                    "Mapping 1": {
+                        "mapping": [
+                            {
+                                "map_type": "Scenario",
+                                "position": 0,
+                                "read_start_row": 1
+                            }
+                        ]
+                    }
+                }
+            ],
+            "alternative": [
+                {
+                    "Mapping 1": {
+                        "mapping": [
+                            {
+                                "map_type": "Alternative",
+                                "position": 0,
+                                "read_start_row": 1
+                            }
+                        ]
+                    }
+                }
+            ],
+            "scenario_alternative": [
+                {
+                    "Mapping 1": {
+                        "mapping": [
+                            {
+                                "map_type": "Scenario",
+                                "position": 0,
+                                "read_start_row": 1
+                            },
+                            {
+                                "map_type": "ScenarioAlternative",
+                                "position": 1
+                            },
+                            {
+                                "map_type": "ScenarioBeforeAlternative",
+                                "position": 2
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        "selected_tables": [
+            "scenario",
+            "alternative",
+            "scenario_alternative"
+        ],
+        "table_options": {
+            "scenario": {},
+            "scenario_alternative": {},
+            "alternative": {}
+        },
+        "table_types": {
+            "scenario": {
+                "0": "string"
+            },
+            "scenario_alternative": {
+                "0": "string",
+                "1": "string",
+                "2": "string"
+            },
+            "alternative": {
+                "0": "string"
+            }
+        },
+        "table_default_column_type": {},
+        "table_row_types": {},
+        "source_type": "ExcelReader"
+    },
+    "description": ""
+}

@@ -1,0 +1,15 @@
+{
+    "name": "conver connections direct",
+    "tooltype": "julia",
+    "includes": [
+        "conv_connection_dir.jl",
+        "common.jl",
+        "db.jl"
+    ],
+    "description": "",
+    "inputfiles": [],
+    "inputfiles_opt": [],
+    "outputfiles": [],
+    "cmdline_args": [],
+    "includes_main_path": "../../../../../Sines_additional"
+}

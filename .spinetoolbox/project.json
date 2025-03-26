@@ -1,0 +1,1574 @@
+{
+    "project": {
+        "version": 13,
+        "description": "",
+        "settings": {
+            "enable_execute_all": true
+        },
+        "specifications": {
+            "Tool": [
+                {
+                    "type": "path",
+                    "relative": false,
+                    "path": "/home/jube/.spinetoolbox/plugins/SpineOpt/specifications/Tool/load_template.json"
+                },
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": ".spinetoolbox/specifications/Tool/storage_converter.json"
+                },
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": ".spinetoolbox/specifications/Tool/pv_unit_converter.json"
+                },
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": ".spinetoolbox/specifications/Tool/assign_pv_cf.json"
+                },
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": ".spinetoolbox/specifications/Tool/process_connections.json"
+                },
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": ".spinetoolbox/specifications/Tool/market_price_processor.json"
+                },
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": ".spinetoolbox/specifications/Tool/hp_units_conversion.json"
+                },
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": ".spinetoolbox/specifications/Tool/hp_cop_processing.json"
+                },
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": ".spinetoolbox/specifications/Tool/node_converter.json"
+                },
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": ".spinetoolbox/specifications/Tool/convert_diverting_units.json"
+                },
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": ".spinetoolbox/specifications/Tool/represnetative_periods_selector.json"
+                },
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": ".spinetoolbox/specifications/Tool/delete_temporal_block.json"
+                },
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": ".spinetoolbox/specifications/Tool/conver_connections_direct.json"
+                },
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": ".spinetoolbox/specifications/Tool/results_extraction.json"
+                },
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": ".spinetoolbox/specifications/Tool/asd.json"
+                },
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": ".spinetoolbox/specifications/Tool/fft.json"
+                }
+            ],
+            "Importer": [
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": ".spinetoolbox/specifications/Importer/unit_and_connection_importer.json"
+                },
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": ".spinetoolbox/specifications/Importer/nodes_importer.json"
+                },
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": ".spinetoolbox/specifications/Importer/object_param_timeseries.json"
+                },
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": ".spinetoolbox/specifications/Importer/demand_importer.json"
+                },
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": ".spinetoolbox/specifications/Importer/rel_param_2-dim_timeseries.json"
+                },
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": ".spinetoolbox/specifications/Importer/model_spec_importer.json"
+                },
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": ".spinetoolbox/specifications/Importer/rel_param_3_dim_timeseries.json"
+                },
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": ".spinetoolbox/specifications/Importer/import_object_parameter_time_series_in_wide_format.json"
+                },
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": ".spinetoolbox/specifications/Importer/scenario_importer.json"
+                }
+            ]
+        },
+        "connections": [
+            {
+                "name": "from storage input data to convert storages",
+                "from": [
+                    "storage input data",
+                    "right"
+                ],
+                "to": [
+                    "convert storages",
+                    "left"
+                ],
+                "filter_settings": {
+                    "known_filters": {},
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from pv unit input to convert pv units",
+                "from": [
+                    "pv unit input",
+                    "right"
+                ],
+                "to": [
+                    "convert pv units",
+                    "left"
+                ],
+                "filter_settings": {
+                    "known_filters": {},
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from model specification to model spec importer",
+                "from": [
+                    "model specification",
+                    "right"
+                ],
+                "to": [
+                    "model spec importer",
+                    "left"
+                ],
+                "filter_settings": {
+                    "known_filters": {},
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from model spec importer to Input data",
+                "from": [
+                    "model spec importer",
+                    "right"
+                ],
+                "to": [
+                    "Input data",
+                    "left"
+                ],
+                "options": {
+                    "write_index": 2
+                },
+                "filter_settings": {
+                    "known_filters": {},
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from Input data to Full period run",
+                "from": [
+                    "Input data",
+                    "right"
+                ],
+                "to": [
+                    "Full period run",
+                    "left"
+                ],
+                "filter_settings": {
+                    "known_filters": {
+                        "db_url@Input data": {
+                            "scenario_filter": {
+                                "Base": true,
+                                "Myscen": true
+                            },
+                            "alternative_filter": {
+                                "Base": true,
+                                "Highprice": true,
+                                "Newer": true
+                            }
+                        }
+                    },
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from Full period run to output db",
+                "from": [
+                    "Full period run",
+                    "right"
+                ],
+                "to": [
+                    "output db",
+                    "left"
+                ],
+                "filter_settings": {
+                    "known_filters": {},
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from hp units input to convert hp units",
+                "from": [
+                    "hp units input",
+                    "right"
+                ],
+                "to": [
+                    "convert hp units",
+                    "left"
+                ],
+                "filter_settings": {
+                    "known_filters": {},
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from Existing load to import object parameters wide",
+                "from": [
+                    "Existing load",
+                    "right"
+                ],
+                "to": [
+                    "import object parameters wide",
+                    "left"
+                ],
+                "filter_settings": {
+                    "known_filters": {},
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from import object parameters wide to Input data",
+                "from": [
+                    "import object parameters wide",
+                    "right"
+                ],
+                "to": [
+                    "Input data",
+                    "left"
+                ],
+                "options": {
+                    "write_index": 4
+                },
+                "filter_settings": {
+                    "known_filters": {},
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from scenarios to scenario importer",
+                "from": [
+                    "scenarios",
+                    "right"
+                ],
+                "to": [
+                    "scenario importer",
+                    "left"
+                ],
+                "filter_settings": {
+                    "known_filters": {},
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from scenario importer to Input data",
+                "from": [
+                    "scenario importer",
+                    "right"
+                ],
+                "to": [
+                    "Input data",
+                    "left"
+                ],
+                "options": {
+                    "write_index": 2
+                },
+                "filter_settings": {
+                    "known_filters": {},
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from model specification to convert hp units",
+                "from": [
+                    "model specification",
+                    "right"
+                ],
+                "to": [
+                    "convert hp units",
+                    "left"
+                ],
+                "filter_settings": {
+                    "known_filters": {},
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from model specification to convert storages",
+                "from": [
+                    "model specification",
+                    "right"
+                ],
+                "to": [
+                    "convert storages",
+                    "left"
+                ],
+                "filter_settings": {
+                    "known_filters": {},
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from model specification to convert pv units",
+                "from": [
+                    "model specification",
+                    "right"
+                ],
+                "to": [
+                    "convert pv units",
+                    "left"
+                ],
+                "filter_settings": {
+                    "known_filters": {},
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from Input data to Select repr periods",
+                "from": [
+                    "Input data",
+                    "right"
+                ],
+                "to": [
+                    "Select repr periods",
+                    "left"
+                ],
+                "filter_settings": {
+                    "known_filters": {
+                        "db_url@Input data": {
+                            "scenario_filter": {
+                                "Base": false,
+                                "Myscen": false
+                            },
+                            "alternative_filter": {
+                                "Base": true,
+                                "Highprice": true,
+                                "Newer": true
+                            }
+                        }
+                    },
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from repr periods template to Select repr periods",
+                "from": [
+                    "repr periods template",
+                    "right"
+                ],
+                "to": [
+                    "Select repr periods",
+                    "left"
+                ],
+                "filter_settings": {
+                    "known_filters": {},
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from repr period selection settings to Select repr periods",
+                "from": [
+                    "repr period selection settings",
+                    "right"
+                ],
+                "to": [
+                    "Select repr periods",
+                    "left"
+                ],
+                "filter_settings": {
+                    "known_filters": {},
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from Select repr periods to input with repr periods",
+                "from": [
+                    "Select repr periods",
+                    "right"
+                ],
+                "to": [
+                    "input with repr periods",
+                    "left"
+                ],
+                "filter_settings": {
+                    "known_filters": {},
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from convert pv units to Input data",
+                "from": [
+                    "convert pv units",
+                    "right"
+                ],
+                "to": [
+                    "Input data",
+                    "left"
+                ],
+                "options": {
+                    "write_index": 5
+                },
+                "filter_settings": {
+                    "known_filters": {},
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from convert hp units to Input data",
+                "from": [
+                    "convert hp units",
+                    "right"
+                ],
+                "to": [
+                    "Input data",
+                    "left"
+                ],
+                "options": {
+                    "write_index": 4
+                },
+                "filter_settings": {
+                    "known_filters": {},
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from convert storages to Input data",
+                "from": [
+                    "convert storages",
+                    "right"
+                ],
+                "to": [
+                    "Input data",
+                    "left"
+                ],
+                "options": {
+                    "write_index": 4
+                },
+                "filter_settings": {
+                    "known_filters": {},
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from connections input to convert connections",
+                "from": [
+                    "connections input",
+                    "right"
+                ],
+                "to": [
+                    "convert connections",
+                    "left"
+                ],
+                "filter_settings": {
+                    "known_filters": {},
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from model specification to convert connections",
+                "from": [
+                    "model specification",
+                    "right"
+                ],
+                "to": [
+                    "convert connections",
+                    "left"
+                ],
+                "filter_settings": {
+                    "known_filters": {},
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from diverting units to convert diverting units (1)",
+                "from": [
+                    "diverting units",
+                    "right"
+                ],
+                "to": [
+                    "convert diverting units (1)",
+                    "left"
+                ],
+                "filter_settings": {
+                    "known_filters": {},
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from model specification to convert diverting units (1)",
+                "from": [
+                    "model specification",
+                    "right"
+                ],
+                "to": [
+                    "convert diverting units (1)",
+                    "left"
+                ],
+                "filter_settings": {
+                    "known_filters": {},
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from convert diverting units (1) to Input data",
+                "from": [
+                    "convert diverting units (1)",
+                    "right"
+                ],
+                "to": [
+                    "Input data",
+                    "left"
+                ],
+                "options": {
+                    "write_index": 6
+                },
+                "filter_settings": {
+                    "known_filters": {},
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from nodes to convert nodes (1)",
+                "from": [
+                    "nodes",
+                    "right"
+                ],
+                "to": [
+                    "convert nodes (1)",
+                    "left"
+                ],
+                "filter_settings": {
+                    "known_filters": {},
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from model specification to convert nodes (1)",
+                "from": [
+                    "model specification",
+                    "right"
+                ],
+                "to": [
+                    "convert nodes (1)",
+                    "left"
+                ],
+                "filter_settings": {
+                    "known_filters": {},
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from convert nodes (1) to Input data",
+                "from": [
+                    "convert nodes (1)",
+                    "right"
+                ],
+                "to": [
+                    "Input data",
+                    "left"
+                ],
+                "options": {
+                    "write_index": 3
+                },
+                "filter_settings": {
+                    "known_filters": {},
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from output db to Extract results",
+                "from": [
+                    "output db",
+                    "right"
+                ],
+                "to": [
+                    "Extract results",
+                    "left"
+                ],
+                "filter_settings": {
+                    "known_filters": {
+                        "db_url@output db": {
+                            "scenario_filter": {},
+                            "alternative_filter": {
+                                "Base__Full period run@2025-03-24T13:55:36": true,
+                                "Base__Run SpineOpt@2025-03-26T12:01:03": true,
+                                "Myscen__Run SpineOpt@2025-03-26T12:09:04": true,
+                                "Myscen__Run SpineOpt@2025-03-26T15:34:56": true
+                            }
+                        }
+                    },
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from Output recipe to Extract results",
+                "from": [
+                    "Output recipe",
+                    "right"
+                ],
+                "to": [
+                    "Extract results",
+                    "left"
+                ],
+                "filter_settings": {
+                    "known_filters": {},
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from input with repr periods to Run SpineOpt",
+                "from": [
+                    "input with repr periods",
+                    "right"
+                ],
+                "to": [
+                    "Run SpineOpt",
+                    "left"
+                ],
+                "filter_settings": {
+                    "known_filters": {
+                        "db_url@input with repr periods": {
+                            "scenario_filter": {
+                                "Base": false,
+                                "Myscen": true
+                            },
+                            "alternative_filter": {
+                                "Base": true,
+                                "Highprice": true,
+                                "Newer": true
+                            }
+                        }
+                    },
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from input with repr periods to Extract results",
+                "from": [
+                    "input with repr periods",
+                    "right"
+                ],
+                "to": [
+                    "Extract results",
+                    "left"
+                ],
+                "filter_settings": {
+                    "known_filters": {
+                        "db_url@input with repr periods": {
+                            "scenario_filter": {
+                                "Base": false,
+                                "Myscen": false
+                            },
+                            "alternative_filter": {
+                                "Base": true,
+                                "Highprice": true,
+                                "Newer": true
+                            }
+                        }
+                    },
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from convert connections to Input data",
+                "from": [
+                    "convert connections",
+                    "right"
+                ],
+                "to": [
+                    "Input data",
+                    "left"
+                ],
+                "options": {
+                    "write_index": 5
+                },
+                "filter_settings": {
+                    "known_filters": {},
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from output db to Extract results (full period run)",
+                "from": [
+                    "output db",
+                    "right"
+                ],
+                "to": [
+                    "Extract results (full period run)",
+                    "left"
+                ],
+                "filter_settings": {
+                    "known_filters": {
+                        "db_url@output db": {
+                            "scenario_filter": {},
+                            "alternative_filter": {
+                                "Base__Full period run@2025-03-24T13:55:36": true,
+                                "Base__Run SpineOpt@2025-03-26T12:01:03": true,
+                                "Myscen__Run SpineOpt@2025-03-26T12:09:04": true,
+                                "Myscen__Run SpineOpt@2025-03-26T15:34:56": true
+                            }
+                        }
+                    },
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from Output recipe to Extract results (full period run)",
+                "from": [
+                    "Output recipe",
+                    "right"
+                ],
+                "to": [
+                    "Extract results (full period run)",
+                    "left"
+                ],
+                "filter_settings": {
+                    "known_filters": {},
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from Input data to Extract results (full period run)",
+                "from": [
+                    "Input data",
+                    "right"
+                ],
+                "to": [
+                    "Extract results (full period run)",
+                    "left"
+                ],
+                "filter_settings": {
+                    "known_filters": {
+                        "db_url@Input data": {
+                            "scenario_filter": {
+                                "Base": false,
+                                "Myscen": false
+                            },
+                            "alternative_filter": {
+                                "Base": true,
+                                "Highprice": true,
+                                "Newer": true
+                            }
+                        }
+                    },
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from Load template to Input data",
+                "from": [
+                    "Load template",
+                    "right"
+                ],
+                "to": [
+                    "Input data",
+                    "left"
+                ],
+                "options": {
+                    "purge_before_writing": true,
+                    "purge_settings": {
+                        "alternative": true,
+                        "scenario": true,
+                        "scenario_alternative": true,
+                        "entity_class": true,
+                        "display_mode": true,
+                        "entity_class_display_mode": true,
+                        "superclass_subclass": true,
+                        "entity": true,
+                        "entity_group": true,
+                        "entity_alternative": true,
+                        "parameter_value_list": true,
+                        "list_value": true,
+                        "parameter_definition": true,
+                        "parameter_type": true,
+                        "parameter_value": true,
+                        "metadata": true,
+                        "entity_metadata": true,
+                        "parameter_value_metadata": true
+                    }
+                },
+                "filter_settings": {
+                    "known_filters": {},
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from Run SpineOpt to output db",
+                "from": [
+                    "Run SpineOpt",
+                    "right"
+                ],
+                "to": [
+                    "output db",
+                    "left"
+                ],
+                "filter_settings": {
+                    "known_filters": {},
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            }
+        ],
+        "jumps": []
+    },
+    "items": {
+        "Load template": {
+            "type": "Tool",
+            "description": "",
+            "x": 345.9948695295623,
+            "y": -986.5494770835709,
+            "specification": "Load template",
+            "execute_in_work": true,
+            "cmd_line_args": [
+                {
+                    "type": "resource",
+                    "arg": "db_url@Input data"
+                }
+            ],
+            "kill_completed_processes": false,
+            "log_process_output": false
+        },
+        "convert storages": {
+            "type": "Tool",
+            "description": "",
+            "x": 80.40757307269976,
+            "y": -757.0618084236697,
+            "specification": "storage converter",
+            "execute_in_work": true,
+            "cmd_line_args": [
+                {
+                    "type": "resource",
+                    "arg": "<project>/current_input/storages/storages-input.xlsx"
+                },
+                {
+                    "type": "resource",
+                    "arg": "<project>/current_input/modelspec.xlsx"
+                },
+                {
+                    "type": "resource",
+                    "arg": "db_url@Input data"
+                }
+            ],
+            "kill_completed_processes": false,
+            "log_process_output": false
+        },
+        "pv unit input": {
+            "type": "Data Connection",
+            "description": "",
+            "x": -663.6022018196215,
+            "y": -238.33914740353907,
+            "file_references": [
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": "current_input/production/pv-input.xlsx"
+                }
+            ],
+            "db_references": []
+        },
+        "convert pv units": {
+            "type": "Tool",
+            "description": "",
+            "x": 87.62831567785362,
+            "y": -245.24488909523873,
+            "specification": "pv unit converter",
+            "execute_in_work": true,
+            "cmd_line_args": [
+                {
+                    "type": "resource",
+                    "arg": "<project>/current_input/production/pv-input.xlsx"
+                },
+                {
+                    "type": "resource",
+                    "arg": "<project>/current_input/modelspec.xlsx"
+                },
+                {
+                    "type": "resource",
+                    "arg": "db_url@Input data"
+                }
+            ],
+            "kill_completed_processes": false,
+            "log_process_output": false
+        },
+        "storage input data": {
+            "type": "Data Connection",
+            "description": "",
+            "x": -540.6659069858886,
+            "y": -757.1109132468399,
+            "file_references": [
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": "current_input/storages/storages-input.xlsx"
+                }
+            ],
+            "db_references": []
+        },
+        "connections input": {
+            "type": "Data Connection",
+            "description": "",
+            "x": -542.9471513142296,
+            "y": -1217.9487416313739,
+            "file_references": [
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": "current_input/connections/connections-input.xlsx"
+                }
+            ],
+            "db_references": []
+        },
+        "model specification": {
+            "type": "Data Connection",
+            "description": "",
+            "x": -359.7664728712508,
+            "y": -70.51743374432455,
+            "file_references": [
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": "current_input/modelspec.xlsx"
+                }
+            ],
+            "db_references": []
+        },
+        "model spec importer": {
+            "type": "Importer",
+            "description": "",
+            "x": 92.73255414311551,
+            "y": 287.02827503472975,
+            "specification": "model spec importer",
+            "cancel_on_error": false,
+            "on_conflict": "merge",
+            "file_selection": [
+                [
+                    "<project>/current_input/modelspec.xlsx",
+                    true
+                ]
+            ]
+        },
+        "output db": {
+            "type": "Data Store",
+            "description": "",
+            "x": 1531.0798650829868,
+            "y": 75.26810225908507,
+            "url": {
+                "dialect": "sqlite",
+                "host": "",
+                "port": "",
+                "database": {
+                    "type": "path",
+                    "relative": true,
+                    "path": ".spinetoolbox/items/output_db/output db.sqlite"
+                },
+                "schema": ""
+            }
+        },
+        "hp units input": {
+            "type": "Data Connection",
+            "description": "",
+            "x": -467.49101902791307,
+            "y": 86.55044515324047,
+            "file_references": [
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": "current_input/production/hp-input.xlsx"
+                }
+            ],
+            "db_references": []
+        },
+        "convert hp units": {
+            "type": "Tool",
+            "description": "",
+            "x": 93.34257294339407,
+            "y": 88.79697139057808,
+            "specification": "hp units conversion",
+            "execute_in_work": true,
+            "cmd_line_args": [
+                {
+                    "type": "resource",
+                    "arg": "<project>/current_input/production/hp-input.xlsx"
+                },
+                {
+                    "type": "resource",
+                    "arg": "<project>/current_input/modelspec.xlsx"
+                },
+                {
+                    "type": "resource",
+                    "arg": "db_url@Input data"
+                }
+            ],
+            "kill_completed_processes": false,
+            "log_process_output": false
+        },
+        "Existing load": {
+            "type": "Data Connection",
+            "description": "",
+            "x": -380.17695567054784,
+            "y": 456.8152369989607,
+            "file_references": [
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": "current_input/demand/tscr_cooldemand.csv"
+                },
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": "current_input/demand/tscr_elecdemand.csv"
+                },
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": "current_input/demand/tscr_heatdemand.csv"
+                }
+            ],
+            "db_references": []
+        },
+        "import object parameters wide": {
+            "type": "Importer",
+            "description": "",
+            "x": 88.34025225178617,
+            "y": 468.6915636088728,
+            "specification": "import object parameter time series in wide format",
+            "cancel_on_error": false,
+            "on_conflict": "merge",
+            "file_selection": [
+                [
+                    "<project>/current_input/demand/tscr_cooldemand.csv",
+                    true
+                ],
+                [
+                    "<project>/current_input/demand/tscr_elecdemand.csv",
+                    true
+                ],
+                [
+                    "<project>/current_input/demand/tscr_heatdemand.csv",
+                    true
+                ]
+            ]
+        },
+        "nodes": {
+            "type": "Data Connection",
+            "description": "",
+            "x": -671.7846219566414,
+            "y": -507.53180299014343,
+            "file_references": [
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": "current_input/nodes/nodes2.xlsx"
+                }
+            ],
+            "db_references": []
+        },
+        "scenarios": {
+            "type": "Data Connection",
+            "description": "",
+            "x": -374.82068860286665,
+            "y": 616.198844796465,
+            "file_references": [
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": "current_input/scenarios.xlsx"
+                }
+            ],
+            "db_references": []
+        },
+        "scenario importer": {
+            "type": "Importer",
+            "description": "",
+            "x": 90.5398320850026,
+            "y": 614.7492458612826,
+            "specification": "scenario importer",
+            "cancel_on_error": false,
+            "on_conflict": "merge",
+            "file_selection": [
+                [
+                    "<project>/current_input/scenarios.xlsx",
+                    true
+                ]
+            ]
+        },
+        "diverting units": {
+            "type": "Data Connection",
+            "description": "",
+            "x": -542.1166963060766,
+            "y": -1018.0901623481483,
+            "file_references": [
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": "current_input/other_units/divertingunits.xlsx"
+                }
+            ],
+            "db_references": []
+        },
+        "input with repr periods": {
+            "type": "Data Store",
+            "description": "",
+            "x": 1087.0916680378964,
+            "y": 298.3777657184934,
+            "url": {
+                "dialect": "sqlite",
+                "host": "",
+                "port": "",
+                "database": {
+                    "type": "path",
+                    "relative": true,
+                    "path": ".spinetoolbox/items/input_with_repr_periods/input_with_repr_periods.sqlite"
+                },
+                "schema": ""
+            }
+        },
+        "repr periods template": {
+            "type": "Data Connection",
+            "description": "",
+            "x": 642.5956470820126,
+            "y": 226.97106944147993,
+            "file_references": [
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": "current_input/representative_periods/representative_periods_template.json"
+                }
+            ],
+            "db_references": []
+        },
+        "repr period selection settings": {
+            "type": "Data Connection",
+            "description": "",
+            "x": 648.5156123082082,
+            "y": 466.9103400483997,
+            "file_references": [
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": "current_input/representative_periods/repr_settings_elexia.json"
+                }
+            ],
+            "db_references": []
+        },
+        "Select repr periods": {
+            "type": "Tool",
+            "description": "",
+            "x": 912.3410479657427,
+            "y": 298.345519781125,
+            "specification": "Represnetative periods selector",
+            "execute_in_work": true,
+            "cmd_line_args": [
+                {
+                    "type": "resource",
+                    "arg": "db_url@Input data"
+                },
+                {
+                    "type": "resource",
+                    "arg": "<project>/current_input/representative_periods/representative_periods_template.json"
+                },
+                {
+                    "type": "resource",
+                    "arg": "<project>/current_input/representative_periods/repr_settings_elexia.json"
+                },
+                {
+                    "type": "resource",
+                    "arg": "db_url@input with repr periods"
+                }
+            ],
+            "kill_completed_processes": false,
+            "log_process_output": false
+        },
+        "Run SpineOpt": {
+            "type": "Tool",
+            "description": "",
+            "x": 1287.409776269836,
+            "y": 215.6329301681576,
+            "specification": "Run SpineOpt",
+            "execute_in_work": true,
+            "cmd_line_args": [
+                {
+                    "type": "resource",
+                    "arg": "db_url@input with repr periods"
+                },
+                {
+                    "type": "resource",
+                    "arg": "db_url@output db"
+                }
+            ],
+            "kill_completed_processes": false,
+            "log_process_output": false
+        },
+        "convert diverting units (1)": {
+            "type": "Tool",
+            "description": "",
+            "x": 80.81482322624163,
+            "y": -1028.1054070115483,
+            "specification": "convert diverting units",
+            "execute_in_work": true,
+            "cmd_line_args": [
+                {
+                    "type": "resource",
+                    "arg": "<project>/current_input/other_units/divertingunits.xlsx"
+                },
+                {
+                    "type": "resource",
+                    "arg": "<project>/current_input/modelspec.xlsx"
+                },
+                {
+                    "type": "resource",
+                    "arg": "db_url@Input data"
+                }
+            ],
+            "kill_completed_processes": false,
+            "log_process_output": false
+        },
+        "convert nodes (1)": {
+            "type": "Tool",
+            "description": "",
+            "x": 82.16661211893444,
+            "y": -516.4428862477062,
+            "specification": "node converter",
+            "execute_in_work": true,
+            "cmd_line_args": [
+                {
+                    "type": "resource",
+                    "arg": "<project>/current_input/nodes/nodes2.xlsx"
+                },
+                {
+                    "type": "resource",
+                    "arg": "<project>/current_input/modelspec.xlsx"
+                },
+                {
+                    "type": "resource",
+                    "arg": "db_url@Input data"
+                }
+            ],
+            "kill_completed_processes": false,
+            "log_process_output": false
+        },
+        "convert connections": {
+            "type": "Tool",
+            "description": "",
+            "x": 78.65226151878423,
+            "y": -1220.9576358500647,
+            "specification": "conver connections direct",
+            "execute_in_work": true,
+            "cmd_line_args": [
+                {
+                    "type": "resource",
+                    "arg": "<project>/current_input/connections/connections-input.xlsx"
+                },
+                {
+                    "type": "resource",
+                    "arg": "<project>/current_input/modelspec.xlsx"
+                },
+                {
+                    "type": "resource",
+                    "arg": "db_url@Input data"
+                }
+            ],
+            "kill_completed_processes": false,
+            "log_process_output": false
+        },
+        "Full period run": {
+            "type": "Tool",
+            "description": "",
+            "x": 1278.094107077615,
+            "y": -28.253033999886725,
+            "specification": "Run SpineOpt",
+            "execute_in_work": true,
+            "cmd_line_args": [
+                {
+                    "type": "resource",
+                    "arg": "db_url@Input data"
+                },
+                {
+                    "type": "resource",
+                    "arg": "db_url@output db"
+                }
+            ],
+            "kill_completed_processes": false,
+            "log_process_output": false
+        },
+        "Extract results": {
+            "type": "Tool",
+            "description": "",
+            "x": 1897.5346870149626,
+            "y": 295.6450658666314,
+            "specification": "Results extraction",
+            "execute_in_work": true,
+            "cmd_line_args": [
+                {
+                    "type": "resource",
+                    "arg": "db_url@output db"
+                },
+                {
+                    "type": "resource",
+                    "arg": "<project>/current_input/output_recipe.json"
+                },
+                {
+                    "type": "resource",
+                    "arg": "db_url@input with repr periods"
+                }
+            ],
+            "kill_completed_processes": false,
+            "log_process_output": false
+        },
+        "Output recipe": {
+            "type": "Data Connection",
+            "description": "",
+            "x": 1793.227391101618,
+            "y": 66.39716092939446,
+            "file_references": [
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": "current_input/output_recipe.json"
+                }
+            ],
+            "db_references": []
+        },
+        "Extract results (full period run)": {
+            "type": "Tool",
+            "description": "",
+            "x": 1895.4070064251139,
+            "y": -158.10012111839552,
+            "specification": "Results extraction",
+            "execute_in_work": true,
+            "cmd_line_args": [
+                {
+                    "type": "resource",
+                    "arg": "db_url@output db"
+                },
+                {
+                    "type": "resource",
+                    "arg": "<project>/current_input/output_recipe.json"
+                },
+                {
+                    "type": "resource",
+                    "arg": "db_url@Input data"
+                }
+            ],
+            "kill_completed_processes": false,
+            "log_process_output": false
+        },
+        "Input data": {
+            "type": "Data Store",
+            "description": "",
+            "x": 645.509472556271,
+            "y": -161.60928809651466,
+            "url": {
+                "dialect": "sqlite",
+                "host": "",
+                "port": "",
+                "database": {
+                    "type": "path",
+                    "relative": true,
+                    "path": ".spinetoolbox/items/input_data/elexia_input.sqlite"
+                },
+                "schema": ""
+            }
+        }
+    }
+}

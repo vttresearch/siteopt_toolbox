@@ -1,0 +1,16 @@
+{
+    "name": "Assign PV CF",
+    "tooltype": "julia",
+    "includes": [
+        "conv_pv_cf.jl",
+        "common.jl"
+    ],
+    "description": "",
+    "inputfiles": [],
+    "inputfiles_opt": [],
+    "outputfiles": [
+        "PV_unit_availability.csv"
+    ],
+    "cmdline_args": [],
+    "includes_main_path": "../../../../../Sines_additional"
+}

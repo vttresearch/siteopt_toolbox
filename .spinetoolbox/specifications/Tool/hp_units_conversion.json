@@ -1,0 +1,17 @@
+{
+    "name": "hp units conversion",
+    "tooltype": "julia",
+    "includes": [
+        "conv_hp_units_dir.jl",
+        "common.jl",
+        "db.jl"
+    ],
+    "description": "",
+    "inputfiles": [],
+    "inputfiles_opt": [],
+    "outputfiles": [
+        "hp_units.xlsx"
+    ],
+    "cmdline_args": [],
+    "includes_main_path": "../../../../../Sines_additional"
+}
