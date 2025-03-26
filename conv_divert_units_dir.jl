@@ -43,7 +43,7 @@ end
 =#
 
 # the unit-node relationships 
-function add_unit_to_node(c0)
+function add_unit_to_node_divunits(c0)
     vcat(add_unit_to_node(c0, "unit__to_node", :outputnode),
         add_unit_to_node(c0, "unit__to_node", :inputnode),
         add_unit_to_node(c0, "unit__to_node", :divertingnode),
@@ -52,9 +52,7 @@ function add_unit_to_node(c0)
     )
 end
 
-
-
-
+#=
 function add_unit_node_param(c0, nodecol, paramcols)
 
     # Check if required columns exist in c0 and select what is present
@@ -81,7 +79,7 @@ function add_unit_node_param(c0, nodecol, paramcols)
                 :alternative_name, :value)
     return c1
 end
-
+=#
 
 # the unit-node-node relationship parameters
 function add_unit_node_node_param_divunits(c0)
@@ -127,7 +125,7 @@ function add_diverting_units(filename, url_in, model_length::Period)
         )
 
     import_objects(url_in, add_unit(c0))
-    import_relations_2dim(url_in,  add_unit_to_node(c0))
+    import_relations_2dim(url_in,  add_unit_to_node_divunits(c0))
     import_relations_3dim(url_in, c1)
 
     c2  =  add_object_object_param(c0, :unit, :divertingnode, [:vom_cost],
@@ -136,22 +134,10 @@ function add_diverting_units(filename, url_in, model_length::Period)
     insertcols!(c2, 2, :Objectclass1 => "unit")
     insertcols!(c2, 3, :Objectclass2 => "node")
 
-    import_rel_param_2dim(url_in, c2       )
+    import_rel_param_2dim(url_in, c2)
 
     import_rel_param_3dim(url_in, add_unit_node_node_param_divunits(c0))
 
-    #=
-    # units excel file
-    XLSX.writetable(outfile1, 
-                "unit" => add_unit(c0), 
-                "unit_param" =>  DataFrame(no_data = []),
-                "unit__to_node" => add_unit_to_node(c0),
-                "unit__node_param" => add_unit_node_param(c0, :divertingnode, [:vom_cost]),
-                "unit__node__node" => c1,
-                "unit__node__node_parameter" =>  add_unit_node_node_param_divunits(c0),
-                overwrite = true
-    )
-                =#
 end
 
 main()

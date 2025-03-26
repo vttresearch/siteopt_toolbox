@@ -39,7 +39,7 @@ end
 """
 The function adds object parameter table for storage nodes
 """
-
+#=
 function add_node_param(c0, paramcols; directory="")
 
     c1 = select(c0, :node, :alternative_name, paramcols)
@@ -83,7 +83,7 @@ function add_node_param_timeser(c1_str, directory)
     c1_str = select(c1_str, :objectclass, :node, :parameter_name, :alternative_name, :time, :value)
 
 end
-
+=#
 """
 Overall function for adding nodes
 

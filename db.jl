@@ -459,8 +459,6 @@ function remove_entity(db_url, entities::Tuple{Vararg{String}})
     
     entity_id_by_name = Dict(x["name"] => x["id"] for x in e)
 	to_rm_entity_ids = unique(entity_id_by_name[name] for name in intersect(entities, keys(entity_id_by_name)))
-	
-    println(to_rm_entity_ids)
 
     if !isempty(to_rm_entity_ids)
 		a = run_request(db_url, "call_method", ("remove_items", "entity", to_rm_entity_ids...))

@@ -35,25 +35,6 @@ function main()
 end
 
 
-#=
-# the unit-node relationships
-function add_unit_to_node(c0)
-
-    c1 = select(c0, :unit => :Object1)
-    c1.Object2 = c0.basenode
-    c2 = select(c0, :unit => :Object1)
-    c2.Object2 = c0.emissionnode
-
-    c1 = vcat(c1,c2)
-    c1 = unique(dropmissing(c1))
-
-    insertcols!(c1, 1, :relationshipclass => "unit__to_node")
-    insertcols!(c1, 2, :Objectclass1 => "unit")
-    insertcols!(c1, 3, :Objectclass2 => "node")
-
-end
-=#
-
 """
 Overall function for adding pv units
 
@@ -76,9 +57,10 @@ function add_pv_units(pv_file::String, url_in, model_length::Period)
     # adjust investment costs 
     c0.unit_investment_cost .=  c0.unit_investment_cost * (model_length / Hour(8760) )
      
-      # add min share of online units for emissions to work
+    # add min share of online units for emissions to work
     insertcols!(c0, :min_units_on_share => 1.0)
 
+    # start importing data
     c1 = add_unit_param2(c0, [:unit_investment_cost, :candidate_units, :min_units_on_share])
 
     import_objects(url_in, add_unit(c0))

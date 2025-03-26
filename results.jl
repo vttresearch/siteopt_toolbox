@@ -15,7 +15,7 @@ function summarizeresults(url_in::Union{String, Nothing},
     #load output DB to memory
     db_out = export_data(url_out)
 
-    df = DataFrame(summary = [], costitem = [], scenario = [], entity = [], value = [])
+    df = DataFrame(summary = [], item = [], scenario = [], entity = [], value = [])
 
     for (key0, val0) in recipe
         for (key1, val1) in val0
@@ -40,12 +40,14 @@ function summarizeresults(url_in::Union{String, Nothing},
                     a = result_unit_investment(db_out, val2["unit"], "parent", scenario)
                 elseif val2["type"] == "node_investment"
                     a = result_node_investment(db_out, val2["node"], "parent", scenario)
+                elseif val2["type"] == "total_costs"
+                    a = result_total_cost(db_out, scenario)
                 else
                     println("Unknown value type $(val2["type"])")
                 end
                 scaler = get(val2, "scaling", 1)
                 transform!(a, :value => (x -> x .* scaler) => :value)
-                insertcols!(a, :costitem => key1)
+                insertcols!(a, :item => key1)
                 insertcols!(a, :summary => key0)
                 df = vcat(df, a, cols = :union)
             end
@@ -54,7 +56,7 @@ function summarizeresults(url_in::Union{String, Nothing},
 
     if nrow(df) > 0
         #combine different entities
-        df = combine(groupby(df, [:summary, :costitem, :scenario]), :value => sum => :value)
+        df = combine(groupby(df, [:summary, :item, :scenario]), :value => sum => :value)
     end
 
     return df
@@ -282,9 +284,6 @@ function result_unit_investment(db::Union{String, Dict},
     units = get_entities(db, "unit")
     units = filter(x -> occursin(unit, x), units)
     entityelementsvec = [["report1", u, stoch_scen] for u in units]
-
-    #b = get_parameter_values(db, "report__unit__stochastic_scenario", 
-    #    ["report1", unit, stoch_scen], "units_invested")
     
     b = get_parameter_values(db, "report__unit__stochastic_scenario", "units_invested")
     b = subset(b, :entity => ByRow(x->in(x, entityelementsvec) ))
@@ -313,6 +312,17 @@ function result_node_investment(db::Union{String, Dict},
     return select(b, :alternative => :scenario, :entity, :value)
 end
 
+function result_total_cost(db::Union{String, Dict}, 
+    scenario::Union{Vector{String}, Nothing})
+
+    b = get_parameter_values(db, "report__model", "total_costs")
+    if !isnothing(scenario)
+        b = subset(b, :alternative => ByRow(in(scenario)))
+    end
+    transform!(b, :value => ByRow(x -> tssum(x) ) => :value)
+    return select(b, :alternative => :scenario, :entity, :value)
+end
+
 function prepare_tb_weight(url_in::String)
 
     a = get_entities(url_in, "model__default_temporal_block")
@@ -325,9 +335,6 @@ function prepare_tb_weight(url_in::String)
     for tb in tbs
         b = subset(a, :entity => ByRow(==(tb)))
         
-        #block_start = b[findfirst(b.parameter_name .== "block_start"), :value]
-        #reso = b[findfirst(b.parameter_name .== "resolution"), :value]
-        #block_end = b[findfirst(b.parameter_name .== "block_end"), :value] - reso
         block_start = return_element(b, b.parameter_name .== "block_start", :value)
         reso = return_element(b, b.parameter_name .== "resolution", :value)
         block_end = return_element(b, b.parameter_name .== "block_end", :value)
