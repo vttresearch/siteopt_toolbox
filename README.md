@@ -14,7 +14,9 @@ You need Spine Toolbox for running the toolbox project. In addition, it is neede
 > conda init
 > conda create -n spinetoolbox python=3.12
 > conda activate spinetoolbox
+> where python
 ```
+The last command prints the python interpreter path, which you should make note of. The command applied in Windows. In Linux use "which python". 
 
 N.B. If you get error CondaError: Run 'conda init' before 'conda activate', run 
 
@@ -31,15 +33,18 @@ N.B. If you get error CondaError: Run 'conda init' before 'conda activate', run
 - Create a Miniconda environment for Siteopt python dependencies and activate it. I.e., run the following in command prompt:
 
 ```
->conda create -n spinedb python=3.11
+>conda create -n spinedb python=3.11 numpy=1.26.4
 >conda activate spinedb
 ```
 
 Next install the Spine DB API (https://github.com/spine-tools/Spine-Database-API) and Scikit learn extra (https://scikit-learn-extra.readthedocs.io/en/stable/install.html)
 ```
->pip install spinedb_api
+>pip install git+https://github.com/spine-tools/Spine-Database-API.git
 >conda install -c conda-forge scikit-learn-extra
 ```
+
+Exit the console.
+
 
 ## Julia language
 
@@ -58,35 +63,38 @@ git clone https://extgit.vtt.fi/...
 
 (replace ... by the actual URL). 
 
+You will now have a **siteopt_toolbox** folder.
 
-## Siteopt installation
+## Siteopt dependencies installation
 
-Go to Siteopt **code** folder and start Julia console (type "julia" in command prompt). Run commands:
+Go to Siteopt **code** folder of siteopt_toolbox and start Julia console (type "julia" in command prompt). Do not use the same console which you used for Spine Toolbox installation (open a new one). The packages needed by the Siteopt Julia scripts need to be installed. Run commands:
   
 ```
 Using Pkg
 Pkg.activate(".")
+Pkg.add("https://github.com/spine-tools/SpineOpt.jl.git#elexia")
+Pkg.add("https://github.com/spine-tools/SpinePeriods.jl.git#clustering")
 Pkg.resolve()
 Pkg.instantiate()
 ```	
 Rebuilding Julia PyCall package is needed to be able to connect to the databases. This is done by running the following commands in Julia console:
 
 ```
-Pkg.add("PyCall")
-ENV["PYTHON"] = raw"C:\\path\\to\\your\\python\\python.exe" #(replace the path by the Python executable in the Miniconda environment where you installed Spine Toolbox )
+using Pkg
+using PyCall
+ENV["PYTHON"] = raw"C:\path\to\your\python\python.exe" #(replace the path by the Python executable in the Miniconda environment where you installed Spine Toolbox )
 Pkg.build("PyCall")
 ```
-
+You can find the Python path as explained in the Spine Toolbox installation section. You can now exit Julia session.
 
 ## Input data
 
-Check that you have the following input files in the **current_input** folder.
+Check that you have all the necessary input files in the **current_input** folder of siteopt_toolbox.
 
-XXX
 
 # Running the Siteopt tool
 
-Spine Toolbox provides a graphical user interface for running SpineOpt and editing databases. Of the different tools the Toolbox project needs most configurations.
+Spine Toolbox provides a graphical user interface for running SpineOpt and editing databases. 
 
 Activate the proper Miniconda environment, which you used to install Spine Toolbox. Start Spine Toolbox by command
 
@@ -103,10 +111,10 @@ Go to File->Settings. Go to Tools tab. Check that in **Julia** box the second li
 
 XXX
 
-Check also the tool specifications Julia project settings.
-
 
 Select each of the databases one at a time. In "data store properties" click "New Spine db". A new dialogue opens. Click "Save".
+
+- In
 
 
 
