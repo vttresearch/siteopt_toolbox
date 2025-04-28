@@ -65,10 +65,10 @@ Install Git software (https://git-scm.com/downloads) (if not already installed).
 Select an empty folder in your machine. It can be in a different location than the Spine Toolbox installation folder. Start command prompt and run
 
 ```
-git clone https://extgit.vtt.fi/...
+git clone https://extgit.vtt.fi/siteopt/siteopt_toolbox.git
 ```
 
-(replace ... by the actual URL). 
+(replace ... by the actual URL). (Notice that you need user rights for this repository.)
 
 You will now have a **siteopt_toolbox** folder.
 
@@ -95,8 +95,11 @@ You can find the Python path as explained in the Python dependencies of the Site
 l
 ## Input data
 
-Check that you have all the necessary input files in the **current_input** folder of siteopt_toolbox.
+Check that you have all the necessary input files in the **current_input** subfolder of siteopt_toolbox. Make the current_input folder and open a command prompt there. Run command
 
+```
+git clone https://extgit.vtt.fi/siteopt/siteopt_data.git .
+```
 
 ## Running the Siteopt tool
 
