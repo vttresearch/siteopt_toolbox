@@ -9,11 +9,6 @@
             "Tool": [
                 {
                     "type": "path",
-                    "relative": false,
-                    "path": "/home/jube/.spinetoolbox/plugins/SpineOpt/specifications/Tool/load_template.json"
-                },
-                {
-                    "type": "path",
                     "relative": true,
                     "path": ".spinetoolbox/specifications/Tool/storage_converter.json"
                 },
@@ -30,22 +25,7 @@
                 {
                     "type": "path",
                     "relative": true,
-                    "path": ".spinetoolbox/specifications/Tool/process_connections.json"
-                },
-                {
-                    "type": "path",
-                    "relative": true,
-                    "path": ".spinetoolbox/specifications/Tool/market_price_processor.json"
-                },
-                {
-                    "type": "path",
-                    "relative": true,
                     "path": ".spinetoolbox/specifications/Tool/hp_units_conversion.json"
-                },
-                {
-                    "type": "path",
-                    "relative": true,
-                    "path": ".spinetoolbox/specifications/Tool/hp_cop_processing.json"
                 },
                 {
                     "type": "path",
@@ -76,38 +56,13 @@
                     "type": "path",
                     "relative": true,
                     "path": ".spinetoolbox/specifications/Tool/results_extraction.json"
-                },
-                {
-                    "type": "path",
-                    "relative": true,
-                    "path": ".spinetoolbox/specifications/Tool/asd.json"
-                },
-                {
-                    "type": "path",
-                    "relative": true,
-                    "path": ".spinetoolbox/specifications/Tool/fft.json"
                 }
             ],
             "Importer": [
                 {
                     "type": "path",
                     "relative": true,
-                    "path": ".spinetoolbox/specifications/Importer/unit_and_connection_importer.json"
-                },
-                {
-                    "type": "path",
-                    "relative": true,
-                    "path": ".spinetoolbox/specifications/Importer/nodes_importer.json"
-                },
-                {
-                    "type": "path",
-                    "relative": true,
                     "path": ".spinetoolbox/specifications/Importer/object_param_timeseries.json"
-                },
-                {
-                    "type": "path",
-                    "relative": true,
-                    "path": ".spinetoolbox/specifications/Importer/demand_importer.json"
                 },
                 {
                     "type": "path",
@@ -231,7 +186,7 @@
                         "db_url@Input data": {
                             "scenario_filter": {
                                 "Base": true,
-                                "Myscen": true
+                                "Myscen": false
                             },
                             "alternative_filter": {
                                 "Base": true,
@@ -754,7 +709,8 @@
                                 "Base__Full period run@2025-03-24T13:55:36": true,
                                 "Base__Run SpineOpt@2025-03-26T12:01:03": true,
                                 "Myscen__Run SpineOpt@2025-03-26T12:09:04": true,
-                                "Myscen__Run SpineOpt@2025-03-26T15:34:56": true
+                                "Myscen__Run SpineOpt@2025-03-26T15:34:56": true,
+                                "Myscen__Run SpineOpt@2025-03-26T16:44:13": true
                             }
                         }
                     },
@@ -798,8 +754,8 @@
                     "known_filters": {
                         "db_url@input with repr periods": {
                             "scenario_filter": {
-                                "Base": false,
-                                "Myscen": true
+                                "Base": true,
+                                "Myscen": false
                             },
                             "alternative_filter": {
                                 "Base": true,
@@ -886,7 +842,8 @@
                                 "Base__Full period run@2025-03-24T13:55:36": true,
                                 "Base__Run SpineOpt@2025-03-26T12:01:03": true,
                                 "Myscen__Run SpineOpt@2025-03-26T12:09:04": true,
-                                "Myscen__Run SpineOpt@2025-03-26T15:34:56": true
+                                "Myscen__Run SpineOpt@2025-03-26T15:34:56": true,
+                                "Myscen__Run SpineOpt@2025-03-26T16:44:13": true
                             }
                         }
                     },
