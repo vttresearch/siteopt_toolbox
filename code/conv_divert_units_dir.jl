@@ -2,10 +2,10 @@ using DataFrames, CSV, XLSX
 using ArgParse
 
 
-# script for creating hp units
+# script for creating diverting units
 #
 # Try from command line with
-# julia --project=@. conv_hp_units.jl testinputs/hp-input.xlsx 
+# julia --project=@. conv_divert_units_dir.jl diverting_units.xlsx modespec.xlsx sqlite:///inputdb.sqlite
 
 include("common.jl")
 include("db.jl")
@@ -34,13 +34,6 @@ function main()
     add_diverting_units(parsed_args["arg1"], parsed_args["arg3"], model_length)
 end
 
-#=
-function add_unit(c0)
-    c1 = select(c0, :unit)
-    insertcols!(c1, 1, :Objectclass1 => "unit")
-    return unique(c1)
-end
-=#
 
 # the unit-node relationships 
 function add_unit_to_node_divunits(c0)
@@ -52,34 +45,6 @@ function add_unit_to_node_divunits(c0)
     )
 end
 
-#=
-function add_unit_node_param(c0, nodecol, paramcols)
-
-    # Check if required columns exist in c0 and select what is present
-    requested_cols = vcat(paramcols, [:alternative_name])
-    existing_columns = intersect(requested_cols, Symbol.(names(c0)))
-    c1 = select(c0, :unit, nodecol, existing_columns)
-
-    # add alternative name if not present
-    if !hasproperty(c1, :alternative_name)
-        insertcols!(c1, :alternative_name => "Base")
-    end
-
-    c1 = stack(c1, Not([:unit, nodecol, :alternative_name]))
-    c1 = subset(c1, :value => ByRow(!ismissing))
-
-    rename!(c1, :variable => :parameter_name)
-
-    # final dataframe
-    insertcols!(c1, 1, :relationshipclass => "unit__to_node")
-    insertcols!(c1, 2, :Objectclass1 => "unit")
-    insertcols!(c1, 3, :Objectclass2 => "node")
-    c1 = select(c1, :relationshipclass, :Objectclass1, :Objectclass2, 
-                :unit => :Object1, nodecol => :Object2, :parameter_name, 
-                :alternative_name, :value)
-    return c1
-end
-=#
 
 # the unit-node-node relationship parameters
 function add_unit_node_node_param_divunits(c0)
@@ -103,9 +68,12 @@ function add_unit_node_node_param_divunits(c0)
 end
 
 """
-Overall function for adding 
+    add_diverting_units(filename, url_in, model_length::Period)
 
-    Output: excel tables of 
+    Overall function for adding diverting units, i.e. units which create a sidestream flow
+    which is proportional to the main flow passing through the unit. Reverse flow is allowed but
+    does not create a sidestream.
+    
 """
 function add_diverting_units(filename, url_in, model_length::Period)
 
@@ -137,7 +105,6 @@ function add_diverting_units(filename, url_in, model_length::Period)
     import_rel_param_2dim(url_in, c2)
 
     import_rel_param_3dim(url_in, add_unit_node_node_param_divunits(c0))
-
 end
 
 main()

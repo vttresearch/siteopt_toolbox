@@ -99,6 +99,10 @@ function add_nodes(stor_file, url_in, model_length::Period)
         insertcols!(c0, :alternative_name => "Base")
     end
 
+    # node names
+    c0 = transform(c0, [:node, :grid] => ByRow((x,y) -> ismissing(y) ? "n_" * string(x) : "n_" * string(x) * "_" * string(y) ) 
+                        => :node )
+
     c1 = add_object_param(c0, :node, [:demand, :balance_type], directory=dirname(stor_file)) 
     insertcols!(c1, 1, :Objectclass1 => "node")
 
