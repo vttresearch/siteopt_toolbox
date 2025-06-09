@@ -49,8 +49,9 @@ function add_pv_units(pv_file::String, url_in, model_length::Period)
     c0 = DataFrame(XLSX.readtable(pv_file, "Sheet1") )
 
     # unit and node names
-    c0 = transform(c0, [:block_identifier, :type] => ByRow((x,y)->"u_"*string(x)*"_"*string(y)) => :unit )
-    c0 = transform(c0, [:block_identifier] => ByRow(x->"n_"*string(x)*"_elec") => :basenode )
+    c0 = transform(c0, [:block_identifier, :name] => ByRow((x,y)->"u_"*string(x)*"_"*string(y)) => :unit )
+    c0 = transform(c0, [:block_identifier, :grid] 
+         => ByRow((x,y) -> "n_" * string(x) * ((y == "electricity") ? "_elec" : "_dheat")) => :basenode )
     c0 = transform(c0, [:emissionnode] => ByRow(x -> ismissing(x) ?  missing : "n_" * string(x) ) 
                         => :emissionnode )
 
@@ -66,6 +67,7 @@ function add_pv_units(pv_file::String, url_in, model_length::Period)
     import_objects(url_in, add_unit(c0))
     import_object_param(url_in, c1)
     
+    #unit-to-node relationships
     import_relations_2dim(url_in, 
         vcat(add_unit_to_node(c0, "unit__to_node", :basenode),
             add_unit_to_node(c0, "unit__to_node", :emissionnode))    )
