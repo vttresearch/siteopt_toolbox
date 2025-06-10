@@ -112,13 +112,13 @@
                 }
             },
             {
-                "name": "from pv unit input to convert pv units",
+                "name": "from pv unit input to convert VRE units",
                 "from": [
                     "pv unit input",
                     "right"
                 ],
                 "to": [
-                    "convert pv units",
+                    "convert VRE units",
                     "left"
                 ],
                 "filter_settings": {
@@ -361,13 +361,13 @@
                 }
             },
             {
-                "name": "from model specification to convert pv units",
+                "name": "from model specification to convert VRE units",
                 "from": [
                     "model specification",
                     "right"
                 ],
                 "to": [
-                    "convert pv units",
+                    "convert VRE units",
                     "left"
                 ],
                 "filter_settings": {
@@ -468,9 +468,9 @@
                 }
             },
             {
-                "name": "from convert pv units to Input data",
+                "name": "from convert VRE units to Input data",
                 "from": [
-                    "convert pv units",
+                    "convert VRE units",
                     "right"
                 ],
                 "to": [
@@ -632,13 +632,13 @@
                 }
             },
             {
-                "name": "from nodes to convert nodes (1)",
+                "name": "from nodes to convert nodes",
                 "from": [
                     "nodes",
                     "right"
                 ],
                 "to": [
-                    "convert nodes (1)",
+                    "convert nodes",
                     "left"
                 ],
                 "filter_settings": {
@@ -651,13 +651,13 @@
                 }
             },
             {
-                "name": "from model specification to convert nodes (1)",
+                "name": "from model specification to convert nodes",
                 "from": [
                     "model specification",
                     "right"
                 ],
                 "to": [
-                    "convert nodes (1)",
+                    "convert nodes",
                     "left"
                 ],
                 "filter_settings": {
@@ -670,9 +670,9 @@
                 }
             },
             {
-                "name": "from convert nodes (1) to Input data",
+                "name": "from convert nodes to Input data",
                 "from": [
-                    "convert nodes (1)",
+                    "convert nodes",
                     "right"
                 ],
                 "to": [
@@ -707,9 +707,9 @@
                             "scenario_filter": {},
                             "alternative_filter": {
                                 "Base__Full period run@2025-03-24T13:55:36": true,
-                                "Base__Run SpineOpt@2025-06-06T11:23:01": true,
-                                "Base__Run SpineOpt@2025-06-06T11:35:29": true,
-                                "Base__Run SpineOpt@2025-06-06T13:14:27": true
+                                "Base__Run SpineOpt@2025-06-10T09:24:35": true,
+                                "Myscen__Run SpineOpt@2025-06-10T09:35:33": true,
+                                "Myscen__Run SpineOpt@2025-06-10T09:47:19": true
                             }
                         }
                     },
@@ -839,9 +839,9 @@
                             "scenario_filter": {},
                             "alternative_filter": {
                                 "Base__Full period run@2025-03-24T13:55:36": true,
-                                "Base__Run SpineOpt@2025-06-06T11:23:01": true,
-                                "Base__Run SpineOpt@2025-06-06T11:35:29": true,
-                                "Base__Run SpineOpt@2025-06-06T13:14:27": true
+                                "Base__Run SpineOpt@2025-06-10T09:24:35": true,
+                                "Myscen__Run SpineOpt@2025-06-10T09:35:33": true,
+                                "Myscen__Run SpineOpt@2025-06-10T09:47:19": true
                             }
                         }
                     },
@@ -1020,30 +1020,6 @@
                 }
             ],
             "db_references": []
-        },
-        "convert pv units": {
-            "type": "Tool",
-            "description": "",
-            "x": 87.62831567785362,
-            "y": -245.24488909523873,
-            "specification": "pv unit converter",
-            "execute_in_work": true,
-            "cmd_line_args": [
-                {
-                    "type": "resource",
-                    "arg": "<project>/current_input/production/pv-input.xlsx"
-                },
-                {
-                    "type": "resource",
-                    "arg": "<project>/current_input/modelspec.xlsx"
-                },
-                {
-                    "type": "resource",
-                    "arg": "db_url@Input data"
-                }
-            ],
-            "kill_completed_processes": false,
-            "log_process_output": false
         },
         "storage input data": {
             "type": "Data Connection",
@@ -1378,30 +1354,6 @@
             "kill_completed_processes": false,
             "log_process_output": false
         },
-        "convert nodes (1)": {
-            "type": "Tool",
-            "description": "",
-            "x": 82.16661211893444,
-            "y": -516.4428862477062,
-            "specification": "node converter",
-            "execute_in_work": true,
-            "cmd_line_args": [
-                {
-                    "type": "resource",
-                    "arg": "<project>/current_input/nodes/nodes.xlsx"
-                },
-                {
-                    "type": "resource",
-                    "arg": "<project>/current_input/modelspec.xlsx"
-                },
-                {
-                    "type": "resource",
-                    "arg": "db_url@Input data"
-                }
-            ],
-            "kill_completed_processes": false,
-            "log_process_output": false
-        },
         "convert connections": {
             "type": "Tool",
             "description": "",
@@ -1524,6 +1476,54 @@
                 },
                 "schema": ""
             }
+        },
+        "convert VRE units": {
+            "type": "Tool",
+            "description": "",
+            "x": 87.62831567785362,
+            "y": -245.24488909523873,
+            "specification": "pv unit converter",
+            "execute_in_work": true,
+            "cmd_line_args": [
+                {
+                    "type": "resource",
+                    "arg": "<project>/current_input/production/pv-input.xlsx"
+                },
+                {
+                    "type": "resource",
+                    "arg": "<project>/current_input/modelspec.xlsx"
+                },
+                {
+                    "type": "resource",
+                    "arg": "db_url@Input data"
+                }
+            ],
+            "kill_completed_processes": false,
+            "log_process_output": false
+        },
+        "convert nodes": {
+            "type": "Tool",
+            "description": "",
+            "x": 82.16661211893444,
+            "y": -516.4428862477062,
+            "specification": "node converter",
+            "execute_in_work": true,
+            "cmd_line_args": [
+                {
+                    "type": "resource",
+                    "arg": "<project>/current_input/nodes/nodes.xlsx"
+                },
+                {
+                    "type": "resource",
+                    "arg": "<project>/current_input/modelspec.xlsx"
+                },
+                {
+                    "type": "resource",
+                    "arg": "db_url@Input data"
+                }
+            ],
+            "kill_completed_processes": false,
+            "log_process_output": false
         }
     }
 }

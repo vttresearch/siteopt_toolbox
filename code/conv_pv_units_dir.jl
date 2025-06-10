@@ -82,9 +82,6 @@ function add_pv_units(pv_file::String, url_in, model_length::Period)
     
     import_rel_param_2dim(url_in, c4)
     
-    #c5 = add_units_on_temporal_block(c0, "myinvestmentblock")
-    #import_relations_2dim(url_in, c5)
-
 end
 
 main()

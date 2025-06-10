@@ -324,7 +324,7 @@ function add_unit_to_node(c0, relclass::String, col::Symbol)
     insertcols!(c1, 1, :relationshipclass => relclass)
     insertcols!(c1, 2, :Objectclass1 => "unit")
     insertcols!(c1, 3, :Objectclass2 => "node")
-    return c1
+    return unique(c1)
 end
 
 function add_object_object(c0, relclass::String, oc1, oc2, object1::Symbol, object2::Symbol)
