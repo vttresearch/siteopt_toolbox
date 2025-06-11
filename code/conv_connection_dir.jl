@@ -1,8 +1,6 @@
-using DataFrames, CSV, XLSX
+using DataFrames, CSV, XLSX, Dates
 using ArgParse
-
-include("common.jl")
-include("db.jl")
+using Sines_additional
 
 function parse_commandline()
     s = ArgParseSettings()
@@ -111,7 +109,7 @@ end
 
 function add_param_connection_node(c0::DataFrame, nodecol, paramcols::Dict; directory = "")
 
-    c1 = rename_columns(c0, paramcols)
+    c1 = Sines_additional.rename_columns(c0, paramcols)
     paramcols2 = collect(values(paramcols))
     add_param_connection_node(c1, nodecol, paramcols2; directory = directory)
 end

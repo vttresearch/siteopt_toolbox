@@ -1,3 +1,4 @@
+using Sines_additional
 using ArgParse
 using SpineInterface, JSON
 using SpinePeriods
@@ -8,7 +9,6 @@ using PyCall
 # Try from command line with
 # julia --project=@. conv_hp_units.jl testinputs/hp-input.xlsx 
 
-include("db.jl")
 
 function parse_commandline()
     s = ArgParseSettings()
@@ -71,7 +71,7 @@ function select_repr_periods(url_in, repr_template, repr_settings, url_out)
     loadmodel_nofilter(url_out, json_out)
 
     @info "Removing the old temporal block..."
-    remove_entity(url_out, ("myblock",))
+    Sines_additional.remove_entity(url_out, ("myblock",))
 end
 
 function create_copy_db(url_in, url_out)
@@ -91,7 +91,6 @@ def purge_db(db_url):
     purge.purge_url(db_url, None)
     
 """
-
 
 
 main()

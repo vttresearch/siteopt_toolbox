@@ -1,14 +1,11 @@
-using DataFrames, CSV, XLSX
+using DataFrames, CSV, XLSX, Dates
 using ArgParse
-
+using Sines_additional
 
 # script for creating hp units
 #
 # Try from command line with
 # julia --project=@. conv_hp_units.jl testinputs/hp-input.xlsx 
-
-include("common.jl")
-include("db.jl")
 
 function parse_commandline()
     s = ArgParseSettings()
@@ -33,7 +30,6 @@ function main()
     model_length = calc_model_len(parsed_args["arg2"])
     add_hp_units(parsed_args["arg1"], parsed_args["arg3"], model_length)
 end
-
 
 
 """
@@ -91,7 +87,6 @@ function add_hp_units(hp_file, url_in, model_length::Period)
     c4 = add_unit_node_node_param(rename(c0, :cop_profile => :fix_ratio_out_in_unit_flow), 
             :inputnode, [:fix_ratio_out_in_unit_flow], directory = dirname(hp_file))
     import_rel_param_3dim(url_in, c4)
-
 
 end
 

@@ -123,8 +123,7 @@ function add_unit_node_node_param(c0, node2, paramcols; directory = "")
     return c1
 end
 
-# creates the "unit_param" sheet for the unit input excel file for importer
-# used for hp, pv and storage units
+# TBC: replace by add_object_param
 function add_unit_param2(c0, paramcols)
     
     # candidate units when not specified
@@ -348,6 +347,23 @@ function add_unit_node_node(c0, node1::Symbol, node2::Symbol)
     add_object_object_object(c0, "unit__node__node", "unit", "node", "node", :unit, node1, node2)
 end
 
+"""
+    augment_basetable(c0, params::Dict{Symbol, Any})
+
+    augment the base alternative rows with new parameters
+
+    `c0`: the input table
+    `params`: dictionary of parameter to parameter value
+"""
+function augment_basetable(c0::DataFrame, params::Dict{Symbol, Any})
+
+    c1 = copy(c0)
+    for (paramname, val) in params
+        c1 = transform(c0, :alternative_name => ByRow(x -> x == "Base" ? val : missing) => paramname)
+    end
+    return c1
+end
+
 function convert_timeseries(x::DataFrame, valcol = :value)
     x.time = DateTime.(x.time)
     y = TimeSeries(x[:,:time], x[:,valcol], false, false)     
@@ -362,6 +378,7 @@ end
 function rename_columns(df::DataFrame, rename_dict::Dict{Symbol, Symbol})
     for (old_name, new_name) in rename_dict
         if old_name in propertynames(df)
+            # if new name already exists, remove it
             if new_name in propertynames(df)
                 df = select(df, Not(new_name))
             end

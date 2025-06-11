@@ -1,14 +1,12 @@
-using DataFrames, CSV, XLSX
+using DataFrames, CSV, XLSX, Dates
 using ArgParse
-
+using Sines_additional
 
 # script for creating diverting units
 #
 # Try from command line with
 # julia --project=@. conv_divert_units_dir.jl diverting_units.xlsx modespec.xlsx sqlite:///inputdb.sqlite
 
-include("common.jl")
-include("db.jl")
 
 function parse_commandline()
     s = ArgParseSettings()
@@ -103,7 +101,6 @@ function add_diverting_units(filename, url_in, model_length::Period)
     insertcols!(c2, 3, :Objectclass2 => "node")
 
     import_rel_param_2dim(url_in, c2)
-
     import_rel_param_3dim(url_in, add_unit_node_node_param_divunits(c0))
 end
 

@@ -1,14 +1,11 @@
-using DataFrames, CSV, XLSX
+using DataFrames, CSV, XLSX, Dates
 using ArgParse
-
+using Sines_additional
 
 # script for creating PV units
 #
 # Try from command line with
 # julia --project=@. conv_pv_units.jl testinputs/pv-input.xlsx 
-
-include("common.jl")
-include("db.jl")
 
 function parse_commandline()
     s = ArgParseSettings()

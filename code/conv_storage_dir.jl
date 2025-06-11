@@ -1,8 +1,6 @@
-using DataFrames, CSV, XLSX
+using DataFrames, CSV, XLSX, Dates
 using ArgParse
-
-include("common.jl")
-include("db.jl")
+using Sines_additional
 
 function parse_commandline()
     s = ArgParseSettings()
@@ -28,14 +26,6 @@ function main()
     add_storages(parsed_args["arg1"],  parsed_args["arg3"], model_length)
 end
 
-#=
-# just the yunit
-function add_unit(c0)
-    c1 = select(c0, :unit => :Object1)
-    insertcols!(c1, 1, :Objectclass1 => "unit")
-    return c1
-end
-=#
 
 # just the storage node
 function add_stornode(c0)
@@ -55,32 +45,6 @@ function add_unit_to_node_storage(c0)
     )
 end
 
-#=
-# the unit-node relationship parameters
-function add_unit_node_param(c0)
-
-    c01 = subset(c0, :max_charging => ByRow(!ismissing))
-
-    c1 = select(c01, :unit)
-    c1.node = c01.stornode
-    
-    insertcols!(c1, 1, :relationshipclass => "unit__to_node")
-    insertcols!(c1, 2, :Objectclass1 => "unit")
-    insertcols!(c1, 3, :Objectclass2 => "node")
-    insertcols!(c1, 6, :parameter_name => "unit_capacity")
-    insertcols!(c1, 7, :alternative_name => c01[:, :alternative_name])
-    insertcols!(c1, 8, :parameter_value => c01[:, :max_charging])
-    
-    # add max max_discharging
-    c01[ismissing.(c01.max_discharging), :max_discharging] .= c01[ismissing.(c01.max_discharging), :max_charging]
-
-    c2 = copy(c1)
-    c2.node = c01.basenode
-    c2.parameter_value = c01[:, :max_discharging]
-
-    vcat(c1,c2)
-end
-=#
 
 """
     Adding the unit-node relationship parameters for storage units
