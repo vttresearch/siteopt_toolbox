@@ -108,14 +108,15 @@ function add_param_connection_node(c0::DataFrame, nodecol, paramcols::Array{Symb
 end
 
 function add_param_connection_node(c0::DataFrame, nodecol, paramcols::Dict; directory = "")
-
     c1 = Sines_additional.rename_columns(c0, paramcols)
     paramcols2 = collect(values(paramcols))
     add_param_connection_node(c1, nodecol, paramcols2; directory = directory)
 end
 
-
-function add_param_node_node2(c0, c_rels, paramcols)
+"""
+    add parameters for connection__node__node relationship
+"""
+function add_connection_n2_param(c0, c_rels, paramcols)
     c1 = add_object_param(c0, :connection, paramcols)
     c1 = innerjoin(c1, c_rels, on = :Object1)
     c1 = select(c1, :relationshipclass, :Objectclass1, :Objectclass2, :Objectclass3, 
@@ -132,6 +133,11 @@ function add_connections(conn_file, url_in, model_length::Period)
 
     #read basic connection info
     c0 = DataFrame(XLSX.readtable(conn_file, "Sheet1") )
+    # node names
+    c0 = transform(c0, [:grid, :node1] => ByRow((x,y) -> "n_" * y 
+                * (ismissing(x) ?  "" : "_" * string(x) ) ) => :node1)
+    c0 = transform(c0, [:grid, :node2] => ByRow((x,y) -> "n_" * y 
+                * (ismissing(x) ?  "" : "_" * string(x) ) ) => :node2)
     # connection object name
     c0 = transform(c0, [:node1, :node2] => ByRow((x,y)->"c_"*x*"__"*y) => :connection )
 
@@ -173,7 +179,7 @@ function add_connections(conn_file, url_in, model_length::Period)
      
     import_rel_param_2dim(url_in, c4)
 
-    c5 = add_param_node_node2(c0, c3, [:fix_ratio_out_in_connection_flow] )
+    c5 = add_connection_n2_param(c0, c3, [:fix_ratio_out_in_connection_flow] )
     import_rel_param_3dim(url_in, c5)
 end
 
