@@ -81,6 +81,14 @@ function add_unit_node_node_param_storage(c0)
     return c1
 end
 
+"""
+    add_storage_node_param3()
+
+    Object parameters for the storage node.
+    `c0`: input table for storages
+    `paramcols`: list of parameter columns
+    `directory`: directory where to fetch time series
+"""
 function add_storage_node_param3(c0, paramcols; directory="")
 
     c1 = insertcols(c0, :has_state => true)
@@ -147,8 +155,8 @@ function add_storages(stor_file, url_in, model_length::Period)
     c0.storage_investment_cost = c0.storage_investment_cost * (model_length / Hour(8760) )
 
     # add min share of online units for emissions to work
-    # see also add_unit_node_param_storage()
-    insertcols!(c0, :min_units_on_share => 1.0)
+    addedparams = Dict(:min_units_on_share => 1.0, :emission_flow_capacity => 1.0)
+    c0 = augment_basetable(c0, addedparams)
 
     # object parameters
     c1 =  add_unit_param2(c0, [:unit_investment_cost, :candidate_units, :min_units_on_share])

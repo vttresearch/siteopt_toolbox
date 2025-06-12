@@ -58,7 +58,8 @@ function add_hp_units(hp_file, url_in, model_length::Period)
     c0.unit_investment_cost .=  c0.unit_investment_cost * (model_length / Hour(8760) )
      
     # add min share of online units for emissions to work
-    insertcols!(c0, :min_units_on_share => 1.0)
+    addedparams = Dict(:min_units_on_share => 1.0, :emission_flow_capacity => 1.0)
+    c0 = augment_basetable(c0, addedparams)
 
     # object parameters
     c1 =  add_unit_param2(c0, [:unit_investment_cost, :candidate_units, :min_units_on_share])
