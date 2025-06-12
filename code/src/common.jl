@@ -355,11 +355,11 @@ end
     `c0`: the input table
     `params`: dictionary of parameter to parameter value
 """
-function augment_basetable(c0::DataFrame, params::Dict{Symbol, Any})
+function augment_basetable(c0::DataFrame, params::Dict{Symbol, <:Any})
 
     c1 = copy(c0)
     for (paramname, val) in params
-        c1 = transform(c0, :alternative_name => ByRow(x -> x == "Base" ? val : missing) => paramname)
+        c1 = transform(c1, :alternative_name => ByRow(x -> x == "Base" ? val : missing) => paramname)
     end
     return c1
 end

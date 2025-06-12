@@ -33,25 +33,20 @@ function add_connection(c0)
     return c1
 end
 
-# object parameters
+"""
+    add_param_connection()
+
+    object parameters for the connection.
+    `c0``: dataframe with connections and their parameters
+    `paramcols``: parameter column titles which are taken from c0
+"""
 function add_param_connection(c0, paramcols)
     
     c1 = copy(c0)
-    # candidate connections when not specified
-    default_candi_conn = 100
-
-    # add parameter "candidate_connections"
-    # TBC if this is needed
-    if !hasproperty(c1, :candidate_connections)
-        insertcols!(c1, :candidate_connections => missings(Float64, nrow(c1)))
-        c1[(!ismissing).(c1.connection_investment_cost), :candidate_connections] .= default_candi_conn
-    end
-
     c1 = add_object_param(c1, :connection, paramcols)
     
     insertcols!(c1, 1, :Objectclass1 => "connection")
     c1 = select(c1, :Objectclass1, :Object1, :parameter_name, :alternative_name, :value)
-
     return c1
 end
 
@@ -93,8 +88,13 @@ function add_conn_node_node(c0)
 end
 
 """
-    c0: dataframe with connections and their parameters
-    paramcols: column titles which are taken from c0
+    add_param_connection_node()
+
+    Adds connection__node relationship parameters
+
+    `c0``: dataframe with connections and their parameters
+    `nodecol`: column of the node in question in c0
+    paramcols: parameter column titles which are taken from c0
 """
 function add_param_connection_node(c0::DataFrame, nodecol, paramcols::Array{Symbol, 1}; directory = "")
 
@@ -124,7 +124,11 @@ function add_connection_n2_param(c0, c_rels, paramcols)
                 :parameter_name, :alternative_name, :value)
 end
 
+"""
+    add_connections(conn_file, url_in, model_length::Period)
 
+    Main function for adding connections
+"""
 function add_connections(conn_file, url_in, model_length::Period)
 
      #definitions for reverse connection flow cost
@@ -150,6 +154,17 @@ function add_connections(conn_file, url_in, model_length::Period)
     if !hasproperty(c0, :fix_ratio_out_in_connection_flow)
         insertcols!(c0, :fix_ratio_out_in_connection_flow => 1.0)
     end
+
+    # candidate connections when not specified
+    default_candi_conn = 10000
+
+    # add parameter "candidate_connections" if needed
+    if !hasproperty(c0, :candidate_connections)
+        insertcols!(c0, :candidate_connections => missings(Float64, nrow(c0)))
+    end
+    c0 = transform(c0, [:connection_investment_cost, :candidate_connections] 
+        => ByRow((x,y) -> ifelse(ismissing(y) && !ismissing(x), default_candi_conn, y) )  
+        => :candidate_connections)
 
     # adjust investment costs 
     c0.connection_investment_cost =  c0.connection_investment_cost * (model_length / Hour(8760) )

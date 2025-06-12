@@ -14,6 +14,7 @@ export add_unit_node_param
 export add_unit_node_param_emission
 export add_unit_node_node
 export add_unit_node_node_param
+export augment_basetable
 export calc_model_len
 export import_objects
 export import_object_param
