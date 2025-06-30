@@ -38,16 +38,16 @@ N.B. If you get error CondaError: Run 'conda init' before 'conda activate', run
 - Create a Miniconda environment for Siteopt python dependencies and activate it. I.e., run the following in command prompt:
 
 ```
-> conda create -n spinedb python=3.11 numpy=1.26.4
+> conda create -n spinedb python=3.11
 > conda activate spinedb
 > where python
 ```
 
-The last command prints the python interpreter path, which you should make note of. The command is applied in Windows. In Linux use "which python". If several paths are shown, make note of the one which is under miniconda/envs. Next install the Spine DB API (https://github.com/spine-tools/Spine-Database-API) and Scikit learn extra (https://scikit-learn-extra.readthedocs.io/en/stable/install.html)
+The last command prints the python interpreter path, which you should make note of. The command is applied in Windows. In Linux use "which python". If several paths are shown, make note of the one which is under miniconda/envs. Next install the Spine DB API (https://github.com/spine-tools/Spine-Database-API).
+
 
 ```
 > pip install git+https://github.com/spine-tools/Spine-Database-API.git
-> conda install -c conda-forge scikit-learn-extra
 ```
 
 Exit the command prompt.

@@ -707,7 +707,17 @@
                             "scenario_filter": {},
                             "alternative_filter": {
                                 "Base__Full period run@2025-03-24T13:55:36": true,
-                                "Base__Run SpineOpt@2025-06-10T09:24:35": true,
+                                "Base__Full period run@2025-06-12T10:58:33": true,
+                                "Base__Full period run@2025-06-12T11:13:29": true,
+                                "Base__Full period run@2025-06-12T11:26:58": true,
+                                "Base__Run SpineOpt@2025-06-10T14:33:07": true,
+                                "Base__Run SpineOpt@2025-06-10T14:47:06": true,
+                                "Base__Run SpineOpt@2025-06-11T09:55:36": true,
+                                "Base__Run SpineOpt@2025-06-11T11:01:09": true,
+                                "Base__Run SpineOpt@2025-06-11T13:12:28": true,
+                                "Base__Run SpineOpt@2025-06-11T15:26:50": true,
+                                "Base__Run SpineOpt@2025-06-12T09:17:20": true,
+                                "Base__Run SpineOpt@2025-06-12T09:38:51": true,
                                 "Myscen__Run SpineOpt@2025-06-10T09:35:33": true,
                                 "Myscen__Run SpineOpt@2025-06-10T09:47:19": true
                             }
@@ -839,7 +849,17 @@
                             "scenario_filter": {},
                             "alternative_filter": {
                                 "Base__Full period run@2025-03-24T13:55:36": true,
-                                "Base__Run SpineOpt@2025-06-10T09:24:35": true,
+                                "Base__Full period run@2025-06-12T10:58:33": true,
+                                "Base__Full period run@2025-06-12T11:13:29": true,
+                                "Base__Full period run@2025-06-12T11:26:58": true,
+                                "Base__Run SpineOpt@2025-06-10T14:33:07": true,
+                                "Base__Run SpineOpt@2025-06-10T14:47:06": true,
+                                "Base__Run SpineOpt@2025-06-11T09:55:36": true,
+                                "Base__Run SpineOpt@2025-06-11T11:01:09": true,
+                                "Base__Run SpineOpt@2025-06-11T13:12:28": true,
+                                "Base__Run SpineOpt@2025-06-11T15:26:50": true,
+                                "Base__Run SpineOpt@2025-06-12T09:17:20": true,
+                                "Base__Run SpineOpt@2025-06-12T09:38:51": true,
                                 "Myscen__Run SpineOpt@2025-06-10T09:35:33": true,
                                 "Myscen__Run SpineOpt@2025-06-10T09:47:19": true
                             }
@@ -1249,7 +1269,7 @@
                 "database": {
                     "type": "path",
                     "relative": true,
-                    "path": ".spinetoolbox/items/input_with_repr_periods/input_with_repr_periods.sqlite"
+                    "path": ".spinetoolbox/items/input_with_repr_periods/input with repr periods.sqlite"
                 },
                 "schema": ""
             }
