@@ -707,19 +707,16 @@
                             "scenario_filter": {},
                             "alternative_filter": {
                                 "Base__Full period run@2025-03-24T13:55:36": true,
-                                "Base__Full period run@2025-06-12T10:58:33": true,
-                                "Base__Full period run@2025-06-12T11:13:29": true,
-                                "Base__Full period run@2025-06-12T11:26:58": true,
-                                "Base__Run SpineOpt@2025-06-10T14:33:07": true,
-                                "Base__Run SpineOpt@2025-06-10T14:47:06": true,
-                                "Base__Run SpineOpt@2025-06-11T09:55:36": true,
-                                "Base__Run SpineOpt@2025-06-11T11:01:09": true,
-                                "Base__Run SpineOpt@2025-06-11T13:12:28": true,
-                                "Base__Run SpineOpt@2025-06-11T15:26:50": true,
-                                "Base__Run SpineOpt@2025-06-12T09:17:20": true,
-                                "Base__Run SpineOpt@2025-06-12T09:38:51": true,
-                                "Myscen__Run SpineOpt@2025-06-10T09:35:33": true,
-                                "Myscen__Run SpineOpt@2025-06-10T09:47:19": true
+                                "Base__Run SpineOpt@2025-06-30T09:18:07": true,
+                                "Base__Run SpineOpt@2025-06-30T12:27:28": true,
+                                "Base__Run SpineOpt@2025-07-03T12:51:27": true,
+                                "Base__Run SpineOpt@2025-08-05T08:06:19": true,
+                                "Base__Run SpineOpt@2025-08-05T09:21:21": true,
+                                "Base__Run SpineOpt@2025-08-05T09:32:59": true,
+                                "Base__Run SpineOpt@2025-08-05T10:59:38": true,
+                                "Base__Run SpineOpt@2025-08-05T11:48:42": true,
+                                "Base__Run SpineOpt@2025-08-05T12:29:18": true,
+                                "Myscen__Run SpineOpt@2025-08-05T12:05:51": true
                             }
                         }
                     },
@@ -849,19 +846,16 @@
                             "scenario_filter": {},
                             "alternative_filter": {
                                 "Base__Full period run@2025-03-24T13:55:36": true,
-                                "Base__Full period run@2025-06-12T10:58:33": true,
-                                "Base__Full period run@2025-06-12T11:13:29": true,
-                                "Base__Full period run@2025-06-12T11:26:58": true,
-                                "Base__Run SpineOpt@2025-06-10T14:33:07": true,
-                                "Base__Run SpineOpt@2025-06-10T14:47:06": true,
-                                "Base__Run SpineOpt@2025-06-11T09:55:36": true,
-                                "Base__Run SpineOpt@2025-06-11T11:01:09": true,
-                                "Base__Run SpineOpt@2025-06-11T13:12:28": true,
-                                "Base__Run SpineOpt@2025-06-11T15:26:50": true,
-                                "Base__Run SpineOpt@2025-06-12T09:17:20": true,
-                                "Base__Run SpineOpt@2025-06-12T09:38:51": true,
-                                "Myscen__Run SpineOpt@2025-06-10T09:35:33": true,
-                                "Myscen__Run SpineOpt@2025-06-10T09:47:19": true
+                                "Base__Run SpineOpt@2025-06-30T09:18:07": true,
+                                "Base__Run SpineOpt@2025-06-30T12:27:28": true,
+                                "Base__Run SpineOpt@2025-07-03T12:51:27": true,
+                                "Base__Run SpineOpt@2025-08-05T08:06:19": true,
+                                "Base__Run SpineOpt@2025-08-05T09:21:21": true,
+                                "Base__Run SpineOpt@2025-08-05T09:32:59": true,
+                                "Base__Run SpineOpt@2025-08-05T10:59:38": true,
+                                "Base__Run SpineOpt@2025-08-05T11:48:42": true,
+                                "Base__Run SpineOpt@2025-08-05T12:29:18": true,
+                                "Myscen__Run SpineOpt@2025-08-05T12:05:51": true
                             }
                         }
                     },

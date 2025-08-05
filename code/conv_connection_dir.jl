@@ -124,6 +124,23 @@ function add_connection_n2_param(c0, c_rels, paramcols)
                 :parameter_name, :alternative_name, :value)
 end
 
+function connection_node_name(grid::Union{String, Missing}, block_id::Union{String, Missing})
+
+    if ismissing(block_id) error("block id not defined for a connection!") end
+
+    result = "n_" * string(block_id)
+
+    if !ismissing(grid) 
+        if grid == "heat" || grid == "dheat"
+            result = result * "_dheat"
+        elseif grid == "cool"
+            result = result * "_cool"
+        else
+            result = result * "_elec"
+        end
+    end
+    return result
+end
 """
     add_connections(conn_file, url_in, model_length::Period)
 
@@ -138,10 +155,12 @@ function add_connections(conn_file, url_in, model_length::Period)
     #read basic connection info
     c0 = DataFrame(XLSX.readtable(conn_file, "Sheet1") )
     # node names
-    c0 = transform(c0, [:grid, :node1] => ByRow((x,y) -> "n_" * y 
-                * (ismissing(x) ?  "" : "_" * string(x) ) ) => :node1)
-    c0 = transform(c0, [:grid, :node2] => ByRow((x,y) -> "n_" * y 
-                * (ismissing(x) ?  "" : "_" * string(x) ) ) => :node2)
+    # c0 = transform(c0, [:grid, :node1] => ByRow((x,y) -> "n_" * y 
+    #             * (ismissing(x) ?  "" : "_" * string(x) ) ) => :node1)
+    # c0 = transform(c0, [:grid, :node2] => ByRow((x,y) -> "n_" * y 
+    #             * (ismissing(x) ?  "" : "_" * string(x) ) ) => :node2)
+    c0 = transform(c0, [:grid, :node1] => ByRow(connection_node_name) => :node1)
+    c0 = transform(c0, [:grid, :node2] => ByRow(connection_node_name) => :node2)
     # connection object name
     c0 = transform(c0, [:node1, :node2] => ByRow((x,y)->"c_"*x*"__"*y) => :connection )
 

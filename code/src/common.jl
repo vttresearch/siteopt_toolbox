@@ -70,7 +70,7 @@ function add_object_object_param(c0, object1, object2, paramcols; directory = ""
     # text values which start with ts: indicating a timeseries
     # load the corresponding timeseries into value clumn
     c1_str = subset(c1, :value => ByRow(x -> isa(x, String) && startswith(x, "ts:")))
-    c1_str = add_unit_node_param_timeser(c1_str, directory)
+    c1_str = load_table_timeser_values(c1_str, directory)
 
     # only numeric or string values; combine with timeseries
     c1 = subset(c1, :value => ByRow(x -> !(isa(x, String) && startswith(x, "ts:")) ))
@@ -81,9 +81,9 @@ function add_object_object_param(c0, object1, object2, paramcols; directory = ""
     return c1
 end
 
-function add_unit_node_param_timeser(c1_str, directory)
+function load_table_timeser_values(c1_str, directory)
     
-    # define time series file names
+    # define time series file names prefix
     prefix = "ts:"
 
     # Remove the substring from the beginning of each string
@@ -91,11 +91,10 @@ function add_unit_node_param_timeser(c1_str, directory)
     rename!(c1_str, :value => :tstype)
     types = unique(c1_str[:,:tstype])
 
-    #load timeseries
+    #load timeseries from disk as Dict
     timeser = readcf2(directory, types)
 
     # assign the time series for parameters
-    #c1_str = innerjoin(c1_str, timeser, on = :tstype)
     c1_str = transform(c1_str, :tstype => ByRow(x -> timeser[x] ) =>  :value )
 
     select!(c1_str, Not(:tstype))
@@ -173,7 +172,7 @@ function add_object_param(c0, object1, paramcols; directory = "")
     # text values which start with ts: indicating a timeseries
     # load the corresponding timeseries into value clumn
     c1_str = subset(c1, :value => ByRow(x -> isa(x, String) && startswith(x, "ts:")))
-    c1_str = add_unit_node_param_timeser(c1_str, directory)
+    c1_str = load_table_timeser_values(c1_str, directory)
 
     # only numeric or string values; combine with timeseries
     c1 = subset(c1, :value => ByRow(x -> !(isa(x, String) && startswith(x, "ts:")) ))
