@@ -386,3 +386,46 @@ function rename_columns(df::DataFrame, rename_dict::Dict{Symbol, Symbol})
     end
     return df
 end
+
+"""
+    curtain_value() gives the maximum value of arguments but supports also 
+    timeseries arguments. Each time index is calculated separately. 
+    For timeseries only the common domain is returned.
+    Where values are missing in timeseries, the previous given value holds.
+"""
+function curtain_value(a::TimeSeries)
+    a
+end
+
+function curtain_value(a::Number)
+    a
+end
+
+function curtain_value(a::Number, b::Number)
+    max(a,b)
+end
+
+function curtain_value(a::TimeSeries, b::Number)
+    SpineInterface.timedata_operation(max,a,b)
+end
+
+function curtain_value(a::Number, b::TimeSeries)
+    SpineInterface.timedata_operation(max,a,b)
+end
+
+function curtain_value(a::TimeSeries, b::TimeSeries)
+    SpineInterface.timedata_operation(max,a,b)
+end
+
+function curtain_value(c::AbstractVector{<:Union{TimeSeries, Number}})
+    if length(c) == 0 
+        return nothing 
+    else
+        r = c[1]
+        for b in c[2:end]
+            r = curtain_value(r, b)
+        end
+        # could also use r = reduce(curtain_value, c)
+        return r
+    end
+end

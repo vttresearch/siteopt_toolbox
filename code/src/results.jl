@@ -8,7 +8,7 @@ function summarizeresults(url_in::Union{String, Nothing},
     # load recipe
     recipe = JSON.parsefile(recipe_file)
 
-    println(get_entities(url_out, "stochastic_scenario") )
+    #println(get_entities(url_out, "stochastic_scenario") )
 
     weight = prepare_tb_weight(url_in)
 
