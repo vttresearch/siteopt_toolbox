@@ -47,7 +47,11 @@ function summarizeresults(url_in::Union{String, Nothing},
                 end
                 scaler = get(val2, "scaling", 1)
                 transform!(a, :value => (x -> x .* scaler) => :value)
-                insertcols!(a, :item => key1)
+                if get(val2, "aggregation", true) == true
+                    insertcols!(a, :item => key1)
+                else
+                    a.item = a.showentity
+                end
                 insertcols!(a, :summary => key0)
                 df = vcat(df, a, cols = :union)
             end
@@ -292,7 +296,8 @@ function result_unit_investment(db::Union{String, Dict},
         b = subset(b, :alternative => ByRow(in(scenario)))
     end
     transform!(b, :value => ByRow(x -> tssum(x) ) => :value)
-    return select(b, :alternative => :scenario, :entity, :value)
+    transform!(b, :entity => ByRow(x -> x[2] ) => :showentity)
+    return select(b, :alternative => :scenario, :entity, :showentity, :value)
 end
 
 function result_node_investment(db::Union{String, Dict}, 
