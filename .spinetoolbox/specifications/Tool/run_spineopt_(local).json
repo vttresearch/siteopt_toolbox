@@ -1,0 +1,13 @@
+{
+    "name": "Run SpineOpt (local)",
+    "tooltype": "julia",
+    "includes": [
+        "run_spineopt.jl"
+    ],
+    "description": "Runs SpineOpt.",
+    "inputfiles": [],
+    "inputfiles_opt": [],
+    "outputfiles": [],
+    "cmdline_args": [],
+    "includes_main_path": "../../../code"
+}

@@ -1,0 +1,13 @@
+{
+    "name": "Load Template (local)",
+    "tooltype": "julia",
+    "includes": [
+        "load_template.jl"
+    ],
+    "description": "Loads the SpineOpt template in all db urls passed as argument.",
+    "inputfiles": [],
+    "inputfiles_opt": [],
+    "outputfiles": [],
+    "cmdline_args": [],
+    "includes_main_path": "../../../code"
+}
