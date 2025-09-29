@@ -20,11 +20,6 @@
                 {
                     "type": "path",
                     "relative": true,
-                    "path": ".spinetoolbox/specifications/Tool/assign_pv_cf.json"
-                },
-                {
-                    "type": "path",
-                    "relative": true,
                     "path": ".spinetoolbox/specifications/Tool/hp_units_conversion.json"
                 },
                 {
@@ -41,11 +36,6 @@
                     "type": "path",
                     "relative": true,
                     "path": ".spinetoolbox/specifications/Tool/represnetative_periods_selector.json"
-                },
-                {
-                    "type": "path",
-                    "relative": true,
-                    "path": ".spinetoolbox/specifications/Tool/delete_temporal_block.json"
                 },
                 {
                     "type": "path",
