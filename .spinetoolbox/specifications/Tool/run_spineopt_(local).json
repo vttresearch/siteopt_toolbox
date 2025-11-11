@@ -1,13 +1,13 @@
 {
-    "name": "delete_temporal_block",
+    "name": "Run SpineOpt (local)",
     "tooltype": "julia",
     "includes": [
-        "delete_entity.jl"
+        "run_spineopt.jl"
     ],
-    "description": "",
+    "description": "Runs SpineOpt.",
     "inputfiles": [],
     "inputfiles_opt": [],
     "outputfiles": [],
     "cmdline_args": [],
-    "includes_main_path": "../../../../../Sines_additional"
+    "includes_main_path": "../../../code"
 }

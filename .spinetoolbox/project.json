@@ -20,11 +20,6 @@
                 {
                     "type": "path",
                     "relative": true,
-                    "path": ".spinetoolbox/specifications/Tool/assign_pv_cf.json"
-                },
-                {
-                    "type": "path",
-                    "relative": true,
                     "path": ".spinetoolbox/specifications/Tool/hp_units_conversion.json"
                 },
                 {
@@ -45,17 +40,22 @@
                 {
                     "type": "path",
                     "relative": true,
-                    "path": ".spinetoolbox/specifications/Tool/delete_temporal_block.json"
-                },
-                {
-                    "type": "path",
-                    "relative": true,
                     "path": ".spinetoolbox/specifications/Tool/conver_connections_direct.json"
                 },
                 {
                     "type": "path",
                     "relative": true,
                     "path": ".spinetoolbox/specifications/Tool/results_extraction.json"
+                },
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": ".spinetoolbox/specifications/Tool/load_template_(local).json"
+                },
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": ".spinetoolbox/specifications/Tool/run_spineopt_(local).json"
                 }
             ],
             "Importer": [
@@ -986,7 +986,7 @@
             "description": "",
             "x": 345.9948695295623,
             "y": -986.5494770835709,
-            "specification": "Load template",
+            "specification": "Load Template (local)",
             "execute_in_work": true,
             "cmd_line_args": [
                 {
@@ -1329,7 +1329,7 @@
             "description": "",
             "x": 1287.409776269836,
             "y": 215.6329301681576,
-            "specification": "Run SpineOpt",
+            "specification": "Run SpineOpt (local)",
             "execute_in_work": true,
             "cmd_line_args": [
                 {
@@ -1397,7 +1397,7 @@
             "description": "",
             "x": 1278.094107077615,
             "y": -28.253033999886725,
-            "specification": "Run SpineOpt",
+            "specification": "Run SpineOpt (local)",
             "execute_in_work": true,
             "cmd_line_args": [
                 {
