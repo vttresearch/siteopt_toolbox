@@ -94,7 +94,7 @@ end
 
     `c0``: dataframe with connections and their parameters
     `nodecol`: column of the node in question in c0
-    paramcols: parameter column titles which are taken from c0
+    `paramcols`: parameter column titles which are taken from c0
 """
 function add_param_connection_node(c0::DataFrame, nodecol, paramcols::Array{Symbol, 1}; directory = "")
 
@@ -213,6 +213,7 @@ function add_connections(conn_file, url_in, model_length::Period)
      
     import_rel_param_2dim(url_in, c4)
 
+    # 3-dim relationship parameters
     c5 = add_connection_n2_param(c0, c3, [:fix_ratio_out_in_connection_flow] )
     import_rel_param_3dim(url_in, c5)
 end
