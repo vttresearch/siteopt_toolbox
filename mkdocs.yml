@@ -3,12 +3,12 @@ site_url: https://github.com/vttresearch/siteopt_toolbox
 site_description: Project documentation for Siteopt
 site_author: VTT DOES Team
 
-repo_name:vttresearch/siteopt_toolbox
+repo_name: vttresearch/siteopt_toolbox
 repo_url: https://github.com/vttresearch/siteopt_toolbox
 edit_uri: blob/main/docs/
 
 # Copyright
-copyright: Copyright &copy; 2024 - 2024 VTT - Design and Operation of Energy Systems
+copyright: Copyright &copy; 2024 - 2025 VTT - Design and Operation of Energy Systems
 
 theme:
   name: material
