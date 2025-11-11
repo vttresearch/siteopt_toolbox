@@ -10,7 +10,9 @@ edit_uri: blob/main/docs/
 # Copyright
 copyright: Copyright &copy; 2024 - 2025 VTT - Design and Operation of Energy Systems
 
-
+theme:
+  name: material
+  logo: images/buildingicon.png
 nav:
   - Home: index.md
   - Overview: introduction.md
