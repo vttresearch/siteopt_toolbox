@@ -22,7 +22,7 @@ theme:
     - django
 
 nav:
-  - About us: index.md
+  - Home: index.md
   - Overview: introduction.md
 
 
