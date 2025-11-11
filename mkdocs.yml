@@ -1,16 +1,91 @@
-site_name: Siteopt tool documentation
+site_name: Siteopt
+site_url: https://github.com/vttresearch/siteopt_toolbox
+site_description: Project documentation for Siteopt
+site_author: VTT DOES Team
+
+repo_name:vttresearch/siteopt_toolbox
+repo_url: https://github.com/vttresearch/siteopt_toolbox
+edit_uri: blob/main/docs/
+
+# Copyright
+copyright: Copyright &copy; 2024 - 2024 VTT - Design and Operation of Energy Systems
+
 theme:
-  name: readthedocs
+  name: material
+  logo: images/VTT_Orange_Logo - Predicer.svg
+  favicon: images/Predicer_logo_web.svg
+  color_mode: auto
+  user_color_mode_toggle: true
+  locale: en
   highlightjs: true
+  hljs_languages:
+    - yaml
+    - django
+
+nav:
+  - About us: index.md
+  - Overview: introduction.md
+
+
 plugins:
-  - search
-  - mkdocstrings:
-      handlers:
-        # See: https://mkdocstrings.github.io/python/usage/
-        python:
-          options:
-            docstring_style: sphinx
+  - mkdocs-video
+  - plotly
+  - blog
+  - search:
+      separator: '[\s\u200b\-_,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'
+  - minify:
+      minify_html: true
+      
 markdown_extensions:
-  - markdown_include.include:
-      base_path: .
+  - abbr
   - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.magiclink:
+      normalize_issue_symbols: true
+      repo_url_shorthand: true
+      user: squidfunk
+      repo: mkdocs-material
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.snippets:
+      auto_append:
+        - includes/mkdocs.md
+  - pymdownx.tabbed:
+      alternate_style: true
+      combine_header_slug: true
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+        - name: plotly
+          class: mkdocs-plotly
+          format: !!python/name:mkdocs_plotly_plugin.fences.fence_plotly
+extra:
+  homepage: https://cris.vtt.fi/en/organisations/does-design-and-operation-of-energy-systems
