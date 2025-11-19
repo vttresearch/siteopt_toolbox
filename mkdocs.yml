@@ -1,4 +1,4 @@
-site_name: siteopt_toolbox
+site_name: Siteopt
 site_url: https://vttresearch.github.io/siteopt_toolbox/
 site_description: Project documentation for Siteopt
 site_author: VTT DOES Team
@@ -14,7 +14,7 @@ theme:
   name: material
   logo: images/buildingicon.png
 nav:
-  - Home: index.md
+  - Getting started: getstart.md
   - Overview: introduction.md
 
 
