@@ -14,8 +14,9 @@ theme:
   name: material
   logo: images/buildingicon.png
 nav:
+  - Home: index.md
   - Getting started: getstart.md
-  - Overview: introduction.md
+  - User guide: introduction.md
 
 
 plugins:
