@@ -1,7 +1,9 @@
 
 # Welcome to Siteopt
 
-**Siteopt** (/lu\'make/) is a tool for energy system optimization.
+**Siteopt** is a tool for energy system optimization.
+
+- [Introduction](introduction.md)
 
 
 
