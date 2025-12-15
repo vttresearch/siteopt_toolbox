@@ -5,7 +5,7 @@ Installing the Siteopt tool takes place mostly in the command line. You can use 
 ## System requirements
 
 - Windows or Linux operating system
-- 16 GB RAM
+- 16 GB RAM (depending on the models which you run more can be needed)
 - network connection for installation
 
 ## Spine Toolbox
