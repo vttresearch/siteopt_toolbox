@@ -15,7 +15,7 @@ theme:
   logo: images/buildingicon.png
 nav:
   - Home: index.md
-  - Getting started: getstart.md
+  - Installation: installation.md
   - User guide: introduction.md
 
 
