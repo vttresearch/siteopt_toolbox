@@ -172,56 +172,6 @@
                 }
             },
             {
-                "name": "from Input data to Full period run",
-                "from": [
-                    "Input data",
-                    "right"
-                ],
-                "to": [
-                    "Full period run",
-                    "left"
-                ],
-                "filter_settings": {
-                    "known_filters": {
-                        "db_url@Input data": {
-                            "scenario_filter": {
-                                "Base": true,
-                                "Myscen": false
-                            },
-                            "alternative_filter": {
-                                "Base": true,
-                                "Highprice": true,
-                                "Newer": true
-                            }
-                        }
-                    },
-                    "auto_online": true,
-                    "enabled_filter_types": {
-                        "alternative_filter": false,
-                        "scenario_filter": true
-                    }
-                }
-            },
-            {
-                "name": "from Full period run to output db",
-                "from": [
-                    "Full period run",
-                    "right"
-                ],
-                "to": [
-                    "output db",
-                    "left"
-                ],
-                "filter_settings": {
-                    "known_filters": {},
-                    "auto_online": true,
-                    "enabled_filter_types": {
-                        "alternative_filter": false,
-                        "scenario_filter": true
-                    }
-                }
-            },
-            {
                 "name": "from hp units input to convert hp units",
                 "from": [
                     "hp units input",
@@ -706,17 +656,9 @@
                         "db_url@output db": {
                             "scenario_filter": {},
                             "alternative_filter": {
-                                "Base__Full period run@2025-03-24T13:55:36": true,
-                                "Base__Run SpineOpt@2025-06-30T09:18:07": true,
-                                "Base__Run SpineOpt@2025-06-30T12:27:28": true,
-                                "Base__Run SpineOpt@2025-07-03T12:51:27": true,
-                                "Base__Run SpineOpt@2025-08-05T08:06:19": true,
-                                "Base__Run SpineOpt@2025-08-05T09:21:21": true,
-                                "Base__Run SpineOpt@2025-08-05T09:32:59": true,
-                                "Base__Run SpineOpt@2025-08-05T10:59:38": true,
-                                "Base__Run SpineOpt@2025-08-05T11:48:42": true,
-                                "Base__Run SpineOpt@2025-08-05T12:29:18": true,
-                                "Myscen__Run SpineOpt@2025-08-05T12:05:51": true
+                                "Base": true,
+                                "Base__Run SpineOpt@2025-11-11T09:45:52": true,
+                                "Base__Run SpineOpt@2025-12-16T12:25:25": true
                             }
                         }
                     },
@@ -747,13 +689,13 @@
                 }
             },
             {
-                "name": "from input with repr periods to Run SpineOpt",
+                "name": "from input with repr periods to Optimize",
                 "from": [
                     "input with repr periods",
                     "right"
                 ],
                 "to": [
-                    "Run SpineOpt",
+                    "Optimize",
                     "left"
                 ],
                 "filter_settings": {
@@ -765,8 +707,7 @@
                             },
                             "alternative_filter": {
                                 "Base": true,
-                                "Highprice": true,
-                                "Newer": true
+                                "Highprice": true
                             }
                         }
                     },
@@ -796,8 +737,7 @@
                             },
                             "alternative_filter": {
                                 "Base": true,
-                                "Highprice": true,
-                                "Newer": true
+                                "Highprice": true
                             }
                         }
                     },
@@ -823,92 +763,6 @@
                 },
                 "filter_settings": {
                     "known_filters": {},
-                    "auto_online": true,
-                    "enabled_filter_types": {
-                        "alternative_filter": false,
-                        "scenario_filter": true
-                    }
-                }
-            },
-            {
-                "name": "from output db to Extract results (full period run)",
-                "from": [
-                    "output db",
-                    "right"
-                ],
-                "to": [
-                    "Extract results (full period run)",
-                    "left"
-                ],
-                "filter_settings": {
-                    "known_filters": {
-                        "db_url@output db": {
-                            "scenario_filter": {},
-                            "alternative_filter": {
-                                "Base__Full period run@2025-03-24T13:55:36": true,
-                                "Base__Run SpineOpt@2025-06-30T09:18:07": true,
-                                "Base__Run SpineOpt@2025-06-30T12:27:28": true,
-                                "Base__Run SpineOpt@2025-07-03T12:51:27": true,
-                                "Base__Run SpineOpt@2025-08-05T08:06:19": true,
-                                "Base__Run SpineOpt@2025-08-05T09:21:21": true,
-                                "Base__Run SpineOpt@2025-08-05T09:32:59": true,
-                                "Base__Run SpineOpt@2025-08-05T10:59:38": true,
-                                "Base__Run SpineOpt@2025-08-05T11:48:42": true,
-                                "Base__Run SpineOpt@2025-08-05T12:29:18": true,
-                                "Myscen__Run SpineOpt@2025-08-05T12:05:51": true
-                            }
-                        }
-                    },
-                    "auto_online": true,
-                    "enabled_filter_types": {
-                        "alternative_filter": false,
-                        "scenario_filter": true
-                    }
-                }
-            },
-            {
-                "name": "from Output recipe to Extract results (full period run)",
-                "from": [
-                    "Output recipe",
-                    "right"
-                ],
-                "to": [
-                    "Extract results (full period run)",
-                    "left"
-                ],
-                "filter_settings": {
-                    "known_filters": {},
-                    "auto_online": true,
-                    "enabled_filter_types": {
-                        "alternative_filter": false,
-                        "scenario_filter": true
-                    }
-                }
-            },
-            {
-                "name": "from Input data to Extract results (full period run)",
-                "from": [
-                    "Input data",
-                    "right"
-                ],
-                "to": [
-                    "Extract results (full period run)",
-                    "left"
-                ],
-                "filter_settings": {
-                    "known_filters": {
-                        "db_url@Input data": {
-                            "scenario_filter": {
-                                "Base": false,
-                                "Myscen": false
-                            },
-                            "alternative_filter": {
-                                "Base": true,
-                                "Highprice": true,
-                                "Newer": true
-                            }
-                        }
-                    },
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
@@ -959,15 +813,68 @@
                 }
             },
             {
-                "name": "from Run SpineOpt to output db",
+                "name": "from Optimize to output db",
                 "from": [
-                    "Run SpineOpt",
+                    "Optimize",
                     "right"
                 ],
                 "to": [
                     "output db",
                     "left"
                 ],
+                "filter_settings": {
+                    "known_filters": {},
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from Input data to Copy DB",
+                "from": [
+                    "Input data",
+                    "right"
+                ],
+                "to": [
+                    "Copy DB",
+                    "left"
+                ],
+                "filter_settings": {
+                    "known_filters": {
+                        "db_url@Input data": {
+                            "scenario_filter": {
+                                "Base": true,
+                                "Myscen": true
+                            },
+                            "alternative_filter": {
+                                "Base": true,
+                                "Highprice": true,
+                                "Newer": true
+                            }
+                        }
+                    },
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from Copy DB to input with repr periods",
+                "from": [
+                    "Copy DB",
+                    "right"
+                ],
+                "to": [
+                    "input with repr periods",
+                    "left"
+                ],
+                "options": {
+                    "purge_before_writing": true
+                },
                 "filter_settings": {
                     "known_filters": {},
                     "auto_online": true,
@@ -1024,8 +931,8 @@
         "pv unit input": {
             "type": "Data Connection",
             "description": "",
-            "x": -663.6022018196215,
-            "y": -238.33914740353907,
+            "x": -402.4014119101521,
+            "y": -247.1436684117234,
             "file_references": [
                 {
                     "type": "path",
@@ -1038,8 +945,8 @@
         "storage input data": {
             "type": "Data Connection",
             "description": "",
-            "x": -540.6659069858886,
-            "y": -757.1109132468399,
+            "x": -363.9163244049608,
+            "y": -758.640929821804,
             "file_references": [
                 {
                     "type": "path",
@@ -1052,8 +959,8 @@
         "connections input": {
             "type": "Data Connection",
             "description": "",
-            "x": -542.9471513142296,
-            "y": -1217.9487416313739,
+            "x": -370.2379390186906,
+            "y": -1217.401945145626,
             "file_references": [
                 {
                     "type": "path",
@@ -1066,8 +973,8 @@
         "model specification": {
             "type": "Data Connection",
             "description": "",
-            "x": -359.7664728712508,
-            "y": -70.51743374432455,
+            "x": -210.0896157321166,
+            "y": -111.60519844918494,
             "file_references": [
                 {
                     "type": "path",
@@ -1095,8 +1002,8 @@
         "output db": {
             "type": "Data Store",
             "description": "",
-            "x": 1531.0798650829868,
-            "y": 75.26810225908507,
+            "x": 1478.6924199324474,
+            "y": -135.77846249023025,
             "url": {
                 "dialect": "sqlite",
                 "host": "",
@@ -1150,8 +1057,8 @@
         "Existing load": {
             "type": "Data Connection",
             "description": "",
-            "x": -380.17695567054784,
-            "y": 456.8152369989607,
+            "x": -278.51855775877493,
+            "y": 469.31422034876874,
             "file_references": [
                 {
                     "type": "path",
@@ -1197,8 +1104,8 @@
         "nodes": {
             "type": "Data Connection",
             "description": "",
-            "x": -671.7846219566414,
-            "y": -507.53180299014343,
+            "x": -428.3527770720605,
+            "y": -515.1820850096011,
             "file_references": [
                 {
                     "type": "path",
@@ -1211,8 +1118,8 @@
         "scenarios": {
             "type": "Data Connection",
             "description": "",
-            "x": -374.82068860286665,
-            "y": 616.198844796465,
+            "x": -283.16147737094036,
+            "y": 612.0325170131956,
             "file_references": [
                 {
                     "type": "path",
@@ -1240,8 +1147,8 @@
         "diverting units": {
             "type": "Data Connection",
             "description": "",
-            "x": -542.1166963060766,
-            "y": -1018.0901623481483,
+            "x": -330.7795190568871,
+            "y": -1027.0199022319166,
             "file_references": [
                 {
                     "type": "path",
@@ -1254,8 +1161,8 @@
         "input with repr periods": {
             "type": "Data Store",
             "description": "",
-            "x": 1087.0916680378964,
-            "y": 298.3777657184934,
+            "x": 1048.1752802117817,
+            "y": 43.924460701588316,
             "url": {
                 "dialect": "sqlite",
                 "host": "",
@@ -1271,8 +1178,8 @@
         "repr periods template": {
             "type": "Data Connection",
             "description": "",
-            "x": 642.5956470820126,
-            "y": 226.97106944147993,
+            "x": 642.5956470820125,
+            "y": 128.18331572903443,
             "file_references": [
                 {
                     "type": "path",
@@ -1285,8 +1192,8 @@
         "repr period selection settings": {
             "type": "Data Connection",
             "description": "",
-            "x": 648.5156123082082,
-            "y": 466.9103400483997,
+            "x": 639.5349074252584,
+            "y": 294.78016312519924,
             "file_references": [
                 {
                     "type": "path",
@@ -1299,8 +1206,8 @@
         "Select repr periods": {
             "type": "Tool",
             "description": "",
-            "x": 912.3410479657427,
-            "y": 298.345519781125,
+            "x": 883.9021491697356,
+            "y": 177.10600386130557,
             "specification": "Represnetative periods selector",
             "execute_in_work": true,
             "cmd_line_args": [
@@ -1319,26 +1226,6 @@
                 {
                     "type": "resource",
                     "arg": "db_url@input with repr periods"
-                }
-            ],
-            "kill_completed_processes": false,
-            "log_process_output": false
-        },
-        "Run SpineOpt": {
-            "type": "Tool",
-            "description": "",
-            "x": 1287.409776269836,
-            "y": 215.6329301681576,
-            "specification": "Run SpineOpt (local)",
-            "execute_in_work": true,
-            "cmd_line_args": [
-                {
-                    "type": "resource",
-                    "arg": "db_url@input with repr periods"
-                },
-                {
-                    "type": "resource",
-                    "arg": "db_url@output db"
                 }
             ],
             "kill_completed_processes": false,
@@ -1392,31 +1279,11 @@
             "kill_completed_processes": false,
             "log_process_output": false
         },
-        "Full period run": {
-            "type": "Tool",
-            "description": "",
-            "x": 1278.094107077615,
-            "y": -28.253033999886725,
-            "specification": "Run SpineOpt (local)",
-            "execute_in_work": true,
-            "cmd_line_args": [
-                {
-                    "type": "resource",
-                    "arg": "db_url@Input data"
-                },
-                {
-                    "type": "resource",
-                    "arg": "db_url@output db"
-                }
-            ],
-            "kill_completed_processes": false,
-            "log_process_output": false
-        },
         "Extract results": {
             "type": "Tool",
             "description": "",
-            "x": 1897.5346870149626,
-            "y": 295.6450658666314,
+            "x": 1719.417373503129,
+            "y": 47.17889743835944,
             "specification": "Results extraction",
             "execute_in_work": true,
             "cmd_line_args": [
@@ -1439,8 +1306,8 @@
         "Output recipe": {
             "type": "Data Connection",
             "description": "",
-            "x": 1793.227391101618,
-            "y": 66.39716092939446,
+            "x": 1537.2773019375547,
+            "y": 196.6173817321635,
             "file_references": [
                 {
                     "type": "path",
@@ -1449,30 +1316,6 @@
                 }
             ],
             "db_references": []
-        },
-        "Extract results (full period run)": {
-            "type": "Tool",
-            "description": "",
-            "x": 1895.4070064251139,
-            "y": -158.10012111839552,
-            "specification": "Results extraction",
-            "execute_in_work": true,
-            "cmd_line_args": [
-                {
-                    "type": "resource",
-                    "arg": "db_url@output db"
-                },
-                {
-                    "type": "resource",
-                    "arg": "<project>/current_input/output_recipe.json"
-                },
-                {
-                    "type": "resource",
-                    "arg": "db_url@Input data"
-                }
-            ],
-            "kill_completed_processes": false,
-            "log_process_output": false
         },
         "Input data": {
             "type": "Data Store",
@@ -1534,6 +1377,33 @@
                 {
                     "type": "resource",
                     "arg": "db_url@Input data"
+                }
+            ],
+            "kill_completed_processes": false,
+            "log_process_output": false
+        },
+        "Copy DB": {
+            "type": "Merger",
+            "description": "",
+            "x": 835.2055541143118,
+            "y": -248.46616842827197,
+            "cancel_on_error": false
+        },
+        "Optimize": {
+            "type": "Tool",
+            "description": "",
+            "x": 1244.0030360022463,
+            "y": -142.0984810026677,
+            "specification": "Run SpineOpt (local)",
+            "execute_in_work": true,
+            "cmd_line_args": [
+                {
+                    "type": "resource",
+                    "arg": "db_url@input with repr periods"
+                },
+                {
+                    "type": "resource",
+                    "arg": "db_url@output db"
                 }
             ],
             "kill_completed_processes": false,

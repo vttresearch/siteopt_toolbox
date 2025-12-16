@@ -1,6 +1,6 @@
 # Installing the Siteopt tool
 
-Installing the Siteopt tool takes place mostly in the command line. You can use command shell such as **cmd** or **Windows Powershell** in Windows or terminal in Linux. You need Spine Toolbox and Julia language for running the Siteopt tool. You also need the Git software. Install them first.
+Installing the Siteopt tool takes place mostly in the command line. You can use command shell such as **cmd** or **Windows Powershell** in Windows or terminal in Linux. You need Spine Toolbox and Julia language for running the Siteopt tool. 
 
 ## System requirements
 
@@ -8,8 +8,8 @@ Installing the Siteopt tool takes place mostly in the command line. You can use 
 - 16 GB RAM (depending on the models which you run more can be needed)
 - network connection for installation
 
-## Spine Toolbox
-You need Spine Toolbox for running the Siteopt. In addition, it is needed for using the databases. To install it, first:
+## Spine Toolbox installation
+You need Spine Toolbox for running the Siteopt. To install it, first:
 
 - Install Miniconda (https://www.anaconda.com/docs/getting-started/miniconda/install). Add Miniconda to path variable in Windows when asked by the installer.
 - Create a Miniconda environment for Spine Toolbox and activate it. I.e., run the following in command prompt:
@@ -21,22 +21,21 @@ You need Spine Toolbox for running the Siteopt. In addition, it is needed for us
 > conda activate spinetb
 ```
 
-
 N.B. If you get error CondaError: Run 'conda init' before 'conda activate', run 
 
 ```
 > source activate base
-> conda activate spinetoolbox
+> conda activate spinetb
 ```
 
-- Install Spine toolbox.  in https://github.com/Spine-tools/Spine-Toolbox?tab=readme-ov-file#installation-from-sources-using-git
+- Install Spine toolbox:
 
 ```
 > python -m pip install spinetoolbox 
 > where python
 ```
 
-The last command prints the python interpreter path, which you should make note of. The command is applied in Windows. In Linux use "which python". If several paths are shown, make note of the one which is under miniconda/envs. 
+The last command prints the Python interpreter path, which you should make note of. The command is applied in Windows. In Linux use "which python". If several paths are shown, make note of the one which is under **miniconda/envs**. 
 
 Exit the command prompt.
 
@@ -68,7 +67,7 @@ Rebuilding Julia PyCall package is needed to be able to connect to the databases
 ENV["PYTHON"] = raw"C:\path\to\your\python\python.exe" #(replace the path by the Python executable in the Miniconda environment where you installed Spine Toolbox )
 Pkg.build("PyCall")
 ```
-You can find the Python path as explained in the Python dependencies of the Siteopt tool section. Next add the correct versions of the optimization tool:
+You can find the Python path as explained in the Python dependencies of the Siteopt tool section. Next add the correct version of the optimization tool:
 
 ```
 Pkg.add(url="https://github.com/spine-tools/SpinePeriods.jl.git", rev="clustering")
@@ -82,7 +81,7 @@ You can now exit Julia session.
 
 Check that you have all the necessary input files in the **current_input** subfolder of siteopt_toolbox. Make the current_input folder if it does not exist. Download or copy your input data to the current_input folder. Ask your optimization model provider for the data. Example input data has been provided in (TBC).
 
-## Running the Siteopt tool
+## Running the Siteopt tool via Toolbox
 
 Spine Toolbox provides a graphical user interface for running SpineOpt and editing databases. To run it, activate the proper Miniconda environment, which you used to install Spine Toolbox. Start Spine Toolbox by command
 
@@ -93,7 +92,7 @@ Spine Toolbox provides a graphical user interface for running SpineOpt and editi
 
 in console (e.g. "cmd" in Windows).
 
-### Settings
+### Adjusting Toolbox settings
 
 Now Open the Siteopt toolbox project (File->Open project...). You select a folder, not a file when opening a project. Locate the siteopt_toolbox folder.
 Go to File->Settings. Go to Tools tab. Check that in **Julia** box the second line points to the **code** folder (See figure below but the path can be different in your computer).
