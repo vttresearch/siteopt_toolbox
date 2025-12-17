@@ -3,7 +3,8 @@
         "version": 13,
         "description": "",
         "settings": {
-            "enable_execute_all": true
+            "enable_execute_all": true,
+            "store_external_paths_as_relative": false
         },
         "specifications": {
             "Tool": [
@@ -901,7 +902,7 @@
                     "arg": "db_url@Input data"
                 }
             ],
-            "kill_completed_processes": false,
+            "kill_completed_processes": true,
             "log_process_output": false
         },
         "convert storages": {
@@ -925,7 +926,7 @@
                     "arg": "db_url@Input data"
                 }
             ],
-            "kill_completed_processes": false,
+            "kill_completed_processes": true,
             "log_process_output": false
         },
         "pv unit input": {
@@ -940,6 +941,8 @@
                     "path": "current_input/production/pv-input.xlsx"
                 }
             ],
+            "file_patterns": [],
+            "directory_references": [],
             "db_references": []
         },
         "storage input data": {
@@ -954,13 +957,15 @@
                     "path": "current_input/storages/storages-input.xlsx"
                 }
             ],
+            "file_patterns": [],
+            "directory_references": [],
             "db_references": []
         },
         "connections input": {
             "type": "Data Connection",
             "description": "",
-            "x": -370.2379390186906,
-            "y": -1217.401945145626,
+            "x": -373.7364069164701,
+            "y": -1133.4387155989173,
             "file_references": [
                 {
                     "type": "path",
@@ -968,6 +973,8 @@
                     "path": "current_input/connections/connections-input.xlsx"
                 }
             ],
+            "file_patterns": [],
+            "directory_references": [],
             "db_references": []
         },
         "model specification": {
@@ -982,13 +989,15 @@
                     "path": "current_input/modelspec.xlsx"
                 }
             ],
+            "file_patterns": [],
+            "directory_references": [],
             "db_references": []
         },
         "model spec importer": {
             "type": "Importer",
             "description": "",
-            "x": 92.73255414311551,
-            "y": 287.02827503472975,
+            "x": 85.73561834755647,
+            "y": 178.57577020356456,
             "specification": "model spec importer",
             "cancel_on_error": false,
             "on_conflict": "merge",
@@ -1007,7 +1016,7 @@
             "url": {
                 "dialect": "sqlite",
                 "host": "",
-                "port": "",
+                "port": null,
                 "database": {
                     "type": "path",
                     "relative": true,
@@ -1019,8 +1028,8 @@
         "hp units input": {
             "type": "Data Connection",
             "description": "",
-            "x": -467.49101902791307,
-            "y": 86.55044515324047,
+            "x": -474.4879548234721,
+            "y": -21.90205967792471,
             "file_references": [
                 {
                     "type": "path",
@@ -1028,13 +1037,15 @@
                     "path": "current_input/production/hp-input.xlsx"
                 }
             ],
+            "file_patterns": [],
+            "directory_references": [],
             "db_references": []
         },
         "convert hp units": {
             "type": "Tool",
             "description": "",
-            "x": 93.34257294339407,
-            "y": 88.79697139057808,
+            "x": 86.34563714783503,
+            "y": -19.655533440587106,
             "specification": "hp units conversion",
             "execute_in_work": true,
             "cmd_line_args": [
@@ -1051,14 +1062,14 @@
                     "arg": "db_url@Input data"
                 }
             ],
-            "kill_completed_processes": false,
+            "kill_completed_processes": true,
             "log_process_output": false
         },
         "Existing load": {
             "type": "Data Connection",
             "description": "",
-            "x": -278.51855775877493,
-            "y": 469.31422034876874,
+            "x": -285.515493554334,
+            "y": 360.86171551760356,
             "file_references": [
                 {
                     "type": "path",
@@ -1076,13 +1087,15 @@
                     "path": "current_input/demand/tscr_heatdemand.csv"
                 }
             ],
+            "file_patterns": [],
+            "directory_references": [],
             "db_references": []
         },
         "import object parameters wide": {
             "type": "Importer",
             "description": "",
-            "x": 88.34025225178617,
-            "y": 468.6915636088728,
+            "x": 81.34331645622713,
+            "y": 360.2390587777076,
             "specification": "import object parameter time series in wide format",
             "cancel_on_error": false,
             "on_conflict": "merge",
@@ -1113,13 +1126,15 @@
                     "path": "current_input/nodes/nodes.xlsx"
                 }
             ],
+            "file_patterns": [],
+            "directory_references": [],
             "db_references": []
         },
         "scenarios": {
             "type": "Data Connection",
             "description": "",
-            "x": -283.16147737094036,
-            "y": 612.0325170131956,
+            "x": -290.15841316649943,
+            "y": 503.5800121820303,
             "file_references": [
                 {
                     "type": "path",
@@ -1127,13 +1142,15 @@
                     "path": "current_input/scenarios.xlsx"
                 }
             ],
+            "file_patterns": [],
+            "directory_references": [],
             "db_references": []
         },
         "scenario importer": {
             "type": "Importer",
             "description": "",
-            "x": 90.5398320850026,
-            "y": 614.7492458612826,
+            "x": 83.54289628944356,
+            "y": 506.2967410301174,
             "specification": "scenario importer",
             "cancel_on_error": false,
             "on_conflict": "merge",
@@ -1147,8 +1164,8 @@
         "diverting units": {
             "type": "Data Connection",
             "description": "",
-            "x": -330.7795190568871,
-            "y": -1027.0199022319166,
+            "x": -334.2779869546667,
+            "y": -943.056672685208,
             "file_references": [
                 {
                     "type": "path",
@@ -1156,6 +1173,8 @@
                     "path": "current_input/other_units/divertingunits.xlsx"
                 }
             ],
+            "file_patterns": [],
+            "directory_references": [],
             "db_references": []
         },
         "input with repr periods": {
@@ -1166,7 +1185,7 @@
             "url": {
                 "dialect": "sqlite",
                 "host": "",
-                "port": "",
+                "port": null,
                 "database": {
                     "type": "path",
                     "relative": true,
@@ -1187,6 +1206,8 @@
                     "path": "current_input/representative_periods/representative_periods_template.json"
                 }
             ],
+            "file_patterns": [],
+            "directory_references": [],
             "db_references": []
         },
         "repr period selection settings": {
@@ -1201,6 +1222,8 @@
                     "path": "current_input/representative_periods/repr_settings_elexia.json"
                 }
             ],
+            "file_patterns": [],
+            "directory_references": [],
             "db_references": []
         },
         "Select repr periods": {
@@ -1234,8 +1257,8 @@
         "convert diverting units (1)": {
             "type": "Tool",
             "description": "",
-            "x": 80.81482322624163,
-            "y": -1028.1054070115483,
+            "x": 77.31635532846211,
+            "y": -944.1421774648397,
             "specification": "convert diverting units",
             "execute_in_work": true,
             "cmd_line_args": [
@@ -1252,14 +1275,14 @@
                     "arg": "db_url@Input data"
                 }
             ],
-            "kill_completed_processes": false,
+            "kill_completed_processes": true,
             "log_process_output": false
         },
         "convert connections": {
             "type": "Tool",
             "description": "",
-            "x": 78.65226151878423,
-            "y": -1220.9576358500647,
+            "x": 75.15379362100471,
+            "y": -1136.994406303356,
             "specification": "conver connections direct",
             "execute_in_work": true,
             "cmd_line_args": [
@@ -1276,7 +1299,7 @@
                     "arg": "db_url@Input data"
                 }
             ],
-            "kill_completed_processes": false,
+            "kill_completed_processes": true,
             "log_process_output": false
         },
         "Extract results": {
@@ -1315,6 +1338,8 @@
                     "path": "current_input/output_recipe.json"
                 }
             ],
+            "file_patterns": [],
+            "directory_references": [],
             "db_references": []
         },
         "Input data": {
@@ -1325,7 +1350,7 @@
             "url": {
                 "dialect": "sqlite",
                 "host": "",
-                "port": "",
+                "port": null,
                 "database": {
                     "type": "path",
                     "relative": true,
@@ -1355,7 +1380,7 @@
                     "arg": "db_url@Input data"
                 }
             ],
-            "kill_completed_processes": false,
+            "kill_completed_processes": true,
             "log_process_output": false
         },
         "convert nodes": {
@@ -1379,7 +1404,7 @@
                     "arg": "db_url@Input data"
                 }
             ],
-            "kill_completed_processes": false,
+            "kill_completed_processes": true,
             "log_process_output": false
         },
         "Copy DB": {
