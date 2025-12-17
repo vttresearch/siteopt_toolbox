@@ -54,22 +54,20 @@ Go to [https://github.com/vttresearch/siteopt_toolbox](https://github.com/vttres
 
 ## Siteopt Julia dependencies installation
 
-Go to Siteopt **code** folder of siteopt_toolbox and start Julia console (type "julia" in command prompt). Do not use the same console which you used for Spine Toolbox installation (open a new one). The packages needed by the Siteopt Julia scripts need to be installed. Run commands:
+Go to Siteopt **code** folder of siteopt_toolbox and start Julia console (type "julia" in command prompt). Do not use the same console which you used for Spine Toolbox installation (open a new one). 
   
-```
-Using Pkg
-Pkg.activate(".")
-```
-
 Rebuilding Julia PyCall package is needed to be able to connect to the databases. This is done by running the following commands in Julia console:
 
 ```
+Using Pkg
 ENV["PYTHON"] = raw"C:\path\to\your\python\python.exe" #(replace the path by the Python executable in the Miniconda environment where you installed Spine Toolbox )
+Pkg.add("PyCall")
 Pkg.build("PyCall")
 ```
-You can find the Python path as explained in the Python dependencies of the Siteopt tool section. Next add the correct version of the optimization tool:
+You can find the Python path as explained in the Python dependencies of the Siteopt tool section. The packages needed by the Siteopt Julia scripts also need to be installed. Next add the correct version of these:
 
 ```
+Pkg.activate(".")
 Pkg.add(url="https://github.com/spine-tools/SpinePeriods.jl.git", rev="clustering")
 Pkg.add(url="https://github.com/spine-tools/SpineOpt.jl.git", rev="elexia")
 Pkg.instantiate()
@@ -90,12 +88,12 @@ Spine Toolbox provides a graphical user interface for running SpineOpt and editi
 > spinetoolbox
 ```
 
-in console (e.g. "cmd" in Windows).
+in console (e.g. "cmd" in Windows). 
 
 ### Adjusting Toolbox settings
 
-Now Open the Siteopt toolbox project (File->Open project...). You select a folder, not a file when opening a project. Locate the siteopt_toolbox folder.
-Go to File->Settings. Go to Tools tab. Check that in **Julia** box the second line points to the **code** folder (See figure below but the path can be different in your computer).
+Now Open the Siteopt toolbox project (File->Open project...). You select a folder, not a file when opening a project. Locate the siteopt_toolbox folder. Toolbox may ask you to upgrade databases. Do this. 
+You will now see the project opened in the Toolbox window. Go to File->Settings. Go to Tools tab in the settings window. Check that in **Julia** box the second line points to the **code** folder (See figure below but the path can be different in your computer).
 
 ![alt text](images/juliasettings.png "Repository URL")
 
@@ -106,8 +104,6 @@ Go to File->Settings. Go to Tools tab. Check that in **Julia** box the second li
 
 - Link from Input data to Select repr periods
 - Link from Input with repr periods to Extract results
-- Link from Input data to Extract results (full period run)
-- Link from output db to Extract results (full period run)
 - Link from output db to Extract results
 
 Click File->Save project.

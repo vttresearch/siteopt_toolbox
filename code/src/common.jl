@@ -266,7 +266,11 @@ function read_timeseries(folder, id, col=nothing)
     end
 end
 
+"""
+    calc_model_len(modelspecfile)
 
+    function for calculating the model time horizon length
+"""
 function calc_model_len(modelspecfile)
     #read model info
     df = DataFrame(XLSX.readtable(modelspecfile, "params_1d_datetimes") )
@@ -277,7 +281,7 @@ function calc_model_len(modelspecfile)
                                 :model_start => ByRow(!ismissing), 
                                 :model_end => ByRow(!ismissing))
     if isempty(wide_df)
-        throw(ArgumentError("Base alternative for model start/end not found."))
+        throw(ArgumentError("Base alternative for model start/end not found!"))
     end
         
     wide_df = transform(wide_df, [:model_start, :model_end] => 
