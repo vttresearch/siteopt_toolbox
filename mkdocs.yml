@@ -18,7 +18,8 @@ nav:
   - Installation: installation.md
   - User guide: introduction.md
 
-
+extra_css:
+  - style.css
 plugins:
   - plotly
   - search:
@@ -77,5 +78,6 @@ markdown_extensions:
         - name: plotly
           class: mkdocs-plotly
           format: !!python/name:mkdocs_plotly_plugin.fences.fence_plotly
+  - tables
 extra:
   homepage: https://cris.vtt.fi/en/organisations/does-design-and-operation-of-energy-systems
