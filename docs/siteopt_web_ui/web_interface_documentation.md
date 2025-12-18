@@ -11,10 +11,8 @@ Web Interface** is a simplified version of Spine Toolbox, dedicated to running a
 This is a web app, so you need to use a browser to view the site. Supported browsers are Firefox and Chrome. Other 
 browsers may work as well but are not supported.
 
-<figure>
-  <img style="width: 100%"
-  src="web_interface_front_page.png"
-  alt="Screenshot of the web interface home page (draft).">
+<figure markdown="span">
+    ![Image title](web_interface_front_page.png){ width="100%" }
   <figcaption><i>Web interface home page (draft)</i></figcaption>
 </figure>
 
