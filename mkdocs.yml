@@ -17,6 +17,7 @@ nav:
   - Home: index.md
   - Installation: installation.md
   - User guide: introduction.md
+  - SiteOpt Web Interface: siteopt_web_ui/web_interface_documentation.md
 
 extra_css:
   - style.css
