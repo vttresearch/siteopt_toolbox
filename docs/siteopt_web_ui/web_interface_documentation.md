@@ -7,19 +7,24 @@ and view output results. SiteOpt tool has been implemented as a Spine Toolbox pr
 a public GitHub repository https://github.com/spine-tools/Spine-Toolbox. Spine Toolbox is an open source Python 
 package to manage data, scenarios and workflows for modelling and simulation. Spine Toolbox project is a combination 
 of a workflow, computational steps (tools), the relationships between tools and input data. **SiteOpt 
-Web Interface** is a simplified version of Spine Toolbox, dedicated to running a single project, i.e. SiteOpt. This 
-is a web app, so you need to use a browser to view the site. Supported browsers are Firefox and Chrome. Other browsers
-may work as well but they are not supported.
+Web Interface** is a simplified version of Spine Toolbox, dedicated to running a single project, i.e. SiteOpt tool. 
+This is a web app, so you need to use a browser to view the site. Supported browsers are Firefox and Chrome. Other 
+browsers may work as well but are not supported.
 
-![alt text](web_interface_front_page.png "Front page (draft)")
+<figure>
+  <img style="width: 100%"
+  src="web_interface_front_page.png"
+  alt="Screenshot of the web interface home page (draft).">
+  <figcaption><i>Web interface home page (draft)</i></figcaption>
+</figure>
 
 ## 1. Overview
-**Name:** SiteOpt Web Interface
-**Purpose:** A web application for using the SiteOpt tool.
-**Status:** e.g., MVP, beta, production.
-**Repo(s):** https://extgit.vtt.fi/siteopt/siteopt-web-interface
-**Maintainer:** Pekka Savolainen (Research Scientist, VTT)
-**Developers:** Pekka Savolainen (VTT), Tomasz Wolski (Amtech), Jussi Ikäheimo (VTT)
+**Name:** SiteOpt Web Interface  
+**Purpose:** A web application for using the SiteOpt tool.  
+**Status:** beta  
+**Repo(s):** https://extgit.vtt.fi/siteopt/siteopt-web-interface  
+**Maintainer:** Pekka Savolainen (Research Scientist, VTT)  
+**Developers:** Pekka Savolainen (VTT), Tomasz Wolski (AMC TECH), Jussi Ikäheimo (VTT)  
 
 ## 2. Architecture
 - Frontend: Vue 3 (Composition API, Pinia/Vuex, Vite or webpack)
@@ -33,8 +38,8 @@ See installation instructions in SiteOpt Web Interface repository (https://extgi
 
 ## Core Features
 
-- Feature A: Adding input data to UI
-- Feature B: Adding SiteOpt project to UI
+- Feature A: Adding input data to the website
+- Feature B: Adding SiteOpt project to the website
 - Feature C: Creating a work folder
 - Feature D: Inspecting and editing input data
 - Feature E: Selecting scenarios
@@ -42,7 +47,7 @@ See installation instructions in SiteOpt Web Interface repository (https://extgi
 - Feature G: Executing the SiteOpt tool
 - Feature H: Inspecting output data
 
-### Feature A: Adding input data to the web site
+### Feature A: Adding input data to the website
 Input data (available in https://extgit.vtt.fi/siteopt/siteopt_data) is a collection of files that are available in 
 a Git repository hosted by VTT. It consists of Excel files, CSV (comma separated value), 
 and JSON files. The files are categorized into the following categories.
@@ -62,7 +67,7 @@ app, there is a widget on the page to add the local input data folder path.
 Input data could have been shared in the same repo as the SiteOpt project, but for data confidentiality reasons, it's separated
 into it's own repo.
 
-### Feature B: Adding SiteOpt project to the web site
+### Feature B: Adding SiteOpt project to the website
 SiteOpt project (https://extgit.vtt.fi/siteopt/siteopt_toolbox) contains the definition of the workflow, 
 relationships between different workflow items, source code for the items in the workflow, database files (SQLite), 
 and paths to the files used by the workflow items. The root folder of the repo is a Spine Toolbox project, which means
