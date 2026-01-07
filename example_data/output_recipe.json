@@ -1,0 +1,32 @@
+{
+    "Totals":
+    {
+        "Total costs":
+         [
+            {
+                "type": "total_costs"
+            }
+        ]
+        
+    },
+    "Investments":
+    {
+        "Electrical line investments":
+         [
+            {
+                "type": "connection_investment",
+                "connection": "market",
+                "aggregation": false
+            }
+        ],
+		"Total heater investments":
+         [
+            {
+                "type": "unit_investment",
+                "unit": "hp",
+                "aggregation": true
+            }
+        ]
+    }
+
+}

@@ -1,0 +1,66 @@
+{
+    "entities": [
+        [
+            "representative_period",
+            "rp1"
+        ],
+        [
+            "node__representative_period",
+            [
+                "n_1_elec",
+                "rp1"
+            ]
+        ]
+    
+    ],
+    "parameter_values": [
+        [
+            "representative_period", 
+            "rp1", 
+            "for_rolling", 
+            false,
+            "Base"
+        ],
+        [
+            "representative_period", 
+            "rp1", 
+            "representative_periods", 
+            20,
+            "Base"
+        ],
+        [
+            "representative_period", 
+            "rp1", 
+            "representative_blocks", 
+            10,
+            "Base"
+        ],
+        [
+            "representative_period", 
+            "rp1", 
+            "max_timeslice_duration", 
+            {
+                "type":"duration", 
+                "data": "1h"
+            },
+            "Base"
+        ],
+        [
+                "model", 
+                "mymodel", 
+                "roll_forward", 
+                {
+                    "type":"duration", 
+                    "data": "1D"
+                },
+                "Base"
+        ],
+        [
+            "representative_period", 
+            "rp1", 
+            "representative_period_method", 
+            "representative_periods_clustering",
+            "Base"
+        ]
+    ]
+}
