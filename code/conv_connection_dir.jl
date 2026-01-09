@@ -141,6 +141,7 @@ function connection_node_name(grid::Union{String, Missing}, block_id::Union{Stri
     end
     return result
 end
+
 """
     add_connections(conn_file, url_in, model_length::Period)
 
@@ -155,10 +156,6 @@ function add_connections(conn_file, url_in, model_length::Period)
     #read basic connection info
     c0 = DataFrame(XLSX.readtable(conn_file, "Sheet1") )
     # node names
-    # c0 = transform(c0, [:grid, :node1] => ByRow((x,y) -> "n_" * y 
-    #             * (ismissing(x) ?  "" : "_" * string(x) ) ) => :node1)
-    # c0 = transform(c0, [:grid, :node2] => ByRow((x,y) -> "n_" * y 
-    #             * (ismissing(x) ?  "" : "_" * string(x) ) ) => :node2)
     c0 = transform(c0, [:grid, :node1] => ByRow(connection_node_name) => :node1)
     c0 = transform(c0, [:grid, :node2] => ByRow(connection_node_name) => :node2)
     # connection object name
@@ -169,7 +166,7 @@ function add_connections(conn_file, url_in, model_length::Period)
         insertcols!(c0, :alternative_name => "Base")
     end
 
-    # add alternative name if not present
+    # add fix_ratio_out_in_connection_flow if not present
     if !hasproperty(c0, :fix_ratio_out_in_connection_flow)
         insertcols!(c0, :fix_ratio_out_in_connection_flow => 1.0)
     end

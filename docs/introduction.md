@@ -33,9 +33,10 @@ The following input files are expected to lie in the **current_input** folder:
    | modelspec.xlsx  |  model time horizon parameters 
    | scenarios.xlsx  |  study scenarios definition 
  
-It is recommended that you start with an example data set an modify it as needed. Not all of the files are expected to containt data. In that case just leave the header row (first row) in the file. 
+!!! info "Important Information"
+    It is recommended that you start with an example data set an modify it as needed. 
 
-In the following we will go through each of the files and show how to fill them.
+Not all of the files are expected to containt data. In that case just leave the header row (first row) in the file. In the following we will go through each of the files and show how to fill them.
 
 ### Connections table
 
@@ -56,6 +57,9 @@ connection_flow_cost_reverse.mul |  | Multiplier for the unit cost of energy or 
 fix_ratio_out_in_connection_flow | x | Transfer efficiency
 connection_investment_variable_type | x | 
 
+!! info "Important Information"
+    Write the grid names exactly the same way in all tables. 
+	
 ### Demand data
 
 ### The nodes table

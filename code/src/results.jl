@@ -40,6 +40,8 @@ function summarizeresults(url_in::Union{String, Nothing},
                     a = result_unit_investment(db_out, val2["unit"], "parent", scenario)
                 elseif val2["type"] == "node_investment"
                     a = result_node_investment(db_out, val2["node"], "parent", scenario)
+                elseif val2["type"] == "connection_investment"
+                    a = result_connection_investment(db_out, val2["connection"], "parent", scenario)
                 elseif val2["type"] == "total_costs"
                     a = result_total_cost(db_out, scenario)
                 else
@@ -313,8 +315,29 @@ function result_node_investment(db::Union{String, Dict},
     if !isnothing(scenario)
         b = subset(b, :alternative => ByRow(in(scenario)))
     end
-    transform!(b, :value => ByRow(b -> tssum(b) ) => :value)
-    return select(b, :alternative => :scenario, :entity, :value)
+    
+    transform!(b, :value => ByRow(x -> tssum(x) ) => :value)
+    transform!(b, :entity => ByRow(x -> x[2] ) => :showentity)
+    return select(b, :alternative => :scenario, :entity, :showentity, :value)
+end
+
+function result_connection_investment(db::Union{String, Dict}, 
+    con::String, stoch_scen::String, scenario::Union{Vector{String}, Nothing})
+
+    entities = get_entities(db, "connection")
+    entities = filter(x -> occursin(con, x), entities)
+    entityelementsvec = [["report1", n, stoch_scen] for n in entities]
+
+    b = get_parameter_values(db, "report__connection__stochastic_scenario", "connections_invested")
+    b = subset(b, :entity => ByRow(x->in(x, entityelementsvec) ))
+
+    if !isnothing(scenario)
+        b = subset(b, :alternative => ByRow(in(scenario)))
+    end
+
+    transform!(b, :value => ByRow(x -> tssum(x) ) => :value)
+    transform!(b, :entity => ByRow(x -> x[2] ) => :showentity)
+    return select(b, :alternative => :scenario, :entity, :showentity, :value)
 end
 
 function result_total_cost(db::Union{String, Dict}, 
