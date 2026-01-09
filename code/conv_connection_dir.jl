@@ -131,13 +131,14 @@ function connection_node_name(grid::Union{String, Missing}, block_id::Union{Stri
     result = "n_" * string(block_id)
 
     if !ismissing(grid) 
-        if grid == "heat" || grid == "dheat"
-            result = result * "_dheat"
-        elseif grid == "cool"
-            result = result * "_cool"
-        else
-            result = result * "_elec"
-        end
+        # if grid == "heat" || grid == "dheat"
+        #     result = result * "_dheat"
+        # elseif grid == "cool"
+        #     result = result * "_cool"
+        # else
+        #     result = result * "_elec"
+        # end
+        result = result * "_" * string(grid)
     end
     return result
 end

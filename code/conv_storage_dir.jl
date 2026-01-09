@@ -136,11 +136,15 @@ function add_storages(stor_file, url_in, model_length::Period)
     c0 = transform(c0, [:type, :block_identifier] => 
         ByRow((a,b) -> ifelse(a=="elec", "u_"*string(b)*"_stocharger", "u_"*string(b)*"_heatstocharger")) => :unit )
 
+    #c0 = transform(c0, [:type, :block_identifier] => 
+    #    ByRow((a,b) -> ifelse(a=="elec", "n_"*string(b)*"_elecstor", "n_"*string(b)*"_heatstor")) => :stornode )
     c0 = transform(c0, [:type, :block_identifier] => 
-        ByRow((a,b) -> ifelse(a=="elec", "n_"*string(b)*"_elecstor", "n_"*string(b)*"_heatstor")) => :stornode )
+        ByRow((a,b) -> "n_" * string(b) * "_" * string(a) * "_stor") => :stornode )
 
+    #c0 = transform(c0, [:type, :block_identifier] => 
+    #    ByRow((a,b) -> ifelse(a=="elec", "n_"*string(b)*"_elec", "n_"*string(b)*"_dheat")) => :basenode )
     c0 = transform(c0, [:type, :block_identifier] => 
-        ByRow((a,b) -> ifelse(a=="elec", "n_"*string(b)*"_elec", "n_"*string(b)*"_dheat")) => :basenode )
+        ByRow((a,b) -> "n_" * string(b) * "_" * string(a) ) => :basenode )
 
     c0 = transform(c0, [:emissionnode] => ByRow(x -> ismissing(x) ?  missing : "n_" * string(x) ) 
             => :emissionnode )

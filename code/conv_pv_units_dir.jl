@@ -47,8 +47,10 @@ function add_pv_units(pv_file::String, url_in, model_length::Period)
 
     # unit and node names
     c0 = transform(c0, [:block_identifier, :name] => ByRow((x,y)->"u_"*string(x)*"_"*string(y)) => :unit )
+    #c0 = transform(c0, [:block_identifier, :grid] 
+    #     => ByRow((x,y) -> "n_" * string(x) * ((y == "elec") ? "_elec" : "_dheat")) => :basenode )
     c0 = transform(c0, [:block_identifier, :grid] 
-         => ByRow((x,y) -> "n_" * string(x) * ((y == "elec") ? "_elec" : "_dheat")) => :basenode )
+         => ByRow((x,y) -> "n_" * string(x) * "_" * string(y)) => :basenode )
     c0 = transform(c0, [:emissionnode] => ByRow(x -> ismissing(x) ?  missing : "n_" * string(x) ) 
                         => :emissionnode )
 

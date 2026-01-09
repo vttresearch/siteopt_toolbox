@@ -49,8 +49,10 @@ function add_hp_units(hp_file, url_in, model_length::Period)
     c0 = transform(c0, [:type, :block_identifier] => 
         ByRow((a,b)->ifelse(a=="cool","u_"*string(b)*"_chiller","u_"*string(b)*"_hp")) => :unit )
     c0 = transform(c0, [:block_identifier] => ByRow(x->"n_"*string(x)*"_elec") => :inputnode )
+    #c0 = transform(c0, [:type, :block_identifier] => 
+    #    ByRow((a,b)->ifelse(a=="cool", "n_"*string(b)*"_cool", "n_"*string(b)*"_dheat")) => :basenode )
     c0 = transform(c0, [:type, :block_identifier] => 
-        ByRow((a,b)->ifelse(a=="cool", "n_"*string(b)*"_cool", "n_"*string(b)*"_dheat")) => :basenode )
+        ByRow((a,b) -> "n_" * string(b) * "_" * string(a)) => :basenode )
     c0 = transform(c0, [:emissionnode] => ByRow(x -> ismissing(x) ?  missing : "n_" * string(x) ) 
         => :emissionnode )
 
