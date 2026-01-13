@@ -42,7 +42,7 @@ Exit the command prompt.
 
 ## Julia language
 
-Install Julia language Install version 1.10 or 1.11. See https://julialang.org/downloads/ for instructions.
+For the time being, do not install Julia 1.12. Install Julia language version 1.10 or 1.11. See https://julialang.org/downloads/ for instructions.
 
 
 ## Downloading the Siteopt tool
@@ -54,12 +54,12 @@ Go to [https://github.com/vttresearch/siteopt_toolbox](https://github.com/vttres
 
 ## Siteopt Julia dependencies installation
 
-Go to Siteopt **code** folder of siteopt_toolbox and start Julia console (type "julia" in command prompt). Do not use the same console which you used for Spine Toolbox installation (open a new one). 
+Using command prompt or terminal (Linux) go to Siteopt **code** folder of siteopt_toolbox and start Julia console (type "julia" in command prompt or terminal). Do not use the same terminal which you used for Spine Toolbox installation (open a new one). 
   
 Rebuilding Julia PyCall package is needed to be able to connect to the databases. This is done by running the following commands in Julia console:
 
 ```
-Using Pkg
+using Pkg
 ENV["PYTHON"] = raw"C:\path\to\your\python\python.exe" #(replace the path by the Python executable in the Miniconda environment where you installed Spine Toolbox )
 Pkg.add("PyCall")
 Pkg.build("PyCall")
