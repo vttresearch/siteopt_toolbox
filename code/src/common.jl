@@ -126,7 +126,7 @@ end
 function add_unit_param2(c0, paramcols)
     
     # candidate units when not specified
-    default_candi_units = 40
+    default_candi_units = 5000
 
     # Check if required columns exist in c0 and select what is present
     requested_cols = vcat(paramcols, [:alternative_name])
