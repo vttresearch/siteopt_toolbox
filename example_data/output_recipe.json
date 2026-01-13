@@ -6,8 +6,15 @@
             {
                 "type": "total_costs"
             }
+        ],
+        "Supply chain emissions":
+        [
+            {
+                "type": "unit_flow",
+                "unit": "u_1_hp", 
+                "node": "n_co2"
+            }
         ]
-        
     },
     "Investments":
     {
