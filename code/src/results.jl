@@ -278,7 +278,7 @@ end
         unit::String, stoch_scen::String, scenario::Union{Vector{String}, Nothing})
 
     `db` Results DB URL or in-memory dictionary
-    `unit` The unit name or partial string
+    `unit` The unit name or partial string which will be matched with existing units
     `stoch_scen` Stochastic scenario name
     `scenario` output scenario name. if nothing, considers all scenarios.
 

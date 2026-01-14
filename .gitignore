@@ -1,3 +1,6 @@
 .spinetoolbox/local
-current_input
+# Ignore everything in the current input except .gitkeep
+current-input/*
+!current-input/.gitkeep
+
 .idea

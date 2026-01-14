@@ -33,6 +33,14 @@
                 "unit": "hp",
                 "aggregation": true
             }
+        ],
+        "Total PV investments":
+         [
+            {
+                "type": "unit_investment",
+                "unit": "pv",
+                "aggregation": true
+            }
         ]
     }
 
