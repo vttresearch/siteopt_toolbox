@@ -13,6 +13,8 @@ copyright: Copyright &copy; 2024 - 2025 VTT - Design and Operation of Energy Sys
 theme:
   name: material
   logo: images/buildingicon.png
+  features:
+    - content.code.copy
 nav:
   - Home: index.md
   - Installation: installation.md

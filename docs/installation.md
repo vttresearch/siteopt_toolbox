@@ -77,7 +77,7 @@ You can now exit Julia session.
 
 ## Input data
 
-Check that you have all the necessary input files in the **current_input** subfolder of siteopt_toolbox. Make the current_input folder if it does not exist. Download or copy your input data to the current_input folder. Ask your optimization model provider for the data. Example input data has been provided in (TBC).
+Check that you have all the necessary input files in the **current_input** subfolder of siteopt_toolbox. Make the current_input folder if it does not exist. Download or copy your input data to the current_input folder. Ask your optimization model provider for the data. Example input data has been provided in the **example_data** folder so you can just copy the contents.
 
 ## Running the Siteopt tool via Toolbox
 
