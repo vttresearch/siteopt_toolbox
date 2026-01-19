@@ -84,7 +84,7 @@ Check that you have all the necessary input files in the **current_input** subfo
 Spine Toolbox provides a graphical user interface for running SpineOpt and editing databases. To run it, activate the proper Miniconda environment, which you used to install Spine Toolbox. Start Spine Toolbox by command
 
 ```
-> conda activate spinetoolbox
+> conda activate spinetb
 > spinetoolbox
 ```
 
