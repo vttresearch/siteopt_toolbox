@@ -657,9 +657,7 @@
                         "db_url@output db": {
                             "scenario_filter": {},
                             "alternative_filter": {
-                                "Base": true,
-                                "Base__Run SpineOpt@2025-11-11T09:45:52": true,
-                                "Base__Run SpineOpt@2025-12-16T12:25:25": true
+                                "Base__Optimize@2026-01-07T11:08:22": true
                             }
                         }
                     },
