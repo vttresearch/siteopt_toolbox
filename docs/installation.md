@@ -8,6 +8,10 @@ Installing the Siteopt tool takes place mostly in the command line. You can use 
 - 16 GB RAM (depending on the models which you run more can be needed)
 - network connection for installation
 
+## Miniconda
+
+Install Miniconda (https://www.anaconda.com/docs/getting-started/miniconda/install). Add Miniconda to path variable in Windows when asked by the installer.
+
 ## Julia language
 
 For the time being, do not install Julia 1.12. Install Julia language version 1.10 or 1.11. See https://julialang.org/downloads/ for instructions.
