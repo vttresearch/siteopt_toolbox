@@ -10,7 +10,7 @@ Installing the Siteopt tool takes place mostly in the command line. You can use 
 
 ## Miniconda
 
-Install Miniconda (https://www.anaconda.com/docs/getting-started/miniconda/install). Add Miniconda to path variable in Windows when asked by the installer.
+Install Miniconda (https://www.anaconda.com/docs/getting-started/miniconda/install). Add Miniconda to PATH variable in Windows when asked by the installer.
 
 ## Julia language
 
@@ -26,7 +26,7 @@ On Windows you can install by opening command prompt (cmd) and run these command
 
 ## Downloading the Siteopt tool
 
-Select an empty folder in your machine. It can be in a different location than the Spine Toolbox installation folder. Make a **siteopt_toolbox** folder there. 
+Select an empty folder in your machine. Make a **siteopt_toolbox** folder there. 
 
 Go to [https://github.com/vttresearch/siteopt_toolbox](https://github.com/vttresearch/siteopt_toolbox) and from the green "Code" icon select download zip. Unpack the zip file into the siteopt_toolbox folder. 
 
