@@ -57,6 +57,11 @@
                     "type": "path",
                     "relative": true,
                     "path": ".spinetoolbox/specifications/Tool/run_spineopt_(local).json"
+                },
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": ".spinetoolbox/specifications/Tool/load_mytemplate.json"
                 }
             ],
             "Importer": [
@@ -655,9 +660,15 @@
                 "filter_settings": {
                     "known_filters": {
                         "db_url@output db": {
-                            "scenario_filter": {},
+                            "scenario_filter": {
+                                "Base": false,
+                                "Myscen": false
+                            },
                             "alternative_filter": {
-                                "Base__Optimize@2026-01-07T11:08:22": true
+                                "Base": true,
+                                "Base__Optimize@2026-02-20T11:57:33": true,
+                                "Base__Optimize@2026-03-03T08:53:26": true,
+                                "Myscen__Optimize@2026-03-03T08:53:26": true
                             }
                         }
                     },
@@ -844,8 +855,8 @@
                     "known_filters": {
                         "db_url@Input data": {
                             "scenario_filter": {
-                                "Base": true,
-                                "Myscen": true
+                                "Base": false,
+                                "Myscen": false
                             },
                             "alternative_filter": {
                                 "Base": true,
@@ -882,6 +893,44 @@
                         "scenario_filter": true
                     }
                 }
+            },
+            {
+                "name": "from Additional template to Load mytemplate",
+                "from": [
+                    "Additional template",
+                    "right"
+                ],
+                "to": [
+                    "Load mytemplate",
+                    "left"
+                ],
+                "filter_settings": {
+                    "known_filters": {},
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from Load mytemplate to Input data",
+                "from": [
+                    "Load mytemplate",
+                    "right"
+                ],
+                "to": [
+                    "Input data",
+                    "left"
+                ],
+                "filter_settings": {
+                    "known_filters": {},
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
             }
         ],
         "jumps": []
@@ -890,8 +939,8 @@
         "Load template": {
             "type": "Tool",
             "description": "",
-            "x": 345.9948695295623,
-            "y": -986.5494770835709,
+            "x": 465.04130765617765,
+            "y": -1096.1975122001902,
             "specification": "Load Template (local)",
             "execute_in_work": true,
             "cmd_line_args": [
@@ -1042,7 +1091,7 @@
         "convert hp units": {
             "type": "Tool",
             "description": "",
-            "x": 86.34563714783503,
+            "x": 83.22643194204582,
             "y": -19.655533440587106,
             "specification": "hp units conversion",
             "execute_in_work": true,
@@ -1427,6 +1476,42 @@
                 {
                     "type": "resource",
                     "arg": "db_url@output db"
+                }
+            ],
+            "kill_completed_processes": false,
+            "log_process_output": false
+        },
+        "Additional template": {
+            "type": "Data Connection",
+            "description": "",
+            "x": 242.79207775822886,
+            "y": -1137.2067642095103,
+            "file_references": [
+                {
+                    "type": "path",
+                    "relative": true,
+                    "path": "templates/augment_template.json"
+                }
+            ],
+            "file_patterns": [],
+            "directory_references": [],
+            "db_references": []
+        },
+        "Load mytemplate": {
+            "type": "Tool",
+            "description": "",
+            "x": 414.6189449274986,
+            "y": -956.6320432067022,
+            "specification": "load_mytemplate",
+            "execute_in_work": true,
+            "cmd_line_args": [
+                {
+                    "type": "resource",
+                    "arg": "<project>/templates/augment_template.json"
+                },
+                {
+                    "type": "resource",
+                    "arg": "db_url@Input data"
                 }
             ],
             "kill_completed_processes": false,

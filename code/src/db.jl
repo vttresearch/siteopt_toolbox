@@ -411,10 +411,13 @@ function get_parameter_values(db_url::String, entityclass::String, paramname::St
 			)  
 
     if length(pval) > 0
-        a = DataFrame( [(entity=r["element_name_list"], alternative=r["alternative_name"], 
-                    value=parse_db_value(r["value"], r["type"]) ) for r in pval] )
+        a = DataFrame( [(entity= ifelse(length(r["dimension_name_list"]) > 0, 
+                            r["element_name_list"], r["entity_byname"][1]), 
+                        alternative=r["alternative_name"], 
+                        value=parse_db_value(r["value"], r["type"]) ) for r in pval] )
     end
-        
+    
+
     return a
 end
 

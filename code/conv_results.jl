@@ -30,9 +30,9 @@ end
 
 
 """
-Overall function for adding hp units
+Overall function summarizing results into excel table
 
-    Output: excel tables of hp units
+    Output: excel table of results summary
 """
 function conv_results(url_in, url_out, recipe_file, output_file = "results.xlsx")
 

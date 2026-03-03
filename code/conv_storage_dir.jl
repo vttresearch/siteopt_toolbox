@@ -133,21 +133,21 @@ function add_storages(stor_file, url_in, model_length::Period)
     #read basic info
     c0 = DataFrame(XLSX.readtable(stor_file, "Sheet1") )
    
+    # storage unit name
     c0 = transform(c0, [:type, :block_identifier] => 
         ByRow((a,b) -> ifelse(a=="elec", "u_"*string(b)*"_stocharger", "u_"*string(b)*"_heatstocharger")) => :unit )
 
-    #c0 = transform(c0, [:type, :block_identifier] => 
-    #    ByRow((a,b) -> ifelse(a=="elec", "n_"*string(b)*"_elecstor", "n_"*string(b)*"_heatstor")) => :stornode )
+    # storage nodes
     c0 = transform(c0, [:type, :block_identifier] => 
         ByRow((a,b) -> "n_" * string(b) * "_" * string(a) * "_stor") => :stornode )
-
-    #c0 = transform(c0, [:type, :block_identifier] => 
-    #    ByRow((a,b) -> ifelse(a=="elec", "n_"*string(b)*"_elec", "n_"*string(b)*"_dheat")) => :basenode )
     c0 = transform(c0, [:type, :block_identifier] => 
         ByRow((a,b) -> "n_" * string(b) * "_" * string(a) ) => :basenode )
 
     c0 = transform(c0, [:emissionnode] => ByRow(x -> ismissing(x) ?  missing : "n_" * string(x) ) 
             => :emissionnode )
+
+    # storage unit group
+    c0 = transform(c0, :type => ByRow(a -> "storage" * "_" * string(a)) => :group )
 
     # add alternative name if not present
     if !hasproperty(c0, :alternative_name)
@@ -163,7 +163,7 @@ function add_storages(stor_file, url_in, model_length::Period)
     c0 = augment_basetable(c0, addedparams)
 
     # object parameters
-    c1 =  add_unit_param2(c0, [:unit_investment_cost, :candidate_units, :min_units_on_share])
+    c1 =  add_unit_param2(c0, [:unit_investment_cost, :candidate_units, :min_units_on_share, :group])
     c1_sto = add_storage_node_param3(c0, [:node_state_cap, 
                     :demand,
                     :storage_investment_cost,

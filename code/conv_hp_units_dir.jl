@@ -49,12 +49,12 @@ function add_hp_units(hp_file, url_in, model_length::Period)
     c0 = transform(c0, [:type, :block_identifier] => 
         ByRow((a,b)->ifelse(a=="cool","u_"*string(b)*"_chiller","u_"*string(b)*"_hp")) => :unit )
     c0 = transform(c0, [:block_identifier] => ByRow(x->"n_"*string(x)*"_elec") => :inputnode )
-    #c0 = transform(c0, [:type, :block_identifier] => 
-    #    ByRow((a,b)->ifelse(a=="cool", "n_"*string(b)*"_cool", "n_"*string(b)*"_dheat")) => :basenode )
     c0 = transform(c0, [:type, :block_identifier] => 
         ByRow((a,b) -> "n_" * string(b) * "_" * string(a)) => :basenode )
     c0 = transform(c0, [:emissionnode] => ByRow(x -> ismissing(x) ?  missing : "n_" * string(x) ) 
         => :emissionnode )
+    c0 = transform(c0, :type => 
+        ByRow(a -> ifelse(a=="cool","chillers","heat_pumps")) => :group )
 
     # adjust investment costs 
     c0.unit_investment_cost .=  c0.unit_investment_cost * (model_length / Hour(8760) )
@@ -64,7 +64,7 @@ function add_hp_units(hp_file, url_in, model_length::Period)
     c0 = augment_basetable(c0, addedparams)
 
     # object parameters
-    c1 =  add_unit_param2(c0, [:unit_investment_cost, :candidate_units, :min_units_on_share])
+    c1 =  add_unit_param2(c0, [:unit_investment_cost, :candidate_units, :min_units_on_share, :group])
     import_objects(url_in, add_unit(c0))
     import_object_param(url_in, c1)
 

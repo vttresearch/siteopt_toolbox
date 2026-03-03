@@ -1,22 +1,65 @@
 using JSON
 
+"""
+    loadgrouping(db)
+
+Loads the group parameters of units, nodes and connections and
+turns makes group member lists.
+
+# Arguments
+- `db`: Database URL, filename or dictionary.
+
+# Returns
+Description of the return value and its type or structure.
+"""
+function loadgrouping(db::String; entityclass = "unit", parameter = "unit_investment")
+    b = get_parameter_values(db, entityclass, "group")
+    println(b)
+
+    # grouping for unit investments
+    g = Dict()
+    for df in groupby(b, :value)
+        if !ismissing(df[1, :value])
+            g[df[1, :value]] = [Dict("type" => parameter, entityclass => u) for u in df[:, :entity]]
+        end
+    end
+
+    return g
+end
+
+"""
+    summarizeresults(url_in, url_out, recipe_file, scenario)
+
+Makes a result summary guided by the recipe file as well as internal entity groupings.
+
+# Arguments
+- `url_in`: Database URL or filename 
+
+# Returns
+DataFrame with result summaries, each summary contains items with values per scenario.
+"""
 function summarizeresults(url_in::Union{String, Nothing}, 
                         url_out::String, 
                         recipe_file::String, 
                         scenario::Union{Vector{String}, Nothing})
   
-    # load recipe
+    #println(get_entities(url_out, "stochastic_scenario") )
+
+    # load results recipe
     recipe = JSON.parsefile(recipe_file)
 
-    #println(get_entities(url_out, "stochastic_scenario") )
+    # built-in grouping will be added to the recipe
+    g = loadgrouping(url_in)
+    recipe = merge(recipe, Dict("default_investment_grouping" => g))
 
     weight = prepare_tb_weight(url_in)
 
     #load output DB to memory
     db_out = export_data(url_out)
-
+    
     df = DataFrame(summary = [], item = [], scenario = [], entity = [], value = [])
 
+    # build results
     for (key0, val0) in recipe
         for (key1, val1) in val0
             for val2 in val1
@@ -67,7 +110,6 @@ function summarizeresults(url_in::Union{String, Nothing},
 
     return df
 end
-
 
 """
     function result_connection_flow_costs(url_in::String, url_out::String, 
