@@ -1,0 +1,7 @@
+{
+	"object_parameters": [
+		["connection", "group", null, null, "The group where the unit belongs to."],
+        ["unit", "group", null, null, "The group where the unit belongs to."],
+    	["node", "group", null, null, "The group where the node belongs to."]
+	]
+}
