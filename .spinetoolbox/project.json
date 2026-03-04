@@ -668,6 +668,10 @@
                                 "Base": true,
                                 "Base__Optimize@2026-02-20T11:57:33": true,
                                 "Base__Optimize@2026-03-03T08:53:26": true,
+                                "Base__Optimize@2026-03-03T09:21:27": true,
+                                "Base__Optimize@2026-03-04T11:45:04": true,
+                                "Base__Optimize@2026-03-04T11:59:13": true,
+                                "Base__Optimize@2026-03-04T13:15:24": true,
                                 "Myscen__Optimize@2026-03-03T08:53:26": true
                             }
                         }
@@ -717,7 +721,8 @@
                             },
                             "alternative_filter": {
                                 "Base": true,
-                                "Highprice": true
+                                "Highprice": true,
+                                "Newer": true
                             }
                         }
                     },
@@ -747,7 +752,8 @@
                             },
                             "alternative_filter": {
                                 "Base": true,
-                                "Highprice": true
+                                "Highprice": true,
+                                "Newer": true
                             }
                         }
                     },
@@ -955,8 +961,8 @@
         "convert storages": {
             "type": "Tool",
             "description": "",
-            "x": 80.40757307269976,
-            "y": -757.0618084236697,
+            "x": 84.9297063420529,
+            "y": -653.0527432285478,
             "specification": "storage converter",
             "execute_in_work": true,
             "cmd_line_args": [
@@ -995,8 +1001,8 @@
         "storage input data": {
             "type": "Data Connection",
             "description": "",
-            "x": -363.9163244049608,
-            "y": -758.640929821804,
+            "x": -359.3941911356076,
+            "y": -654.631864626682,
             "file_references": [
                 {
                     "type": "path",
@@ -1011,8 +1017,8 @@
         "connections input": {
             "type": "Data Connection",
             "description": "",
-            "x": -373.7364069164701,
-            "y": -1133.4387155989173,
+            "x": -367.5461333784128,
+            "y": -1006.5381080687422,
             "file_references": [
                 {
                     "type": "path",
@@ -1027,8 +1033,8 @@
         "model specification": {
             "type": "Data Connection",
             "description": "",
-            "x": -210.0896157321166,
-            "y": -111.60519844918494,
+            "x": -145.09174358251482,
+            "y": -356.12100320244883,
             "file_references": [
                 {
                     "type": "path",
@@ -1043,8 +1049,8 @@
         "model spec importer": {
             "type": "Importer",
             "description": "",
-            "x": 85.73561834755647,
-            "y": 178.57577020356456,
+            "x": 91.9258918856138,
+            "y": 101.19735097784815,
             "specification": "model spec importer",
             "cancel_on_error": false,
             "on_conflict": "merge",
@@ -1058,8 +1064,8 @@
         "output db": {
             "type": "Data Store",
             "description": "",
-            "x": 1478.6924199324474,
-            "y": -135.77846249023025,
+            "x": 1528.2146082369059,
+            "y": -426.72131877892394,
             "url": {
                 "dialect": "sqlite",
                 "host": "",
@@ -1075,8 +1081,8 @@
         "hp units input": {
             "type": "Data Connection",
             "description": "",
-            "x": -474.4879548234721,
-            "y": -21.90205967792471,
+            "x": -468.29768128541474,
+            "y": -99.28047890364113,
             "file_references": [
                 {
                     "type": "path",
@@ -1091,8 +1097,8 @@
         "convert hp units": {
             "type": "Tool",
             "description": "",
-            "x": 83.22643194204582,
-            "y": -19.655533440587106,
+            "x": 89.41670548010313,
+            "y": -97.03395266630352,
             "specification": "hp units conversion",
             "execute_in_work": true,
             "cmd_line_args": [
@@ -1115,8 +1121,8 @@
         "Existing load": {
             "type": "Data Connection",
             "description": "",
-            "x": -285.515493554334,
-            "y": 360.86171551760356,
+            "x": -276.230083247248,
+            "y": 258.72220213965784,
             "file_references": [
                 {
                     "type": "path",
@@ -1141,8 +1147,8 @@
         "import object parameters wide": {
             "type": "Importer",
             "description": "",
-            "x": 81.34331645622713,
-            "y": 360.2390587777076,
+            "x": 90.62872676331311,
+            "y": 258.09954539976195,
             "specification": "import object parameter time series in wide format",
             "cancel_on_error": false,
             "on_conflict": "merge",
@@ -1180,8 +1186,8 @@
         "scenarios": {
             "type": "Data Connection",
             "description": "",
-            "x": -290.15841316649943,
-            "y": 503.5800121820303,
+            "x": -280.8730028594134,
+            "y": 401.44049880408465,
             "file_references": [
                 {
                     "type": "path",
@@ -1196,8 +1202,8 @@
         "scenario importer": {
             "type": "Importer",
             "description": "",
-            "x": 83.54289628944356,
-            "y": 506.2967410301174,
+            "x": 92.82830659652954,
+            "y": 404.15722765217174,
             "specification": "scenario importer",
             "cancel_on_error": false,
             "on_conflict": "merge",
@@ -1211,8 +1217,8 @@
         "diverting units": {
             "type": "Data Connection",
             "description": "",
-            "x": -334.2779869546667,
-            "y": -943.056672685208,
+            "x": -328.08771341660935,
+            "y": -816.1560651550332,
             "file_references": [
                 {
                     "type": "path",
@@ -1227,8 +1233,8 @@
         "input with repr periods": {
             "type": "Data Store",
             "description": "",
-            "x": 1048.1752802117817,
-            "y": 43.924460701588316,
+            "x": 1097.6974685162404,
+            "y": -247.01839558710537,
             "url": {
                 "dialect": "sqlite",
                 "host": "",
@@ -1304,8 +1310,8 @@
         "convert diverting units (1)": {
             "type": "Tool",
             "description": "",
-            "x": 77.31635532846211,
-            "y": -944.1421774648397,
+            "x": 83.50662886651943,
+            "y": -817.2415699346649,
             "specification": "convert diverting units",
             "execute_in_work": true,
             "cmd_line_args": [
@@ -1328,8 +1334,8 @@
         "convert connections": {
             "type": "Tool",
             "description": "",
-            "x": 75.15379362100471,
-            "y": -1136.994406303356,
+            "x": 81.344067159062,
+            "y": -1010.093798773181,
             "specification": "conver connections direct",
             "execute_in_work": true,
             "cmd_line_args": [
@@ -1352,8 +1358,8 @@
         "Extract results": {
             "type": "Tool",
             "description": "",
-            "x": 1719.417373503129,
-            "y": 47.17889743835944,
+            "x": 1768.9395618075878,
+            "y": -243.76395885033423,
             "specification": "Results extraction",
             "execute_in_work": true,
             "cmd_line_args": [
@@ -1376,8 +1382,8 @@
         "Output recipe": {
             "type": "Data Connection",
             "description": "",
-            "x": 1537.2773019375547,
-            "y": 196.6173817321635,
+            "x": 1586.7994902420132,
+            "y": -94.3254745565302,
             "file_references": [
                 {
                     "type": "path",
@@ -1464,8 +1470,8 @@
         "Optimize": {
             "type": "Tool",
             "description": "",
-            "x": 1244.0030360022463,
-            "y": -142.0984810026677,
+            "x": 1293.5252243067048,
+            "y": -433.0413372913614,
             "specification": "Run SpineOpt (local)",
             "execute_in_work": true,
             "cmd_line_args": [
