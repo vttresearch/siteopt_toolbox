@@ -1,7 +1,9 @@
 {
-	"object_parameters": [
+	"parameter_definitions": [
 		["connection", "group", null, null, "The group where the unit belongs to."],
         ["unit", "group", null, null, "The group where the unit belongs to."],
-    	["node", "group", null, null, "The group where the node belongs to."]
+    	["node", "group", null, null, "The group where the node belongs to."],
+		["node", "user_representative", false, "boolean_value_list", "Node was selected by user as representative"],
+		["unit__to_node", "user_representative", false, "boolean_value_list", "Unit to node relationship was selected by user as representative"]
 	]
 }

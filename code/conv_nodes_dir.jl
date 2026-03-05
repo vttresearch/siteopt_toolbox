@@ -45,7 +45,12 @@ function add_nodes(stor_file, url_in, model_length::Period)
 
     #read basic info
     c0 = DataFrame(XLSX.readtable(stor_file, "Sheet1") )
-   
+    
+    # convert column datatypes
+    c0 = transform(c0, [:representative_node] => ByRow(x -> ismissing(x) ? false : true ) 
+                        => :user_representative)
+
+    println(c0.user_representative)
     # add alternative name if not present
     if !hasproperty(c0, :alternative_name)
         insertcols!(c0, :alternative_name => "Base")
@@ -55,12 +60,11 @@ function add_nodes(stor_file, url_in, model_length::Period)
     c0 = transform(c0, [:node, :grid] => ByRow((x,y) -> ismissing(y) ? "n_" * string(x) : "n_" * string(x) * "_" * string(y) ) 
                         => :node )
 
-    c1 = add_object_param(c0, :node, [:demand, :balance_type], directory=dirname(stor_file)) 
+    c1 = add_object_param(c0, :node, [:demand, :balance_type, :user_representative], directory=dirname(stor_file)) 
     insertcols!(c1, 1, :Objectclass1 => "node")
 
     import_objects(url_in, add_nodeobjects(c0))
     import_object_param(url_in, c1)
-
 end
 
 main()

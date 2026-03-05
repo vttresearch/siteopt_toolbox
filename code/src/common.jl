@@ -164,8 +164,10 @@ function add_object_param(c0, object1, paramcols; directory = "")
         insertcols!(c1, :alternative_name => "Base")
     end
 
+    # stack and keep only existing values
     c1 = stack(c1, Not([object1, :alternative_name]))
     c1 = subset(c1, :value => ByRow(!ismissing))
+    c1 = transform(c1, :alternative_name => ByRow(x -> ismissing(x) ? "Base" : x ) => :alternative_name)
 
     rename!(c1, :variable => :parameter_name)
 
