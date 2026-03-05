@@ -1236,8 +1236,8 @@
         "input with repr periods": {
             "type": "Data Store",
             "description": "",
-            "x": 1097.6974685162404,
-            "y": -247.01839558710537,
+            "x": 1097.6974685162402,
+            "y": -244.99823254347615,
             "url": {
                 "dialect": "sqlite",
                 "host": "",

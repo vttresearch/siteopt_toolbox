@@ -45,6 +45,10 @@ function add_pv_units(pv_file::String, url_in, model_length::Period)
     #read basic info
     c0 = DataFrame(XLSX.readtable(pv_file, "Sheet1") )
 
+    # convert column datatypes
+    c0 = transform(c0, [:representative_unit] => ByRow(x -> ismissing(x) ? false : true ) 
+                        => :user_representative)
+
     # unit and node names
     c0 = transform(c0, [:block_identifier, :name] => ByRow((x,y)->"u_"*string(x)*"_"*string(y)) => :unit )
     c0 = transform(c0, [:block_identifier, :grid] 
@@ -72,7 +76,7 @@ function add_pv_units(pv_file::String, url_in, model_length::Period)
         vcat(add_unit_to_node(c0, "unit__to_node", :basenode),
             add_unit_to_node(c0, "unit__to_node", :emissionnode))    )
 
-    c3 = add_unit_node_param(c0, [:unit_capacity, :vom_cost], directory = dirname(pv_file) )
+    c3 = add_unit_node_param(c0, [:unit_capacity, :vom_cost, :user_representative], directory = dirname(pv_file) )
     import_rel_param_2dim(url_in, c3)
     
     #emissions

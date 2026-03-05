@@ -22,6 +22,7 @@ export import_relations_2dim
 export import_relations_3dim
 export import_rel_param_2dim
 export import_rel_param_3dim
+export get_parameter_values
 export loadmodel_nofilter
 export summarizeresults
 

@@ -3,6 +3,7 @@ using ArgParse
 using SpineInterface, JSON
 using SpinePeriods
 using PyCall
+using DataFrames
 
 # script for creating hp units
 #
@@ -66,6 +67,10 @@ function select_repr_periods(url_in, repr_template, repr_settings, url_out)
     loadmodel_nofilter(url_out, repr_template)
     loadmodel_nofilter(url_out, repr_settings)
 
+    #println(representative_selection_entities(url_out))
+    SpineInterface.import_data(url_out, Dict("entities" => representative_selection_entities(url_out)), 
+        "Entities in representative selection.")
+
     # run SpinePeriods to get the actual repr periods mapping
     run_spine_periods(url_out, json_out, alternative="Base")
     loadmodel_nofilter(url_out, json_out)
@@ -78,6 +83,38 @@ function create_copy_db(url_in, url_out)
     input_data = SpineInterface.export_data(url_in)
     SpineInterface.import_data(url_out, input_data, "Copy input db")
     @info "new database copied to $url_out"
+end
+
+"""
+    representative_selection_entities(db)
+
+Creates the array of entities node__representative_period and unit__node__representative_period indicated
+by the user to be used in representative periods selection. Input is taken from the database.
+
+# Arguments
+- `db`: Database URL, filename or dictionary.
+
+# Returns
+Vector of entities in the SpineDB format, describing the "resources" to be used in representative periods selection.
+"""
+
+function representative_selection_entities(db)
+
+    rep_selection_name = "rp1"
+
+    # which nodes were indicated for representative periods selection?
+    b = get_parameter_values(db, "node", "user_representative")
+    b = subset(b, :value => ByRow(identity))
+    vec = [["node__representative_period", [i[:entity], rep_selection_name]] for i in eachrow(b)]
+
+    # which unit__to_node pairs were indicated for representative periods selection?
+    b = get_parameter_values(db, "unit__to_node", "user_representative")
+    b = subset(b, :value => ByRow(identity))
+    vec2 = [["unit__node__representative_period", vcat(i[:entity], rep_selection_name)] for i in eachrow(b)]
+
+    println(vec)
+
+    return vcat(vec, vec2)
 end
 
 py"""
