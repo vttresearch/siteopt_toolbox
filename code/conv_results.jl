@@ -36,6 +36,7 @@ Overall function summarizing results into excel table
 """
 function conv_results(url_in, url_out, recipe_file, output_file = "results.xlsx")
 
+    # produce a summary of results guided by recipe_file and default grouping
     a = summarizeresults(url_in, url_out, recipe_file, nothing)
 
     # Storage nodes excel file

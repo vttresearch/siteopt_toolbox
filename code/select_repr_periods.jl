@@ -97,9 +97,9 @@ by the user to be used in representative periods selection. Input is taken from 
 # Returns
 Vector of entities in the SpineDB format, describing the "resources" to be used in representative periods selection.
 """
-
 function representative_selection_entities(db)
 
+    # the umbrella name for representative selection
     rep_selection_name = "rp1"
 
     # which nodes were indicated for representative periods selection?
@@ -111,8 +111,6 @@ function representative_selection_entities(db)
     b = get_parameter_values(db, "unit__to_node", "user_representative")
     b = subset(b, :value => ByRow(identity))
     vec2 = [["unit__node__representative_period", vcat(i[:entity], rep_selection_name)] for i in eachrow(b)]
-
-    println(vec)
 
     return vcat(vec, vec2)
 end

@@ -208,6 +208,21 @@ function unparse_some_value_types(v::AbstractVector)
 end
 
 
+function get_alternatives(db_url::String)
+    alts = SpineInterface.run_request(db_url, "call_method", ("find_alternatives",), Dict())  
+    a = [r["name"] for r in alts] 
+end
+
+function get_alternatives(db::Dict)
+    alts = [v[1] for v in db["alternatives"] ] 
+    return deepcopy(alts)
+end
+
+function get_scenarios(db_url::String)
+    s = SpineInterface.run_request(db_url, "call_method", ("find_scenarios",), Dict())  
+    a = [r["name"] for r in s] 
+end
+
 function get_entities(db_url::String, entityclass::String)
 
     entities = SpineInterface.run_request(db_url, "call_method", ("get_items","entity"),

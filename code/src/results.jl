@@ -14,7 +14,6 @@ Description of the return value and its type or structure.
 """
 function loadgrouping(db::String; entityclass = "unit", parameter = "unit_investment")
     b = get_parameter_values(db, entityclass, "group")
-    println(b)
 
     # grouping for unit investments
     g = Dict()
@@ -33,7 +32,10 @@ end
 Makes a result summary guided by the recipe file as well as internal entity groupings.
 
 # Arguments
-- `url_in`: Database URL or filename 
+- `url_in`: Database URL or filename of input data in SpineOpt format
+- `url_out`: Database URL or filename of results data in SpineOpt format
+- `recipe_file`: recipe_file file path of JSON file which shows which summaries are produced
+- `scenario`: Database URL or filename of results data in SpineOpt format
 
 # Returns
 DataFrame with result summaries, each summary contains items with values per scenario.
@@ -56,7 +58,11 @@ function summarizeresults(url_in::Union{String, Nothing},
 
     #load output DB to memory
     db_out = export_data(url_out)
-    
+
+    if isnothing(scenario) scenario = get_alternatives(db_out) end
+        
+    println(scenario)
+
     df = DataFrame(summary = [], item = [], scenario = [], entity = [], value = [])
 
     # build results
