@@ -168,9 +168,19 @@ function add_connections(conn_file, url_in, model_length::Period)
     end
 
     # add fix_ratio_out_in_connection_flow if not present
-    if !hasproperty(c0, :fix_ratio_out_in_connection_flow)
-        insertcols!(c0, :fix_ratio_out_in_connection_flow => 1.0)
+    if !hasproperty(c0, :efficiency)
+        insertcols!(c0, :efficiency => 1.0)
     end
+    rename!(c0, :efficiency => :fix_ratio_out_in_connection_flow)
+
+    # connection investment variable type
+    if !hasproperty(c0, :connection_investment_variable_type)
+        insertcols!(c0, :connection_investment_variable_type 
+            => "connection_investment_variable_type_continuous")
+    end
+    c0 = transform(c0, :connection_investment_variable_type
+        => ByRow(x -> ifelse(ismissing(x), "connection_investment_variable_type_continuous", x) )  
+        => :connection_investment_variable_type)
 
     # candidate connections when not specified
     default_candi_conn = 10000

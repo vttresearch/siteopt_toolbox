@@ -15,7 +15,7 @@ The standard workflow for Siteopt usage can be outlined as follows:
 
 ## Preparing the input data 
 
-The following input files are expected to lie in the **current_input** folder:
+The input is mostly given as Microsoft Excel files. Timeseries files are given in comma separated value (CSV) format. The following input files are expected to lie in the **current_input** folder:
 
  Subfolder    | Filename |Notes
 -------------|----------|----------
@@ -36,7 +36,9 @@ The following input files are expected to lie in the **current_input** folder:
 !!! info "Important Information"
     It is recommended that you start with an example data set an modify it as needed. 
 
-Not all of the files are expected to containt data. In that case just leave the header row (first row) in the file. In the following we will go through each of the files and show how to fill them.
+Not all of the files are expected to containt data. In that case just leave the header row (first row) in the file. In addition to the above mentioned files, the user can also add additional timeseries as CSV files. They can be referenced from the Excel files as explained below.
+
+In the following we will go through each of the files and show how to fill them.
 
 ### Connections table
 
@@ -46,21 +48,39 @@ In **connections_input.xlsx** each row represents one connection entity. The hea
 
  Column    | Required | Description
  -------------|----------|----------
-node1 | x | The originating node of the connection
-node2  | x | The destination node of the connection
-grid | x | The type of energy transferred: "elec", "heat" or "cool" 
+node1 | x | The originating city block of the connection
+node2  | x | The destination city block of the connection
+grid | x | The type of energy transferred: "elec"  (electricity), "heat" (heating) or "cool" (cooling) 
 alternative_name | x | The alternative which the given values refer to (normally "Base")
-connection_flow_cost |  | The unit cost of energy or material transfer
+connection_flow_cost |  | The unit cost of energy or material transfer, e.g. €/kWh
 connection_flow_cost.mul |  | Multiplier for the unit cost of energy or material transfer
 connection_flow_cost_reverse |  | The unit cost of energy or material transfer in reverse direction
 connection_flow_cost_reverse.mul |  | Multiplier for the unit cost of energy or material transfer in reverse direction
-fix_ratio_out_in_connection_flow | x | Transfer efficiency
-connection_investment_variable_type | x | 
+efficiency |  | Transfer efficiency (e.g. 0.95 meaning 95 %)
 
-!! info "Important Information"
+
+!!! info "Important Information"
     Write the grid names exactly the same way in all tables. 
 	
+	
 ### Demand data
+
+Demand data for three grids (electricity, heating and cooling) can be given in cross-tabulated CSV files. These are:
+
+* tscr_cooldemand.csv for cooling demand timeseries
+* tscr_elecdemand.csv for electricity demand timeseries
+* tscr_heatdemand.csv for heat demand timeseries
+
+The format of these files is the following:
+
+ Column header   | Required | Description
+ -------------|----------|----------
+Objectclass | x | "node"
+Parameter_name | x | "demand"
+alternative | x | The alternative which the given values refer to (normally "Base")
+time | x | Timestamp in ISO8601 format YYYY-MM-DDTHH\:mm\:SS
+n_1_elec |  | Any following columns should have header name of the node in SpineOpt format. It should be preceeded by "n_" then have the cityblock name followed by the grid name e.g. "_elec". The column then contains the actual values.
+
 
 ### The nodes table
 
