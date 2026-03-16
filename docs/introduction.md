@@ -21,7 +21,7 @@ The standard workflow for Siteopt usage can be outlined as follows:
 
 It is important to understand the way energy systems are abstracted in Siteopt. Abstraction can be a bit daunting at first but it allows the Siteopt to model a wider variety of systems instead of limiting to a very restricted set of components.
 
-![Basic example](images/basic_example.svg){title="Example energy system."}
+![Basic example](images/buildingicon.png){title="Example energy system."}
 
 
 ## Preparing the input data 
