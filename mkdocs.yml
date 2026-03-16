@@ -24,6 +24,7 @@ nav:
 extra_css:
   - style.css
 plugins:
+  - caption
   - plotly
   - search:
       separator: '[\s\u200b\-_,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'

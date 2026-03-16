@@ -1,5 +1,9 @@
 # User guide
 
+## Introduction 
+
+Siteopt can represent detailed interactions between buildings, local energy production, storage, and the wider grid, allowing planners to explore how different technologies and operating strategies perform over time. By capturing temporal variability such as hourly demand, weather‑driven renewable output, and dynamic electricity prices, Siteopt helps identify cost‑efficient, low‑carbon solutions for heating, cooling, and electricity supply. Its modular structure also makes it easy to test future scenarios, compare investment options for sustainable district‑level energy planning.
+ 
 ## Standard workflow
 
 The standard workflow for Siteopt usage can be outlined as follows:
@@ -12,6 +16,13 @@ The standard workflow for Siteopt usage can be outlined as follows:
 * Running optimization
 * Compiling result summary
 * Analyzing results
+
+## Visualizing the model topology and needed entities
+
+It is important to understand the way energy systems are abstracted in Siteopt. Abstraction can be a bit daunting at first but it allows the Siteopt to model a wider variety of systems instead of limiting to a very restricted set of components.
+
+![Basic example](images/basic_example.svg){title="Example energy system."}
+
 
 ## Preparing the input data 
 
@@ -96,6 +107,42 @@ demand |  | Demand of energy or material in the node
 
 Node names should be unique. However, you can use the same name in different grids. Normally the incoming flows to node must match the outgoing flows and possible demand. However, if one declares **balance_type_none** then no such condition is enforced.
 
+### Production units table
+
+In **pv_units.xlsx** the user defines renewable generation units such as PV units and wind turbines or solar collectors.
+
+
+Column    | Required | Description
+ -------------|----------|----------
+block_identifier | x | City block name
+grid | x | The type of energy produced: "elec", "heat" or "cool" 
+name | x | The name of the unit, which can be the same if the unit exists in many blocks
+alternative_name | x | The alternative which the given values refer to (normally "Base")
+unit_capacity | x | The capacity of one subunit (e.g. kilowatts). Normally here one enters the time series for the capacity factor of the unit.
+unit_investment_cost |  | The investment cost of one subunit as annualized cost (e.g. €/kW/year if subunit is 1 kW).
+candidate_units |  | The maximum number of subunits which can be built.
+representative_unit |  | An "X" indicates that the capacity factor of this unit will be used when selecting the representative periods for optimization.
+
+There are also data related to the supply chain carbon dioxide emissions of the production units:
+
+Column    | Required | Description
+ -------------|----------|----------
+investment_emission |  | The hourly carbon dioxide emission arising from one subunit (e.g. kg/hour)
+emission_cost |  | The cost of these carbon dioxide emissions (e.g. €/kg)
+
+### Heat pumps and chiller units table
+
+In **hp_units.xlsx** the user defines heat pumps and chillers. Unlike renewable generation units (defined in **pv_units.xlsx**) these technologies require electricity to operate.
+
+Column    | Required | Description
+ -------------|----------|----------
+block_identifier | x | City block name
+type | x | The type of energy produced: "heat" or "cool" 
+alternative_name | x | The alternative which the given values refer to (normally "Base")
+unit_capacity | x | The capacity of one subunit (e.g. kilowatts). Normally here one enters the time series for the capacity factor of the unit.
+unit_investment_cost |  | The investment cost of one subunit as annualized cost (e.g. €/kW/year if subunit is 1 kW).
+cop_profile | x | The coefficient of performance (COP) factor (unitless)
+
 
 ## Entering data
 
@@ -105,11 +152,11 @@ You will need different types of data for different parameter indices and values
 |-------------|----------|----------|
 | text        | n_7_elec   | use letters, numbers and underscores |
 | number     | 7.1       | scientific notation is also allowed |
-| Datetime     | 2025-12-31T13:00:00  | |
+| Datetime     | 2025-12-31T13:00:00  | Format YYYY-MM-DDTHH\:mm\:ss |
 | Duration     | 3h  | represents a time duration|
 | timeseries     | ts:elec7       | always begin with ts: |
 
-For datetimes such as time stamps the recommended format is ISO8601 (e.g. 2020-03-01T01:00). In case of timeseries, the actual timeseries data should be placed in a CSV file in the input data folder. The file should have two columns which have column titles "time" and "value". File name should have the format ts_ + time series name + .csv. For example if you write ts:elec7 in the input data table, file name ts_elec7.csv is expected. Note that Siteopt does not make daylight saving time adjustments.
+For datetimes such as time stamps the recommended format is ISO8601 (e.g. 2020-03-01T01:00). In case of timeseries, the actual timeseries data should be placed in a CSV file in the input data folder (same folder as the referencing Excel file). The file should have two columns which have column titles "time" and "value". File name should have the format ts_ + time series name + .csv. For example if you write ts:elec7 in the input data table, file name ts_elec7.csv is expected. Note that Siteopt does not make daylight saving time adjustments.
 
 For durations we recommed entering data in the format xU where x is an integer and U is either Y (for year), M (for month), D (for day), h (for hour), m (for minute), or s (for second). For example "60m".
 
