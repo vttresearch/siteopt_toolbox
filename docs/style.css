@@ -4,7 +4,7 @@ table {
   border-collapse: collapse;
   width: 100%;
   margin: 1em 0;
-  font-size: 0.95em;
+  font-size: 1.00em;
 }
 
 th, td {
@@ -29,4 +29,14 @@ tr:hover {
 /* Make tables scrollable on small screens */
 .table-wrapper {
   overflow-x: auto;
+}
+
+/* Increase table font size */
+.md-typeset table {
+    font-size: 1.0rem; /* adjust to taste */
+}
+
+/* Optional: increase header size too */
+.md-typeset table th {
+    font-size: 0.9rem;
 }
