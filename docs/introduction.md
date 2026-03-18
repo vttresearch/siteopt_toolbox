@@ -19,10 +19,15 @@ The standard workflow for Siteopt usage can be outlined as follows:
 
 ## Visualizing the model topology and needed entities
 
-It is important to understand the way energy systems are abstracted in Siteopt. Abstraction can be a bit daunting at first but it allows the Siteopt to model a wider variety of systems instead of limiting to a very restricted set of components. The key idea in the abstraction is that Siteopt uses only a few simple basic components but parameters are used to modify them so that they can resemble various real life components. Let us now see what these basic components are and what they can be used for.
+It is important to understand the way energy systems are abstracted in Siteopt. Abstraction can be a bit daunting at first but it allows the Siteopt to model a wider variety of systems instead of limiting to a very restricted set of components. The key idea in the abstraction is that Siteopt uses only a few simple basic components but parameters are used to modify them so that they can resemble various real life components. Let us now see what these basic components are and what they can be used for. Let us use the following simple example system for this.
 
-![Basic example](images/basic_example.svg){title="Example energy system with two loads."}
+Figure: Example energy system with two loads. {#fig-energy}
 
+![Basic example](images/basic_example.svg){title=""}
+
+In the example you can see different Siteopt components. They have been described in the table below.
+
+Table: Siteopt components.
 
  Component    | Example icon | Description 
 --------------|----------|----------
@@ -33,7 +38,7 @@ Connection | ![Connection icon](images/connectionicon.svg){ width="80" } | Conne
 Storage | ![Storage icon](images/storageicon.svg){ width="80" } | Storages allow energy storage. They can be storages for heat, electricity or cold.
 Diverting unit | ![Diverting icon](images/divertingicon.svg){ width="80" } | unit which produces side streams such as emissions.
 
-The user should rely on these components when visualizing the model topology. In practise, the recommended steps are:
+Note that in the [example system](#fig-energy) the power grid and loads are also nodes. This is precisely what we mean by using a restricted set of components to model many different real-world items. With these components it is possible to model quite a few different systems. The user should rely on these components when visualizing the model topology. In practise, the recommended steps are:
 
 - Decide the energy vectors which are taken into account: electricity, heat or cooling
 - Decide the spatial resolution of demand modelling. For example, does the model "block" refer to a single building, city block or wider area?
@@ -51,7 +56,7 @@ Scenario | Possible realization of all parameters. Composed of one or more alter
 
 Siteopt allows scenario analysis. However, scenarios are inputted in a smart way so that you only need to enter the parameters which change between scenarios. There's no need to repeat every parameter value for every scenario. The following picture shows how alternatives are used to help scenario analysis.
 
-![Basic example](images/scenariobuilding.svg){title="Parameter values used in the optimization are different in each scenario. Scenarios contain alternatives in certain order. Parameters may hold a different value for each alternative. The alternative with the highest order prevails."}
+![Basic example](images/scenariobuilding.svg){width="400" title="Parameter values used in the optimization are different in each scenario. Scenarios contain alternatives in certain order. Parameters may hold a different value for each alternative. The alternative with the highest order prevails."}
 
 In the picture the scenario "My scenario" contains two alternatives in addition to the Base alternative. Alternative 2 has the highest priority, which makes it override all other values. However, it has only been defined for Parameter 1. Alternative 1 overrides the Base value of Parameter 2.
 
@@ -87,15 +92,19 @@ In the following we will go through each of the files and show how to fill them.
 
 In **nodes.xlsx** each row represents one node. However, you can give several alternative parameter values for a node, and in this case each alternative makes one row. Also, you have to define the different grids for each node. For example if cooling demand exists in a node, you have to add a row where grid is "cool".
 
- Column    | Required | Description
- -------------|----------|----------
-node | x | Node name or block name
-grid | x | The type of energy transferred: "elec", "heat" or "cool" 
-alternative_name | x | The alternative which the given values refer to (normally "Base"). Can be left empty if no values are given.
-balance_type |  | Can define the node as free node if "balance_type_none" is given. Normally balance accounting is forced in a node, so that energy is not created or does not diappear. "balance_type_none" disables the balance accounting.
-demand |  | Demand of energy or material in the node
+Table: Monthly Revenue
+
+| Column           | Required | Description |
+|------------------|----------|-------------|
+| node             | x        | Node name or block name |
+| grid             | x        | The type of energy transferred: "elec", "heat" or "cool" |
+| alternative_name | x        | The alternative which the given values refer to (normally "Base"). Can be left empty if no values are given. |
+| balance_type     |          | Can define the node as free node if "balance_type_none" is given. Normally balance accounting is forced in a node, so that energy is not created or does not disappear. "balance_type_none" disables the balance accounting. |
+| demand           |          | Demand of energy or material in the node. If constant, just input a number. If it is a timeseries, follow the notation given in section "Entering data". |
 
 Node names should be unique. However, you can use the same name in different grids. Normally the incoming flows to node must match the outgoing flows and possible demand. However, if one declares **balance_type_none** then no such condition is enforced.
+
+If you wish to define values (e.g. demand) for different alternatives, add a separate row for each node and alternative. Notice that demand time series can also be inputted as shown in the next section.
 
 !!! info "Important Information"
     Write the grid names exactly the same way in all tables. 
@@ -145,6 +154,8 @@ Column    | Required | Description
  -------------|----------|----------
 investment_emission |  | The hourly carbon dioxide emission arising from one subunit (e.g. kg/hour)
 emission_cost |  | The cost of these carbon dioxide emissions (e.g. €/kg)
+
+If you wish to define parameter values for different alternatives, add a separate row for each unit and alternative.
 
 ### Heat pumps and chiller units table
 
@@ -196,6 +207,12 @@ unit_investment_cost | x | Annualized investment cost of the charger/discharger 
 storage_investment_cost | x | Annualized investment cost of storage section (per subunit)
 candidate_units | x | Maximum number of charger/discharger subunits
 candidate_storages | x | Maximum number of storage section subunits
+
+### Scenarios table
+
+The **scenarios.xlsx** file contains three sheets. The **scenario** sheet just lists the different scenario names in the first column (first row just is header row). Likewise the **alternative** sheet lists different alternatives in the first column, where the first row is header row. **scenario_alternative** sheet is more complex and has two kind of entries. On this sheet, the first column (A) is reserved for scenario names and two next columns (B-C) for alternative names. When two columns (A and B) are filled, this has the meaning that an alternative belongs to a scenario. When three columns (A, B and C) are filled, this has the meaning of defining the order of alternatives. In this case the alternative written in column C has higher precedence and alternative written in column B. If There are more than 2 alternatives in any scenario, more rows should be used to define the order of the alternatives.
+
+The following picture shows an example.
 
 
 
