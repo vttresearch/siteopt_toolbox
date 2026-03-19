@@ -1,0 +1,13 @@
+{
+    "name": "load_mytemplate",
+    "tooltype": "julia",
+    "includes": [
+        "load_mytemplate.jl"
+    ],
+    "description": "loading additional data to DB",
+    "inputfiles": [],
+    "inputfiles_opt": [],
+    "outputfiles": [],
+    "cmdline_args": [],
+    "includes_main_path": "../../../code"
+}
