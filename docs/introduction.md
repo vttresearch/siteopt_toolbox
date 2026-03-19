@@ -47,14 +47,19 @@ Note that in the [example system](#fig-energy) the power grid and loads are also
 
 ## Important concepts
 
+Table: Important concepts in Siteopt
+
 Concept   |  Description 
 --------------|----------
 Model | The optimization model which will be created from the user inputs. It holds parameters such as model horizon and time resolution.
 Block | City block or other location for units. Often used interchangeably with "node".
+Subunit | Unit of investment for renewable generators, storages and other unit. The user decides the size of subunit. It can be one kW of installed power but also other values are possible.
 Alternative | A distinct value for certain parameters. For example there can be Base alternative for investment cost and another alternative with lower investment cost.
 Scenario | Possible realization of all parameters. Composed of one or more alternatives. For example, a scenario may manifest lower investment cost but at the same time lower energy prices.
 
 Siteopt allows scenario analysis. However, scenarios are inputted in a smart way so that you only need to enter the parameters which change between scenarios. There's no need to repeat every parameter value for every scenario. The following picture shows how alternatives are used to help scenario analysis.
+
+Figure: Parameter values used in the optimization are different in each scenario. Scenarios contain alternatives in certain order. Parameters may hold a different value for each alternative. The alternative with the highest order prevails. {#fig-simple-system}
 
 ![Basic example](images/scenariobuilding.svg){width="400" title="Parameter values used in the optimization are different in each scenario. Scenarios contain alternatives in certain order. Parameters may hold a different value for each alternative. The alternative with the highest order prevails."}
 
@@ -128,7 +133,7 @@ alternative | x | The alternative which the given values refer to (normally "Bas
 time | x | Timestamp in ISO8601 format YYYY-MM-DDTHH\:mm\:SS
 n_1_elec |  | Any following columns should have header name of the node in SpineOpt format. It should be preceeded by "n_" then have the cityblock name followed by the grid name e.g. "_elec". The column then contains the actual values.
 
-Note that you don't **need** to input demand data via these files. You can also specify timeseries in the nodes input table. In that case you need a separate file for each node and grid.
+It is probably obvious to the user that these files are not meant to be populated manually but using spreadsheet software or other software for processing time series data. Note that you don't **need** to input demand data via these files. You can also specify timeseries in the nodes input table. In that case you need a separate file for each node and grid.
 
 
 
@@ -157,6 +162,9 @@ emission_cost |  | The cost of these carbon dioxide emissions (e.g. €/kg)
 
 If you wish to define parameter values for different alternatives, add a separate row for each unit and alternative.
 
+!!! info "Important Information"
+    In Siteopt the user should decide the units of measurement. For example the user for power can be kW or MW. Currency unit can be € or Norwegian krone. Any any case, units should be used consistently. 
+	
 ### Heat pumps and chiller units table
 
 In **hp_units.xlsx** the user defines heat pumps and chillers. Unlike renewable generation units (defined in **pv_units.xlsx**) these technologies require electricity to operate.
@@ -234,8 +242,39 @@ For datetimes such as time stamps the recommended format is ISO8601 (e.g. 2020-0
 
 For durations we recommed entering data in the format xU where x is an integer and U is either Y (for year), M (for month), D (for day), h (for hour), m (for minute), or s (for second). For example "60m".
 
-## Running optimization
+## Using Siteopt in practise
+
+### Starting Siteopt
+
+When using Siteopt via Spine Toolbox first start the toolbox. Run the commands
+
+```
+conda activate spinetb
+spinetoolbox
+```
+
+Then inside Spine Toolbox:
+
+- Open the project folder where you have downloaded Siteopt_toolbox: File -> Open project…
+- Navigate to the folder where you have downloaded Siteopt_toolbox
+- Press Ok
+- If you get a notification to upgrade databases, just upgrade them
+
+### Building the database for optimization
+
+The Siteopt inputs need to be translated to a format which is understood by the optimization model.
+
+- Close the input Excel files
+- Observe the Design view window in the toolbox
+- Using left mouse button held, select everything to the left of the pink ”Input data” box (see figure) 
+- In the top toolbox press Execute Selection
+- Wait until all the hammer tools have a green check mark
+- Red cross means an error
+
+
+### Running optimization
 
 Optimization of the model can be started by selecting the "Optimize" tool in Toolbox and clicking "Execute selection" in the toolbar.
+
 
 

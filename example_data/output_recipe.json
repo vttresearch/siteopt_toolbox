@@ -1,47 +1,30 @@
 {
-    "Totals":
+    "totals":
     {
+        "Retail electricity emissions":
+        [
+            {
+                "type": "unit_flow",
+                "unit": "u_emissionacco1_div", 
+                "node": "n_co2",
+                "scaling": 1e-3
+            }
+        ],
+        "Investment supply chain emissions":
+        [
+            {
+                "type": "connection_flow",
+                "connection": "c_n_co2_investment__n_co2_total", 
+                "node": "n_co2_total",
+                "scaling": 1e-3
+            }
+        ],
         "Total costs":
          [
             {
                 "type": "total_costs"
             }
-        ],
-        "Supply chain emissions":
-        [
-            {
-                "type": "unit_flow",
-                "unit": "u_1_hp", 
-                "node": "n_co2"
-            }
         ]
-    },
-    "Investments":
-    {
-        "Electrical line investments":
-         [
-            {
-                "type": "connection_investment",
-                "connection": "market",
-                "aggregation": false
-            }
-        ],
-		"Total heater investments":
-         [
-            {
-                "type": "unit_investment",
-                "unit": "hp",
-                "aggregation": true
-            }
-        ],
-        "Total PV investments":
-         [
-            {
-                "type": "unit_investment",
-                "unit": "pv",
-                "aggregation": true
-            }
-        ]
+        
     }
-
 }
