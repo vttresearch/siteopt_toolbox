@@ -50,7 +50,6 @@ function add_nodes(stor_file, url_in, model_length::Period)
     c0 = transform(c0, [:representative_node] => ByRow(x -> ismissing(x) ? false : true ) 
                         => :user_representative)
 
-    println(c0.user_representative)
     # add alternative name if not present
     if !hasproperty(c0, :alternative_name)
         insertcols!(c0, :alternative_name => "Base")

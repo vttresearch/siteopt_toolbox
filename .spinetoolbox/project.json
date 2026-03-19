@@ -109,7 +109,6 @@
                     "left"
                 ],
                 "filter_settings": {
-                    "known_filters": {},
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
@@ -128,7 +127,6 @@
                     "left"
                 ],
                 "filter_settings": {
-                    "known_filters": {},
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
@@ -147,7 +145,6 @@
                     "left"
                 ],
                 "filter_settings": {
-                    "known_filters": {},
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
@@ -169,7 +166,6 @@
                     "write_index": 3
                 },
                 "filter_settings": {
-                    "known_filters": {},
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
@@ -188,7 +184,6 @@
                     "left"
                 ],
                 "filter_settings": {
-                    "known_filters": {},
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
@@ -207,7 +202,6 @@
                     "left"
                 ],
                 "filter_settings": {
-                    "known_filters": {},
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
@@ -229,7 +223,6 @@
                     "write_index": 5
                 },
                 "filter_settings": {
-                    "known_filters": {},
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
@@ -248,7 +241,6 @@
                     "left"
                 ],
                 "filter_settings": {
-                    "known_filters": {},
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
@@ -270,7 +262,6 @@
                     "write_index": 3
                 },
                 "filter_settings": {
-                    "known_filters": {},
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
@@ -289,7 +280,6 @@
                     "left"
                 ],
                 "filter_settings": {
-                    "known_filters": {},
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
@@ -308,7 +298,6 @@
                     "left"
                 ],
                 "filter_settings": {
-                    "known_filters": {},
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
@@ -327,7 +316,6 @@
                     "left"
                 ],
                 "filter_settings": {
-                    "known_filters": {},
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
@@ -346,19 +334,6 @@
                     "left"
                 ],
                 "filter_settings": {
-                    "known_filters": {
-                        "db_url@Input data": {
-                            "scenario_filter": {
-                                "Base": false,
-                                "Myscen": false
-                            },
-                            "alternative_filter": {
-                                "Base": true,
-                                "Highprice": true,
-                                "Newer": true
-                            }
-                        }
-                    },
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
@@ -377,7 +352,6 @@
                     "left"
                 ],
                 "filter_settings": {
-                    "known_filters": {},
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
@@ -396,7 +370,6 @@
                     "left"
                 ],
                 "filter_settings": {
-                    "known_filters": {},
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
@@ -415,7 +388,6 @@
                     "left"
                 ],
                 "filter_settings": {
-                    "known_filters": {},
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
@@ -437,7 +409,6 @@
                     "write_index": 6
                 },
                 "filter_settings": {
-                    "known_filters": {},
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
@@ -459,7 +430,6 @@
                     "write_index": 5
                 },
                 "filter_settings": {
-                    "known_filters": {},
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
@@ -481,7 +451,6 @@
                     "write_index": 5
                 },
                 "filter_settings": {
-                    "known_filters": {},
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
@@ -500,7 +469,6 @@
                     "left"
                 ],
                 "filter_settings": {
-                    "known_filters": {},
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
@@ -519,7 +487,6 @@
                     "left"
                 ],
                 "filter_settings": {
-                    "known_filters": {},
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
@@ -538,7 +505,6 @@
                     "left"
                 ],
                 "filter_settings": {
-                    "known_filters": {},
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
@@ -557,7 +523,6 @@
                     "left"
                 ],
                 "filter_settings": {
-                    "known_filters": {},
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
@@ -579,7 +544,6 @@
                     "write_index": 7
                 },
                 "filter_settings": {
-                    "known_filters": {},
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
@@ -598,7 +562,6 @@
                     "left"
                 ],
                 "filter_settings": {
-                    "known_filters": {},
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
@@ -617,7 +580,6 @@
                     "left"
                 ],
                 "filter_settings": {
-                    "known_filters": {},
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
@@ -639,7 +601,6 @@
                     "write_index": 4
                 },
                 "filter_settings": {
-                    "known_filters": {},
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
@@ -658,24 +619,6 @@
                     "left"
                 ],
                 "filter_settings": {
-                    "known_filters": {
-                        "db_url@output db": {
-                            "scenario_filter": {
-                                "Base": false,
-                                "Myscen": false
-                            },
-                            "alternative_filter": {
-                                "Base": true,
-                                "Base__Optimize@2026-02-20T11:57:33": true,
-                                "Base__Optimize@2026-03-03T08:53:26": true,
-                                "Base__Optimize@2026-03-03T09:21:27": true,
-                                "Base__Optimize@2026-03-04T11:45:04": true,
-                                "Base__Optimize@2026-03-04T11:59:13": true,
-                                "Base__Optimize@2026-03-04T13:15:24": true,
-                                "Myscen__Optimize@2026-03-03T08:53:26": true
-                            }
-                        }
-                    },
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
@@ -694,7 +637,6 @@
                     "left"
                 ],
                 "filter_settings": {
-                    "known_filters": {},
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
@@ -713,19 +655,6 @@
                     "left"
                 ],
                 "filter_settings": {
-                    "known_filters": {
-                        "db_url@input with repr periods": {
-                            "scenario_filter": {
-                                "Base": true,
-                                "Myscen": false
-                            },
-                            "alternative_filter": {
-                                "Base": true,
-                                "Highprice": true,
-                                "Newer": true
-                            }
-                        }
-                    },
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
@@ -744,19 +673,6 @@
                     "left"
                 ],
                 "filter_settings": {
-                    "known_filters": {
-                        "db_url@input with repr periods": {
-                            "scenario_filter": {
-                                "Base": false,
-                                "Myscen": false
-                            },
-                            "alternative_filter": {
-                                "Base": true,
-                                "Highprice": true,
-                                "Newer": true
-                            }
-                        }
-                    },
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
@@ -778,7 +694,6 @@
                     "write_index": 6
                 },
                 "filter_settings": {
-                    "known_filters": {},
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
@@ -820,7 +735,6 @@
                     }
                 },
                 "filter_settings": {
-                    "known_filters": {},
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
@@ -839,7 +753,6 @@
                     "left"
                 ],
                 "filter_settings": {
-                    "known_filters": {},
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
@@ -858,19 +771,6 @@
                     "left"
                 ],
                 "filter_settings": {
-                    "known_filters": {
-                        "db_url@Input data": {
-                            "scenario_filter": {
-                                "Base": false,
-                                "Myscen": false
-                            },
-                            "alternative_filter": {
-                                "Base": true,
-                                "Highprice": true,
-                                "Newer": true
-                            }
-                        }
-                    },
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
@@ -892,7 +792,6 @@
                     "purge_before_writing": true
                 },
                 "filter_settings": {
-                    "known_filters": {},
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
@@ -911,7 +810,6 @@
                     "left"
                 ],
                 "filter_settings": {
-                    "known_filters": {},
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
@@ -933,7 +831,6 @@
                     "write_index": 2
                 },
                 "filter_settings": {
-                    "known_filters": {},
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
@@ -1307,7 +1204,7 @@
                     "arg": "db_url@input with repr periods"
                 }
             ],
-            "kill_completed_processes": false,
+            "kill_completed_processes": true,
             "log_process_output": false
         },
         "convert diverting units (1)": {
@@ -1379,7 +1276,7 @@
                     "arg": "db_url@input with repr periods"
                 }
             ],
-            "kill_completed_processes": false,
+            "kill_completed_processes": true,
             "log_process_output": false
         },
         "Output recipe": {
@@ -1487,7 +1384,7 @@
                     "arg": "db_url@output db"
                 }
             ],
-            "kill_completed_processes": false,
+            "kill_completed_processes": true,
             "log_process_output": false
         },
         "Additional template": {
@@ -1523,7 +1420,7 @@
                     "arg": "db_url@Input data"
                 }
             ],
-            "kill_completed_processes": false,
+            "kill_completed_processes": true,
             "log_process_output": false
         }
     }
