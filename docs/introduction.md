@@ -61,7 +61,7 @@ Siteopt allows scenario analysis. However, scenarios are inputted in a smart way
 
 Figure: Parameter values used in the optimization are different in each scenario. Scenarios contain alternatives in certain order. Parameters may hold a different value for each alternative. The alternative with the highest order prevails. {#fig-simple-system}
 
-![Basic example](images/scenariobuilding.svg){width="400" title="Parameter values used in the optimization are different in each scenario. Scenarios contain alternatives in certain order. Parameters may hold a different value for each alternative. The alternative with the highest order prevails."}
+![Basic example](images/scenariobuilding.svg){width="400"}
 
 In the picture the scenario "My scenario" contains two alternatives in addition to the Base alternative. Alternative 2 has the highest priority, which makes it override all other values. However, it has only been defined for Parameter 1. Alternative 1 overrides the Base value of Parameter 2.
 
@@ -181,21 +181,21 @@ cop_profile | x | The coefficient of performance (COP) factor (unitless)
 
 ### Connections table
 
-In Siteopt and SpineOpt connections are entities which can transfer energy and material from one node to another. These include power lines and pipelines. However, Siteopt does not require that you specify what type of real infrastructure the connection represents. Instead you enter parameters which determine how these connection behave.
+In Siteopt and SpineOpt connections are entities which can transfer energy and material from one node to another. These include power lines and pipelines. However, as Siteopt works in an abstract level, it does not require that you specify what type of real infrastructure the connection represents. Instead you enter parameters which determine how these connection behave.
 
 In **connections_input.xlsx** each row represents one connection entity. The header row shows what is expected on each column. The columns are as follows:
 
  Column    | Required | Description
  -------------|----------|----------
-node1 | x | The originating city block of the connection
-node2  | x | The destination city block of the connection
-grid | x | The type of energy transferred: "elec"  (electricity), "heat" (heating) or "cool" (cooling) 
-alternative_name | x | The alternative which the given values refer to (normally "Base")
-connection_flow_cost |  | The unit cost of energy or material transfer, e.g. €/kWh
-connection_flow_cost.mul |  | Multiplier for the unit cost of energy or material transfer
-connection_flow_cost_reverse |  | The unit cost of energy or material transfer in reverse direction
+node1 | x | The originating city block of the connection.
+node2  | x | The destination city block of the connection.
+grid | x | The type of energy transferred: "elec"  (electricity), "heat" (heating) or "cool" (cooling) .
+alternative_name | x | The alternative which the given values refer to (normally "Base").
+connection_flow_cost |  | The unit cost of energy or material transfer, e.g. €/kWh.
+connection_flow_cost.mul |  | Multiplier for the unit cost of energy or material transfer, e.g. to convert between units between the model and input data.
+connection_flow_cost_reverse |  | The unit cost of energy or material transfer in reverse direction (i.e. from node 2 to node 1).
 connection_flow_cost_reverse.mul |  | Multiplier for the unit cost of energy or material transfer in reverse direction
-efficiency |  | Transfer efficiency (e.g. 0.95 meaning 95 %)
+efficiency |  | Transfer efficiency (e.g. 0.95 meaning 95 %) dictates how much of the transfed quantity reaches the destination and how much is lost.
 
 
 ### Storages table
@@ -204,7 +204,7 @@ In **storages-input.xlsx** the user defines electricity, heat and cold storages.
 
 Column    | Required | Description
  -------------|----------|----------
-block_identifier | x | City block name
+block_identifier | x | Block name (node name).
 type | x | The type of energy produced: "heat" or "cool" 
 alternative_name | x | The alternative which the given values refer to (normally "Base")
 node_state_cap | x | Storage capacity (e.g. kWh) of one storage subunit
@@ -216,13 +216,47 @@ storage_investment_cost | x | Annualized investment cost of storage section (per
 candidate_units | x | Maximum number of charger/discharger subunits
 candidate_storages | x | Maximum number of storage section subunits
 
-### Scenarios table
+The storage table is more complex than the other tables because the power conversion section (charger and discharger) is defined separately from the actual storage. Thus an investment cost is given both from the storage **capacity** and charger **power**. These are given for one subunit on an annual basis as usual. The maximum number of subunits is be given both for the storage section and charger section. Normally it is convenient to define one subunit as kW or MW for charger and kWh or MWh for the storage section but they may also be defined e.g. according to certain battery model if it is convenient for the user.
+
+### Diverting units table
+
+At the time diverting units are mostly used for internal accounting purposes of the optimization model because the underlying SpineOpt model does not account for emissions. Nothing prevents their use by the user. The user should, however, tolerate the bit more complex notation used for these units.
+
+
+
+### Modelspec table
+
+The **modelspec.xlsx** file contains five sheets but only two of them are normally needed by the user. **params_1d_datetime** contain the following data about the model time horizon:
+
+Column    | Required | Description
+ -------------|----------|----------
+objectclass | x | enter text `model`
+object | x | enter text `mymodel`
+parameter_name | x | either `model_start` or `model_end`
+alternative_name | x | The alternative which the given values refer to (normally `Base`)
+parameter_value | x | The model start or end time in YYYY-MM-DDTHH\:mm\:ss format
+
+In other words, here you adjust which parts of the given time series are used for optimization. **params_1d_durations** sheet contain data about the time resolution used by optimization. Normally it contains two rows:
+
+Column    | Required | Description
+ -------------|----------|----------
+objectclass | x | enter text `temporal_block`
+object | x | enter text `myblock` or `myinvestmentblock`
+parameter_name | x | enter text `resolution`
+lternative_name | x | The alternative which the given values refer to (normally `Base`)
+parameter_value | x | The model time resolution (normally 1 hour `1 h`for `myblock` and 1 year `1 Y` for `myinvestmentblock`
+
+It is suggested that you keep the values as  `1 h`for `myblock` and `1 Y` for `myinvestmentblock` but you may increase the value to several hours to speed up computation.
+
+### Scenarios table 
 
 The **scenarios.xlsx** file contains three sheets. The **scenario** sheet just lists the different scenario names in the first column (first row just is header row). Likewise the **alternative** sheet lists different alternatives in the first column, where the first row is header row. **scenario_alternative** sheet is more complex and has two kind of entries. On this sheet, the first column (A) is reserved for scenario names and two next columns (B-C) for alternative names. When two columns (A and B) are filled, this has the meaning that an alternative belongs to a scenario. When three columns (A, B and C) are filled, this has the meaning of defining the order of alternatives. In this case the alternative written in column C has higher precedence and alternative written in column B. If There are more than 2 alternatives in any scenario, more rows should be used to define the order of the alternatives.
 
 The following picture shows an example.
 
+Figure: Inputting alternatives for each scenario. One first has to list each alternative for each scenario. Then one has to specify the order of the alternatives. Here `Highprice`alternative overrides the `Base` alternative in `Myscen` scenario.
 
+![Scenario input table](images/scenariotable.png){width="400"}
 
 ## Entering data
 
@@ -231,16 +265,16 @@ You will need different types of data for different parameter indices and values
 | Type        | Example |Notes|
 |-------------|----------|----------|
 | text        | n_7_elec   | use letters, numbers and underscores |
-| number     | 7.1       | scientific notation is also allowed |
+| number     | 7.1       | scientific notation such as 1.0e3 is also allowed |
 | Datetime     | 2025-12-31T13:00:00  | Format YYYY-MM-DDTHH\:mm\:ss |
-| Duration     | 3h  | represents a time duration|
-| timeseries     | ts:elec7       | always begin with ts: |
+| Duration     | 3h  | Represents a time duration. The unit can be either `Y` (for year), `M` (for month), `D` (for day), `h` (for hour), `m` (for minute), or `s` (for second). |
+| timeseries     | ts:elec7       | always begin with `ts:` |
 
 For datetimes such as time stamps the recommended format is ISO8601 (e.g. 2020-03-01T01:00). In case of timeseries, the actual timeseries data should be placed in a CSV file in the input data folder (same folder as the referencing Excel file). The file should have two columns which have column titles "time" and "value". File name should have the format ts_ + time series name + .csv. For example if you write ts:elec7 in the input data table, file name ts_elec7.csv is expected. Note that Siteopt does not make daylight saving time adjustments.
 
 ![Basic example](images/timeseries.svg){title="Example time series file. Columns should be separated by commas."}
 
-For durations we recommed entering data in the format xU where x is an integer and U is either Y (for year), M (for month), D (for day), h (for hour), m (for minute), or s (for second). For example "60m".
+For durations the data should be entered in format xU where x is an integer and U is either Y (for year), M (for month), D (for day), h (for hour), m (for minute), or s (for second). For example "60m".
 
 ## Using Siteopt in practise
 
