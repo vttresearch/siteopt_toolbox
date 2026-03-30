@@ -175,24 +175,15 @@ function add_connections(conn_file, url_in, model_length::Period)
 
     # connection investment variable type
     if !hasproperty(c0, :connection_investment_variable_type)
-        insertcols!(c0, :connection_investment_variable_type 
-            => "connection_investment_variable_type_continuous")
+        c0 = augment_basetable(c0,  Dict(:connection_investment_variable_type 
+            => "connection_investment_variable_type_continuous"))
     end
-    c0 = transform(c0, :connection_investment_variable_type
-        => ByRow(x -> ifelse(ismissing(x), "connection_investment_variable_type_continuous", x) )  
-        => :connection_investment_variable_type)
-
-    # candidate connections when not specified
-    default_candi_conn = 10000
 
     # add parameter "candidate_connections" if needed
     if !hasproperty(c0, :candidate_connections)
         insertcols!(c0, :candidate_connections => missings(Float64, nrow(c0)))
     end
-    c0 = transform(c0, [:connection_investment_cost, :candidate_connections] 
-        => ByRow((x,y) -> ifelse(ismissing(y) && !ismissing(x), default_candi_conn, y) )  
-        => :candidate_connections)
-
+    
     # adjust investment costs 
     c0.connection_investment_cost =  c0.connection_investment_cost * (model_length / Hour(8760) )
      
