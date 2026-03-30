@@ -53,10 +53,15 @@ function add_investment_group_capa(c0, url_in)
     c1 = rename(c1, :investment_group => :Object1)
     insertcols!(c1, 1, :Objectclass1 => "investment_group")
     insertcols!(c1, 3, :parameter_name => "maximum_entities_invested_available")
-    println(c1)
     import_object_param(url_in, c1)
 end
 
+"""
+    read_invgroups(c_invgroups, url_in)
+
+    main function for reading and importing investment group related data
+
+"""
 function read_invgroups(c_invgroups, url_in)
     c_invgroups = transform(c_invgroups, [:block_identifier, :name] => ByRow((x,y)->"u_" * string(x) * "_" * string(y)) => :unit )
     c_invgroups = transform(c_invgroups, [:group] => ByRow(x -> "ig_" * string(x) ) => :investment_group )
@@ -66,16 +71,20 @@ function read_invgroups(c_invgroups, url_in)
 end
 
 """
-Overall function for adding pv units
+Overall function for adding VRE units
 
-    Output: excel tables of pv units
+    Input:
+    pv_file: vre definition file
+    url_in: database URL
+    model_length: investment horizon length
+
 """
 function add_pv_units(pv_file::String, url_in, model_length::Period)
 
-    #investment group input file ath
+    #investment group input file
     invgroupfile = joinpath(dirname(pv_file), "group_potential.xlsx")
 
-    #read basic info
+    #read given data
     c0 = DataFrame(XLSX.readtable(pv_file, "Sheet1") )
     if isfile(invgroupfile)
         c_invgroups = DataFrame(XLSX.readtable(invgroupfile, "Sheet1") )

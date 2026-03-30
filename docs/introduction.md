@@ -178,6 +178,21 @@ unit_capacity | x | The capacity of one subunit (e.g. kilowatts). Normally here 
 unit_investment_cost |  | The investment cost of one subunit as annualized cost (e.g. €/kW/year if subunit is 1 kW).
 cop_profile | x | The coefficient of performance (COP) factor (unitless)
 
+### Group potentials table
+
+Normally, investments into different VRE units are independent. However, if for example they share the same area, potentials for certain groups of units can be defined. In **group_potential.xlsx** the user defines aggregated renewable unit investment potentials for PV units and wind turbines or solar collectors. 
+
+
+Column    | Required | Description
+ -------------|----------|----------
+block_identifier | x | City block name
+grid | x | The type of energy produced: "elec", "heat" or "cool" (without parentheses)
+name | x | The name of the unit, which can be the same if the unit exists in many blocks
+alternative_name | x | The alternative which the given values refer to (normally "Base" without parentheses)
+group | x | The name of the group for which an investment constraint is given. Can be selected freely.
+candidate_units | x | The quantity of total invested subunits allotted to this group.
+
+For example, if you wish to create an aggregated investment constraint which pertains to two different units, add two lines to this file. Input the unit blocks, grids and names as in **pv_input.xslx**. Think of a descriptive and unique name for this constraint and put it into the `group`column on both lines. On one (not both) of the lines in `candidate_units` columns, write the maximum number of subunits which can be invested.
 
 ### Connections table
 
