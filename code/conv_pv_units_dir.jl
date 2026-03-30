@@ -31,6 +31,39 @@ function main()
     add_pv_units(parsed_args["arg1"], parsed_args["arg3"], model_length)
 end
 
+function add_investment_group(c0, url_in)
+    c1 = dropmissing(c0, :investment_group, disallowmissing=true)
+    c1 = unique(select(c1, :investment_group => :Object1))
+    insertcols!(c1, 1, :Objectclass1 => "investment_group")
+    import_objects(url_in, c1) 
+end
+
+function add_unit_investment_group(c0, url_in)
+    c1 = dropmissing(c0, :investment_group, disallowmissing=true)
+    c1[!,:investment_group] = convert.(String, c1[!,:investment_group])
+    c1 = unique(select(c1, :unit => :Object1, :investment_group => :Object2))
+    insertcols!(c1, 1, :relationshipclass => "unit__investment_group")
+    import_relations_2dim(url_in, c1)
+end
+
+function add_investment_group_capa(c0, url_in)
+    c1 = dropmissing(c0, [:investment_group, :candidate_units], disallowmissing=true)
+    c1 = select(c1,:unit, :investment_group, :alternative_name, :candidate_units)
+    c1 = combine(groupby(c1, [:investment_group, :alternative_name]), :candidate_units => sum => :value)
+    c1 = rename(c1, :investment_group => :Object1)
+    insertcols!(c1, 1, :Objectclass1 => "investment_group")
+    insertcols!(c1, 3, :parameter_name => "maximum_entities_invested_available")
+    println(c1)
+    import_object_param(url_in, c1)
+end
+
+function read_invgroups(c_invgroups, url_in)
+    c_invgroups = transform(c_invgroups, [:block_identifier, :name] => ByRow((x,y)->"u_" * string(x) * "_" * string(y)) => :unit )
+    c_invgroups = transform(c_invgroups, [:group] => ByRow(x -> "ig_" * string(x) ) => :investment_group )
+    add_investment_group(c_invgroups, url_in)
+    add_unit_investment_group(c_invgroups, url_in)
+    add_investment_group_capa(c_invgroups, url_in)
+end
 
 """
 Overall function for adding pv units
@@ -39,11 +72,16 @@ Overall function for adding pv units
 """
 function add_pv_units(pv_file::String, url_in, model_length::Period)
 
-    #output file names
-    outfile1 = "pv_units.xlsx"
+    #investment group input file ath
+    invgroupfile = joinpath(dirname(pv_file), "group_potential.xlsx")
 
     #read basic info
     c0 = DataFrame(XLSX.readtable(pv_file, "Sheet1") )
+    if isfile(invgroupfile)
+        c_invgroups = DataFrame(XLSX.readtable(invgroupfile, "Sheet1") )
+    else
+        c_invgroups = nothing
+    end
 
     # convert column datatypes
     c0 = transform(c0, [:representative_unit] => ByRow(x -> ismissing(x) ? false : true ) 
@@ -86,6 +124,10 @@ function add_pv_units(pv_file::String, url_in, model_length::Period)
     
     import_rel_param_2dim(url_in, c4)
     
+    # investment groups
+    if !isnothing(c_invgroups)
+        read_invgroups(c_invgroups, url_in)
+    end
 end
 
 main()
