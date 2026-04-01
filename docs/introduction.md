@@ -251,7 +251,7 @@ parameter_name | x | either `model_start` or `model_end`
 alternative_name | x | The alternative which the given values refer to (normally `Base`)
 parameter_value | x | The model start or end time in YYYY-MM-DDTHH\:mm\:ss format
 
-In other words, here you adjust which parts of the given time series are used for optimization. **params_1d_durations** sheet contain data about the time resolution used by optimization. Normally it contains two rows:
+In other words, here you adjust which parts of the given time series are used for optimization. **params_1d_durations** sheet contain data about the time resolution used by optimization. Normally it contains two rows. One of the rows determines the time resolution used in the day-to-day optimization of the system. The other defines how often investments can be made. Presently Siteopt supports only a single investment for each entity, so the time resolution for investments should be longer than the model horizon.
 
 Column    | Required | Description
  -------------|----------|----------
@@ -261,7 +261,7 @@ parameter_name | x | enter text `resolution`
 lternative_name | x | The alternative which the given values refer to (normally `Base`)
 parameter_value | x | The model time resolution (normally 1 hour `1 h`for `myblock` and 1 year `1 Y` for `myinvestmentblock`
 
-It is suggested that you keep the values as  `1 h`for `myblock` and `1 Y` for `myinvestmentblock` but you may increase the value to several hours to speed up computation.
+It is suggested that you keep the values as  `1 h`for `myblock` but you may increase the value to several hours to speed up computation. For `myinvestmentblock` you can use e.g. `1 Y`.
 
 ### Scenarios table 
 
@@ -291,7 +291,9 @@ For datetimes such as time stamps the recommended format is ISO8601 (e.g. 2020-0
 
 For durations the data should be entered in format xU where x is an integer and U is either Y (for year), M (for month), D (for day), h (for hour), m (for minute), or s (for second). For example "60m".
 
-## Using Siteopt in practise
+## Using Siteopt via Spine Toolbox
+
+You can use Siteopt in two ways: via Spine Toolbox or via web browser. Here the first method is explained.
 
 ### Starting Siteopt
 
@@ -311,19 +313,26 @@ Then inside Spine Toolbox:
 
 ### Building the database for optimization
 
-The Siteopt inputs need to be translated to a format which is understood by the optimization model.
+The Siteopt inputs need to be translated to a format which is understood by the optimization model. This should be done each time you change the inputs (i.e. the Excel files described above or the time series CSV files).
 
 - Close the input Excel files
 - Observe the Design view window in the toolbox
 - Using left mouse button held, select everything to the left of the pink ”Input data” box (see figure) 
 - In the top toolbox press Execute Selection
 - Wait until all the hammer tools have a green check mark
-- Red cross means an error
+- Red cross in tool icon means an error
+
+Building the database can take several minutes.
+
+### Running representative periods selection
+
+Representative periods are a way to simplify long‑term energy system studies without losing the big picture. Instead of simulating every hour of an entire year — which would be extremely heavy to compute — the year is broken into a small number of “typical” days that capture the main patterns in demand and renewable generation. Think of it like choosing a few key scenes from a movie that still let you understand the whole story. In Siteopt, you can either use representative periods or not. If you decide to use them, 
 
 
 ### Running optimization
 
 Optimization of the model can be started by selecting the "Optimize" tool in Toolbox and clicking "Execute selection" in the toolbar.
 
+Running the optimization can take anything from a few minutes to tens of minutes. Reducing the number of nodes and optimized units as well as increasing time resolution can reduce the running time.
 
 

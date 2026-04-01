@@ -1,6 +1,8 @@
 
 # Script for installing Spine Toolbox, Siteopt and its Julia dependencies.
 # Prerequisities: Julia language and Miniconda must be installed.
+# System: Windows or Linux. Notice that on some Windows versions you may have to add
+# "cmd /c" before all conda commands. E.g. cmd /c conda env list.
 # Running: julia install.jl in command prompt.
 
 using Pkg
