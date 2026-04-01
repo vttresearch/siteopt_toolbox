@@ -1307,7 +1307,7 @@
                 "database": {
                     "type": "path",
                     "relative": true,
-                    "path": ".spinetoolbox/items/input_data/Input data.sqlite"
+                    "path": ".spinetoolbox/items/input_data/elexia_input.sqlite"
                 },
                 "schema": ""
             }
