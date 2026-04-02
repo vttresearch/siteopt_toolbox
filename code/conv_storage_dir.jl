@@ -180,14 +180,9 @@ function add_storages(stor_file, url_in, model_length::Period)
     import_rel_param_2dim(url_in, 
         add_unit_node_param_storage(c0, directory=dirname(stor_file)))
 
-    # required for emissions to work
-    #c5 = add_units_on_temporal_block(c0, "myinvestmentblock")
-    #import_relations_2dim(url_in, c5)
-
     #unit-node-node relationships
     import_relations_3dim(url_in, add_unit_node_node_storage(c0))
     import_rel_param_3dim(url_in, add_unit_node_node_param_storage(c0))
-
 end
 
 main()

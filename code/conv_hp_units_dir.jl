@@ -33,9 +33,9 @@ end
 
 
 """
-Overall function for adding hp units
+    add_hp_units(hp_file, url_in, model_length::Period)
 
-    Output: excel tables of hp units
+    Overall function for adding hp units. Loads the HP and chiller units to DB.
 """
 function add_hp_units(hp_file, url_in, model_length::Period)
 
@@ -63,10 +63,10 @@ function add_hp_units(hp_file, url_in, model_length::Period)
     addedparams = Dict(:min_units_on_share => 1.0, :emission_flow_capacity => 1.0)
     c0 = augment_basetable(c0, addedparams)
 
-    # object parameters
-    c1 =  add_unit_param2(c0, [:unit_investment_cost, :candidate_units, :min_units_on_share, :group])
+    # object parameters 
     import_objects(url_in, add_unit(c0))
-    import_object_param(url_in, c1)
+    import_object_param(url_in, 
+        add_unit_param2(c0, [:unit_investment_cost, :candidate_units, :min_units_on_share, :group]))
 
     # unit-node relationship parameters
     import_relations_2dim(url_in,  
@@ -78,11 +78,10 @@ function add_hp_units(hp_file, url_in, model_length::Period)
     import_rel_param_2dim(url_in, add_unit_node_param(c0, [:unit_capacity], directory = dirname(hp_file) ) )
 
     #emissions
-    c31 = add_unit_node_param_emission(c0, Dict(:investment_emission => :minimum_operating_point,
+    import_rel_param_2dim(url_in, add_unit_node_param_emission(c0, Dict(:investment_emission => :minimum_operating_point,
                                                 :emission_cost => :vom_cost,
                                                 :emission_flow_capacity => :unit_capacity))
-    
-    import_rel_param_2dim(url_in, c31)
+                        )
 
     #unit-node-node relationships
     import_relations_3dim(url_in, add_unit_node_node(c0, :basenode, :inputnode))

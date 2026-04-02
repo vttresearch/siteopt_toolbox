@@ -337,7 +337,7 @@
                     "auto_online": true,
                     "enabled_filter_types": {
                         "alternative_filter": false,
-                        "scenario_filter": true
+                        "scenario_filter": false
                     }
                 }
             },
