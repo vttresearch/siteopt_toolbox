@@ -69,14 +69,13 @@ function add_hp_units(hp_file, url_in, model_length::Period)
     import_object_param(url_in, c1)
 
     # unit-node relationship parameters
-    c3 = add_unit_node_param(c0, [:unit_capacity], directory = dirname(hp_file) )
     import_relations_2dim(url_in,  
         vcat(add_unit_to_node(c0, "unit__to_node", :basenode),
             add_unit_to_node(c0, "unit__from_node", :inputnode),
             add_unit_to_node(c0, "unit__to_node", :emissionnode)
         )
     )
-    import_rel_param_2dim(url_in, c3)
+    import_rel_param_2dim(url_in, add_unit_node_param(c0, [:unit_capacity], directory = dirname(hp_file) ) )
 
     #emissions
     c31 = add_unit_node_param_emission(c0, Dict(:investment_emission => :minimum_operating_point,

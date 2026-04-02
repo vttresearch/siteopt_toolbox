@@ -62,8 +62,11 @@ function add_nodes(stor_file, url_in, model_length::Period)
     c1 = add_object_param(c0, :node, [:demand, :balance_type, :user_representative], directory=dirname(stor_file)) 
     insertcols!(c1, 1, :Objectclass1 => "node")
 
-    import_objects(url_in, add_nodeobjects(c0))
-    import_object_param(url_in, c1)
+    # import data into DB
+    mdict = Dict{Symbol,Any}()
+    import_objects(url_in, add_nodeobjects(c0), mdict)
+    import_object_param(url_in, c1, mdict)
+    import_data(url_in, mdict)
 end
 
 main()

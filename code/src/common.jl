@@ -449,3 +449,18 @@ function bare_scenario(s::String)
         return s
     end
 end
+
+"""
+    merge_vecdicts!(d, other)
+
+    Merge dicts containing vectors. Updates d.
+"""
+function merge_vecdicts!(d, other)
+    for (k, v) in other
+        if haskey(d, k)
+            append!(d[k], v)   # in-place concatenation
+        else
+            d[k] = copy(v)     # avoid aliasing
+        end
+    end
+end

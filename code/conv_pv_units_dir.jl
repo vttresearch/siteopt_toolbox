@@ -120,27 +120,33 @@ function add_pv_units(pv_file::String, url_in, model_length::Period)
     addedparams = Dict(:min_units_on_share => 1.0, :emission_flow_capacity => 1.0)
     c0 = augment_basetable(c0, addedparams)
 
-    # start importing data
+    # unit parameters
     c1 = add_unit_param2(c0, [:unit_investment_cost, :candidate_units, :min_units_on_share, :group])
 
-    import_objects(url_in, add_unit(c0))
-    import_object_param(url_in, c1)
+    # start importing data
+    mdict = Dict{Symbol, Vector{Any}}()
+    import_objects(url_in, add_unit(c0), mdict)
+    import_object_param(url_in, c1, mdict)
     
     #unit-to-node relationships
     import_relations_2dim(url_in, 
         vcat(add_unit_to_node(c0, "unit__to_node", :basenode),
-            add_unit_to_node(c0, "unit__to_node", :emissionnode))    )
+            add_unit_to_node(c0, "unit__to_node", :emissionnode)),
+        mdict)
 
     c3 = add_unit_node_param(c0, [:unit_capacity, :vom_cost, :user_representative], directory = dirname(pv_file) )
-    import_rel_param_2dim(url_in, c3)
+    import_rel_param_2dim(url_in, c3, mdict)
     
     #emissions
     c4 = add_unit_node_param_emission(c0, Dict(:investment_emission => :minimum_operating_point,
                                                 :emission_cost => :vom_cost,
                                                 :emission_flow_capacity => :unit_capacity))
     
-    import_rel_param_2dim(url_in, c4)
+    import_rel_param_2dim(url_in, c4, mdict)
     
+    # send to db
+    import_data(url_in, mdict)
+
     # investment groups
     if !isnothing(c_invgroups)
         read_invgroups(c_invgroups, url_in)

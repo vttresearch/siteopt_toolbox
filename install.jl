@@ -21,7 +21,7 @@ end
 # create conda environment and install Spine Toolbox
 run(`conda create --name spinetb python=3.12 --yes`)
 println("Installing Spine Toolbox. This can take several minutes.")
-run(`conda run -n spinetb python -m pip install spinetoolbox`)
+run(`conda run -n spinetb python -m pip install --upgrade --force-reinstall spinedb_api==0.36.3 spinetoolbox==0.10.5`)
 
 # find python path
 buf = IOBuffer()

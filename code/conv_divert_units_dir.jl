@@ -90,9 +90,11 @@ function add_diverting_units(filename, url_in, model_length::Period)
             add_unit_node_node(c0, :divertingnode, :inputnode)
         )
 
-    import_objects(url_in, add_unit(c0))
-    import_relations_2dim(url_in,  add_unit_to_node_divunits(c0))
-    import_relations_3dim(url_in, c1)
+    # start importing data
+    mdict = Dict{Symbol, Vector{Any}}()
+    import_objects(url_in, add_unit(c0), mdict)
+    import_relations_2dim(url_in,  add_unit_to_node_divunits(c0), mdict)
+    import_relations_3dim(url_in, c1, mdict)
 
     c2  =  add_object_object_param(c0, :unit, :divertingnode, [:vom_cost],
         directory = dirname(filename))
@@ -100,8 +102,10 @@ function add_diverting_units(filename, url_in, model_length::Period)
     insertcols!(c2, 2, :Objectclass1 => "unit")
     insertcols!(c2, 3, :Objectclass2 => "node")
 
-    import_rel_param_2dim(url_in, c2)
-    import_rel_param_3dim(url_in, add_unit_node_node_param_divunits(c0))
+    import_rel_param_2dim(url_in, c2, mdict)
+    import_rel_param_3dim(url_in, add_unit_node_node_param_divunits(c0), mdict)
+    # send to db
+    import_data(url_in, mdict)
 end
 
 main()

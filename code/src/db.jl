@@ -12,6 +12,9 @@ function close_db(url_in)
     SpineInterface.close_connection(url_in)
 end
 
+function import_data(url_in, mdict)
+    SpineInterface.import_data(url_in, mdict, "import_data")
+end
 
 function replace_timeseries(d::Vector, dirname)
     for i in 1:length(d)
@@ -70,7 +73,7 @@ function loadmodel(url_in, filename)
 
 end
 
-function import_objects(url_in, df)
+function import_objects(url_in, df, mdict=nothing)
 
     if isnothing(df) 
         return
@@ -81,10 +84,15 @@ function import_objects(url_in, df)
         for r in eachrow(df)
     ]
 
-    SpineInterface.import_data(url_in, Dict(:entities => a), "testing")
+    if isnothing(mdict)
+        SpineInterface.import_data(url_in, Dict(:entities => a), "import_objects")
+    else
+        merge_vecdicts!(mdict, Dict(:entities => a))
+        return mdict
+    end
 end
 
-function import_relations_2dim(url_in, df)
+function import_relations_2dim(url_in, df, mdict=nothing)
     		
     a = [
             [r[:relationshipclass], 
@@ -92,12 +100,15 @@ function import_relations_2dim(url_in, df)
             ]
         for r in eachrow(df)
     ]
- 
-    SpineInterface.import_data(url_in, Dict(:entities => a), "testing")
+    if isnothing(mdict)        
+        SpineInterface.import_data(url_in, Dict(:entities => a), "testing")
+    else
+        merge_vecdicts!(mdict, Dict(:entities => a))
+        return mdict
+    end    
 end
 
-function import_relations_3dim(url_in, df)
-    		
+function import_relations_3dim(url_in, df, mdict=nothing)
     a = [
             [r[:relationshipclass], 
             [r[:Object1], r[:Object2], r[:Object3]],
@@ -105,12 +116,16 @@ function import_relations_3dim(url_in, df)
         for r in eachrow(df)
     ]
  
-    SpineInterface.import_data(url_in, Dict(:entities => a), "testing")
+    if isnothing(mdict)
+        SpineInterface.import_data(url_in, Dict(:entities => a), "import_relations_3dim")
+    else
+        merge_vecdicts!(mdict, Dict(:entities => a))
+        return mdict
+    end
 end
 
 
-
-function import_object_param(url_in, df)
+function import_object_param(url_in, df, mdict=nothing)
     
     # Convert values column to type Any
     df.value = convert(Vector{Any}, df.value)
@@ -135,11 +150,15 @@ function import_object_param(url_in, df)
         ]
         for r in eachrow(df)
     ]
-    SpineInterface.import_data(url_in, Dict(:parameter_values => a), "testing")
-    	
+    if isnothing(mdict)
+        SpineInterface.import_data(url_in, Dict(:parameter_values => a), "testing")
+    else
+        merge_vecdicts!(mdict,  Dict(:parameter_values => a))
+        return mdict
+    end
 end
 
-function import_rel_param_2dim(url_in, df)
+function import_rel_param_2dim(url_in, df, mdict=nothing)
     
     # Convert values column to type Any
     df.value = convert(Vector{Any}, df.value)
@@ -168,11 +187,15 @@ function import_rel_param_2dim(url_in, df)
             ]
         for r in eachrow(df)
     ]
-
-    SpineInterface.import_data(url_in, Dict(:parameter_values => a), "testing")
+    if isnothing(mdict)
+        SpineInterface.import_data(url_in, Dict(:parameter_values => a), "testing")
+    else
+        merge_vecdicts!(mdict,  Dict(:parameter_values => a))
+        return mdict
+    end
 end
 
-function import_rel_param_3dim(url_in, df)
+function import_rel_param_3dim(url_in, df,  mdict=nothing)
     
     # Convert values column to type Any
     df.value = convert(Vector{Any}, df.value)
@@ -190,7 +213,12 @@ function import_rel_param_3dim(url_in, df)
         for r in eachrow(df)
     ]
 
-    SpineInterface.import_data(url_in, Dict(:parameter_values => a), "testing")
+    if isnothing(mdict)
+        SpineInterface.import_data(url_in, Dict(:parameter_values => a), "testing")
+    else
+        merge_vecdicts!(mdict,  Dict(:parameter_values => a))
+        return mdict
+    end
 end
 
 function unparse_some_value_types(v::AbstractVector)
