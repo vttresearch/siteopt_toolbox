@@ -55,8 +55,8 @@ end
 function add_investment_group_capa(c0, url_in)
     c1 = dropmissing(c0, [:investment_group, :candidate_units], disallowmissing=true)
     c1 = select(c1,:unit, :investment_group, :alternative_name, :candidate_units)
- 
-    c1 = combine(groupby(c1, [:investment_group, :alternative_name]), :candidate_units => sum => :value)
+    # sum the capacity for each investment group
+    c1 = combine(groupby(c1, [:investment_group, :alternative_name]), :candidate_units => (x -> isempty(x) ? 0.0 : sum(x)) => :value)
     c1 = rename(c1, :investment_group => :Object1)
     insertcols!(c1, 1, :Objectclass1 => "investment_group")
     insertcols!(c1, 3, :parameter_name => "maximum_entities_invested_available")
@@ -72,7 +72,7 @@ end
 function read_invgroups(c_invgroups, url_in)
     c_invgroups = transform(c_invgroups, [:block_identifier, :name] => ByRow((x,y)->"u_" * string(x) * "_" * string(y)) => :unit )
     c_invgroups = transform(c_invgroups, [:group] => ByRow(x -> "ig_" * string(x) ) => :investment_group )
-    c_invgroups.candidate_units = Float64.(c_invgroups.candidate_units)
+    c_invgroups.candidate_units = convert.(Union{Missing,Float64}, c_invgroups.candidate_units)
     add_investment_group(c_invgroups, url_in)
     add_unit_investment_group(c_invgroups, url_in)
     add_investment_group_capa(c_invgroups, url_in)
