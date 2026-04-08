@@ -387,6 +387,30 @@
                     "input with repr periods",
                     "left"
                 ],
+                "options": {
+                    "purge_before_writing": true,
+                    "purge_settings": {
+                        "alternative": true,
+                        "scenario": true,
+                        "scenario_alternative": true,
+                        "entity_class": true,
+                        "display_mode": true,
+                        "entity_class_display_mode": true,
+                        "superclass_subclass": true,
+                        "entity": true,
+                        "entity_group": true,
+                        "entity_alternative": true,
+                        "parameter_value_list": true,
+                        "list_value": true,
+                        "parameter_definition": true,
+                        "parameter_type": true,
+                        "parameter_value": true,
+                        "metadata": true,
+                        "entity_metadata": true,
+                        "parameter_value_metadata": true,
+                        "entity_location": true
+                    }
+                },
                 "filter_settings": {
                     "auto_online": true,
                     "enabled_filter_types": {
