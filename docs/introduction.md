@@ -169,11 +169,18 @@ Column    | Required | Description
 investment_emission |  | The hourly carbon dioxide emission arising from one subunit (e.g. kg/hour)
 emission_cost |  | The cost of these carbon dioxide emissions (e.g. €/kg)
 
-If you wish to define parameter values for different alternatives, add a separate row for each unit and alternative.
+If you wish to define parameter values for different alternatives, add a separate row for each unit and alternative. Below you can see an example of what the renewable production units table can look like. In this example, the unit is producting electricity and the capacity factor (production profile) is given as time series (in a CSV file). The cost of one subunit is 100 monetary units per year and the maximum number of subunits is 40.
+
+Table: Example renewable units table
+
+|block_identifier  | grid | name | alternative_name | unit_capacity | unit_investment_cost | candidate_units | representative_unit |
+|------------------|------|------|-----------------|------------|------------|-----------|-----------|
+|b1 | elec | basic_pv | Base | ts:pv | 100 | 40 | |
 
 !!! info "Important Information"
     In Siteopt the user should decide the units of measurement. For example the user for power can be kW or MW. Currency unit can be € or Norwegian krone. Any any case, units should be used consistently. 
 	
+
 ### Heat pumps and chiller units table
 
 In **hp_units.xlsx** the user defines heat pumps and chillers. Unlike renewable generation units (defined in **pv_units.xlsx**) these technologies require electricity to operate.
@@ -326,22 +333,44 @@ The Siteopt inputs need to be translated to a format which is understood by the 
 
 - Close the input Excel files
 - Observe the Design view window in the toolbox
-- Using left mouse button held, select everything to the left of the pink ”Input data” box (see figure) 
+- Using left mouse button held, select everything to the left of the pink ”Input data” box (see figure). It does not matter if you select the blue components or not.
 - In the top toolbox press Execute Selection
 - Wait until all the hammer tools have a green check mark
 - Red cross in tool icon means an error
+
+Figure: To create the input database for optimization, select the red and burgundy components to the left of the Input data by using left mouse button held. {#fig-input-prepa}
+
+![Siteopt input preparation selection](images/toolbox_input_prepa.png){width="400"}
+
+Figure: The button used to execute the selected component(s) is "execute selection". {#fig-toolbox-execute}
+
+![Toolbox execute toolbar](images/toolbox_execute_toolbar.png){width="300"}
 
 Building the database can take several minutes.
 
 ### Running representative periods selection
 
-Representative periods are a way to simplify long‑term energy system studies without losing the big picture. Instead of simulating every hour of an entire year — which would be extremely heavy to compute — the year is broken into a small number of “typical” days that capture the main patterns in demand and renewable generation. Think of it like choosing a few key scenes from a movie that still let you understand the whole story. In Siteopt, you can either use representative periods or not. If you decide to use them, 
+Representative periods are a way to simplify long‑term energy system studies without losing the big picture. Instead of simulating every hour of an entire year — which would be extremely heavy to compute — the year is broken into a small number of “typical” days that capture the main patterns in demand and renewable generation. Think of it like choosing a few key scenes from a movie that still let you understand the whole story. In Siteopt, you can either use representative periods or not. If you decide to use them, select and run (press Execute selection) the `Select repr periods` component right of the Input data.
+
+Figure: To select representative periods, select the `Select repr periods` component right of the Input data by using left mouse button. {#fig-repre-periods}
+
+![Siteopt represenative periods selection](images/toolbox_repre_selection.png){width="400"}
 
 
 ### Running optimization
 
-Optimization of the model can be started by selecting the "Optimize" tool in Toolbox and clicking "Execute selection" in the toolbar.
+Optimization of the model can be started by selecting the `Optimize` tool in Toolbox and clicking "Execute selection" in the toolbar. Before this, click the data path coming to the `Optimize` tool from the left. In the link properties window you can now see the scenarios which are selected for optimization. Select the ones you want. If the properties window is not visible, select View menu -> Dock widgets->Link properties.
+
+Figure: To optimize, select the `Optimize` component using left mouse button. {#fig-optimize}
+
+![Siteopt optimization](images/toolbox_optim.png){width="400"}
 
 Running the optimization can take anything from a few minutes to tens of minutes. Reducing the number of nodes and optimized units as well as increasing time resolution can reduce the running time.
+
+You can also select the `Extract results` component, which builds an Excel summary of the results, at the same time with optimization or after it. The Excel summary can be accessed by right-clicking the `Extract results` component and selecting "Open results directory". There the results have been arranged according to the run time.
+
+## Interpreting results
+
+
 
 
