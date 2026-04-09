@@ -97,7 +97,7 @@ In the following we will go through each of the files and show how to fill them.
 
 In **nodes.xlsx** each row represents one node. However, you can give several alternative parameter values for a node, and in this case each alternative makes one row. Also, you have to define the different grids for each node. For example if cooling demand exists in a node, you have to add a row where grid is "cool".
 
-Table: Monthly Revenue
+Table: Nodes table format
 
 | Column           | Required | Description |
 |------------------|----------|-------------|
@@ -107,14 +107,23 @@ Table: Monthly Revenue
 | balance_type     |          | Can define the node as free node if "balance_type_none" is given. Normally balance accounting is forced in a node, so that energy is not created or does not disappear. "balance_type_none" disables the balance accounting. |
 | demand           |          | Demand of energy or material in the node. If constant, just input a number. If it is a timeseries, follow the notation given in section "Entering data". |
 
-Node names should be unique. However, you can use the same name in different grids. Normally the incoming flows to node must match the outgoing flows and possible demand. However, if one declares **balance_type_none** then no such condition is enforced.
+Node names should be unique. However, you can use the same name in different grids. Normally nodes keep track of energy balance. However, if one declares **balance_type_none** for balance_type then no such condition is enforced and a "free" node is created.
 
 If you wish to define values (e.g. demand) for different alternatives, add a separate row for each node and alternative. Notice that demand time series can also be inputted as shown in the next section.
 
 !!! info "Important Information"
     Write the grid names exactly the same way in all tables. 
 	
-	
+!!! info "Important Information"
+    The "balance_type_none" value for balance_type should be spelled exactly like here.
+
+Table: Example Nodes table
+
+| node           | grid | alternative_name | balance_type | demand |
+|------------------|----------|-------------|---|---|
+| n1             | elec        |  | | |
+| n2             | elec        | Base | | ts:demand2 |
+
 ### Demand data
 
 Demand data for three grids (electricity, heating and cooling) can be given in cross-tabulated CSV files. These are:
