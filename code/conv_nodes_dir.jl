@@ -49,6 +49,10 @@ function add_nodes(stor_file, url_in, model_length::Period)
     # convert column datatypes
     c0 = transform(c0, [:representative_node] => ByRow(x -> ismissing(x) ? false : true ) 
                         => :user_representative)
+    if hasproperty(c0, :free_node)
+        c0 = transform(c0, [:free_node] => ByRow(x -> ismissing(x) ? missing : "balance_type_none" ) 
+                        => :balance_type)
+    end
 
     # add alternative name if not present
     if !hasproperty(c0, :alternative_name)
