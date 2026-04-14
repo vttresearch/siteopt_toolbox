@@ -8,11 +8,13 @@ Installing the Siteopt tool takes place mostly in the command line. You can use 
 - 16 GB RAM (depending on the models which you run more can be needed)
 - network connection for installation
 
-## Miniconda
+## Installing the Siteopt for Spine Toolbox
+
+### Miniconda
 
 Install Miniconda (https://www.anaconda.com/docs/getting-started/miniconda/install). Add Miniconda to PATH variable in Windows when asked by the installer.
 
-## Julia language
+### Julia language
 
 For the time being, do not install Julia 1.12. Install Julia language version 1.10 or 1.11. See https://julialang.org/downloads/ for instructions.
 
@@ -24,13 +26,13 @@ On Windows you can install by opening command prompt (cmd) and run these command
 > juliaup default 1.10
 ```
 
-## Downloading the Siteopt tool
+### Downloading the Siteopt tool
 
 Select an empty folder in your machine. Make a **siteopt_toolbox** folder there. 
 
 Go to [https://github.com/vttresearch/siteopt_toolbox](https://github.com/vttresearch/siteopt_toolbox) and from the green "Code" icon select download zip. Unpack the zip file into the siteopt_toolbox folder. 
 
-## Running the installation script
+### Running the installation script
 
 You can use command shell such as **cmd** or **Windows Powershell** in Windows or terminal in Linux. In Windows you can type "cmd" in the address bar of Windows Explorer window where you have the **siteopt_toolbox** folder open. Otherwise you need to use "cd" to navigate to the siteopt_toolbox folder.
 
@@ -42,7 +44,7 @@ When the command shell is open, type
 
 The installation can take several minutes. You can proceed to the "Input data" part below.
 
-## Spine Toolbox installation
+### Spine Toolbox installation
 
 You can skip this part if you run the installation script.
 
@@ -76,9 +78,10 @@ The last command prints the Python interpreter path, which you should make note 
 
 Exit the command prompt.
 
-## Siteopt Julia dependencies installation
+### Siteopt Julia dependencies installation
 
-You can skip this part if you run the installation script.
+!!! info "Important Information"
+    You can skip this part if you run the installation script.
 
 Using command prompt or terminal (Linux) go to Siteopt **code** folder of siteopt_toolbox and start Julia console (type "julia" in command prompt or terminal). Do not use the same terminal which you used for Spine Toolbox installation (open a new one). 
   
@@ -101,11 +104,11 @@ Pkg.instantiate()
 
 You can now exit Julia session.
 
-## Input data
+### Input data
 
 Check that you have all the necessary input files in the **current_input** subfolder of siteopt_toolbox. Make the current_input folder if it does not exist. Download or copy your input data to the current_input folder. Ask your optimization model provider for the data. Example input data has been provided in the **example_data** folder so you can just copy the contents.
 
-## Running the Siteopt tool via Toolbox
+### Running the Siteopt tool via Toolbox
 
 Spine Toolbox provides a graphical user interface for running SpineOpt and editing databases. To run it, activate the proper Miniconda environment, which you used to install Spine Toolbox. Start Spine Toolbox by command
 
@@ -124,12 +127,3 @@ You will now see the project opened in the Toolbox window. Go to File->Settings.
 ![alt text](images/juliasettings.png "Repository URL")
 
 
-### Correcting links
-
-(This part should be done automatically later). Click the following links and make sure that in "Link properties" the scenario filter checkboxes are unchecked.
-
-- Link from Input data to Select repr periods
-- Link from Input with repr periods to Extract results
-- Link from output db to Extract results
-
-Click File->Save project.

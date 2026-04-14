@@ -311,6 +311,10 @@ For durations the data should be entered in format xU where x is an integer and 
 
 You can use Siteopt in two ways: via Spine Toolbox or via web browser. Here the first method is explained.
 
+### Introduction to Spine Toolbox
+
+Spine Toolbox is an application, which provides means to define, manage, and execute complex data processing and computation workflows, such as energy system models. It is used as the platform for Siteopt but it can be used for other purposes. For the interested user, the documentation can be found in [Spine Toolbox documentation](https://spine-toolbox.readthedocs.io/en/latest/index.html).
+
 ### Starting Siteopt
 
 When using Siteopt via Spine Toolbox first start the toolbox. Run the commands
@@ -320,12 +324,19 @@ conda activate spinetb
 spinetoolbox
 ```
 
+The first time you start the application you will see the main window like this:
+
+Figure: Spine Toolbox main window.
+
+![Spine toolbox main window](images/toolbox_window.png){width="100%"}
+
 Then inside Spine Toolbox:
 
 - Open the project folder where you have downloaded Siteopt_toolbox: File -> Open project…
 - Navigate to the folder where you have downloaded Siteopt_toolbox
 - Press Ok
 - If you get a notification to upgrade databases, just upgrade them
+- Make sure you also remembered to set Julia settings as described in Installation->Adjust toolbox settings
 
 ### Building the database for optimization
 

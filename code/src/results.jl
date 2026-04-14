@@ -14,7 +14,8 @@ Description of the return value and its type or structure.
 """
 function loadgrouping(db::String; entityclass = "unit", parameter = "unit_investment")
     b = get_parameter_values(db, entityclass, "group")
-
+    b = subset(b, :alternative => ByRow(in(["Base"])))
+    
     # grouping for unit investments
     g = Dict()
     for df in groupby(b, :value)
