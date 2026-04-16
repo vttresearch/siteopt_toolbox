@@ -154,6 +154,15 @@ function add_storages(stor_file, url_in, model_length::Period)
         insertcols!(c0, :alternative_name => "Base")
     end
 
+    # if "capacity" is given, rename to node_state_cap
+    if !hasproperty(c0, :node_state_cap)
+        if hasproperty(c0, :capacity)
+             rename!(c0, :capacity => :node_state_cap)
+        else
+            insertcols!(c0, :node_state_cap => 1.0)
+        end
+    end
+
     # adjust investment costs 
     c0.unit_investment_cost =  c0.unit_investment_cost * (model_length / Hour(8760) )
     c0.storage_investment_cost = c0.storage_investment_cost * (model_length / Hour(8760) )
