@@ -46,7 +46,12 @@ function summarizeresults(url_in::Union{String, Nothing},
                         recipe_file::String, 
                         scenario::Union{Vector{String}, Nothing})
   
-    #println(get_entities(url_out, "stochastic_scenario") )
+    a = get_entities(url_out, "stochastic_scenario") 
+    if length(a) == 0
+        error("stochastic_scenario not found!")
+    else
+        stoch_scen = a[1]
+    end
 
     # load results recipe
     recipe = JSON.parsefile(recipe_file)
@@ -61,8 +66,6 @@ function summarizeresults(url_in::Union{String, Nothing},
     db_out = export_data(url_out)
 
     if isnothing(scenario) scenario = get_alternatives(db_out) end
-        
-    println(scenario)
 
     df = DataFrame(summary = [], item = [], scenario = [], entity = [], value = [])
 
@@ -73,11 +76,11 @@ function summarizeresults(url_in::Union{String, Nothing},
                 if val2["type"] == "unit_flow_cost"
                     a = result_unit_flow_costs(url_in, url_out, val2["unit"], val2["node"], scenario)
                 elseif val2["type"] == "unit_flow"
-                    a = result_unit_flow(db_out, weight, val2["unit"], val2["node"], "parent", scenario)
+                    a = result_unit_flow(db_out, weight, val2["unit"], val2["node"], stoch_scen, scenario)
                 elseif val2["type"] == "unit_flow_ts"
-                    a = result_unit_flow(url_out, val2["unit"], val2["node"], "parent", scenario, _sum=false)
+                    a = result_unit_flow(url_out, val2["unit"], val2["node"], stoch_scen, scenario, _sum=false)
                 elseif val2["type"] == "connection_flow"
-                    a = result_connection_flow(db_out, weight, val2["connection"], val2["node"], "parent", scenario)
+                    a = result_connection_flow(db_out, weight, val2["connection"], val2["node"], stoch_scen, scenario)
                 elseif val2["type"] == "connection_flow_cost"
                     a = result_connection_flow_costs(url_in, url_out, val2["connection"], val2["node"], scenario)
                 elseif val2["type"] == "unit_investment_cost"
@@ -87,11 +90,11 @@ function summarizeresults(url_in::Union{String, Nothing},
                 elseif val2["type"] == "node_investment_cost"
                     a = result_node_investment_costs(url_in, url_out, val2["node"], scenario)
                 elseif val2["type"] == "unit_investment"
-                    a = result_unit_investment(db_out, val2["unit"], "parent", scenario)
+                    a = result_unit_investment(db_out, val2["unit"], stoch_scen, scenario)
                 elseif val2["type"] == "node_investment"
-                    a = result_node_investment(db_out, val2["node"], "parent", scenario)
+                    a = result_node_investment(db_out, val2["node"], stoch_scen, scenario)
                 elseif val2["type"] == "connection_investment"
-                    a = result_connection_investment(db_out, val2["connection"], "parent", scenario)
+                    a = result_connection_investment(db_out, val2["connection"], stoch_scen, scenario)
                 elseif val2["type"] == "total_costs"
                     a = result_total_cost(db_out, scenario)
                 else

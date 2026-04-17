@@ -399,7 +399,7 @@ On top of the window, you can see that there is a tab called "myex6". This is th
 Select the dataset and project name and press "Ok". The project appears as a new tab. You can remove project tab from the window by pressing the X button
 
 !!! info "Important Information"
-    You must have access to the Git repository holding these datasets to use them. 
+    You must have access to the Git repository holding the Dokken datasets to use them. 
 
 ### Editing data
 
@@ -407,7 +407,7 @@ The main window of the Siteopt web app with normally has the data and execution 
 
 - delete a row by ticking the box in front of the row and pressing `Delete selected`
 - add new rows to the bottom by pressing `Add row`
-- replace the whole file by a file on your computer by pressing first `Browser`, selecting a file of the same name, press `Open` and then `Replace`
+- replace the whole file by a file on your computer by pressing first `Browse`, selecting a file of the same name, press `Open` and then `Replace`
 - change sheets in the file from the tabs below the data table. This applied only to files which have multiple tabs, such as "modelspec.xlsx".
 - save the edited data by pressing `Save`
 
@@ -426,7 +426,7 @@ You first select a task and then press `Execute`. Before optimization you also h
 
 ### Viewing results
 
-On top of the page you can switch to Results dashboard tab. Note that you first have to have some calculated results. Otherwise the tab shows message "Run the model to generate result files."
+On top of the page you can switch to Results dashboard tab. Note that you first have to have some calculated results. Otherwise the tab shows message "Run the model to generate result files." The results are organized by scenario and optimization run time. 
 
 
 ## Interpreting results
