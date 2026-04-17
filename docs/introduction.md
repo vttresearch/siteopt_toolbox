@@ -254,7 +254,6 @@ The storage table is more complex than the other tables because the power conver
 At the time diverting units are mostly used for internal accounting purposes of the optimization model because the underlying SpineOpt model does not account for emissions. Nothing prevents their use by the user. The user should, however, tolerate the bit more complex notation used for these units.
 
 
-
 ### Modelspec table
 
 The **modelspec.xlsx** file contains five sheets but only two of them are normally needed by the user. **params_1d_datetime** contain the following data about the model time horizon:
@@ -351,7 +350,7 @@ The Siteopt inputs need to be translated to a format which is understood by the 
 
 Figure: To create the input database for optimization, select the red and burgundy components to the left of the Input data by using left mouse button held. {#fig-input-prepa}
 
-![Siteopt input preparation selection](images/toolbox_input_prepa.png){width="400"}
+![Siteopt input preparation selection](images/toolbox_input_prepa.png){width="95%"}
 
 Figure: The button used to execute the selected component(s) is "execute selection". {#fig-toolbox-execute}
 
@@ -379,6 +378,56 @@ Figure: To optimize, select the `Optimize` component using left mouse button. {#
 Running the optimization can take anything from a few minutes to tens of minutes. Reducing the number of nodes and optimized units as well as increasing time resolution can reduce the running time.
 
 You can also select the `Extract results` component, which builds an Excel summary of the results, at the same time with optimization or after it. The Excel summary can be accessed by right-clicking the `Extract results` component and selecting "Open results directory". There the results have been arranged according to the run time.
+
+## Using Siteopt via the Siteopt web app
+
+The Siteopt web app provides a more intuitive user interface for Siteopt. It is used via a web browser. The installation steps have been explained in the installation section of the documentation. In the figure below you can see the application window.
+
+
+Figure: The main window of the Siteopt web app with the data and execution tab open. {#fig-webapp-mainwin}
+
+![Basic example](images/webapp_mainwin.png){width="95%"}
+
+### Creating projects
+
+On top of the window, you can see that there is a tab called "myex6". This is the project name. You can have many projects, each with their own set of input data and results. You can create a new project by pressing the `New project` button. The program asks which dataset you want to copy as basis. The options are:
+
+- Dokken dataset describing Elexia Dokken pilot;
+- Dokken light dataset describing Elexia Dokken pilot (a more compact dataset resulting in a smaller model and shorter run times)
+- small example dataset useful for learning
+
+Select the dataset and project name and press "Ok". The project appears as a new tab. You can remove project tab from the window by pressing the X button
+
+!!! info "Important Information"
+    You must have access to the Git repository holding these datasets to use them. 
+
+### Editing data
+
+The main window of the Siteopt web app with normally has the data and execution tab open. This tab contains two panes: Data editor and Execution. Data editor lets you view and edit the input data files in the project. These are precisely the files described above. For example, to edit VRE production units, click `Production` button and select "pv-input.xlsx". The Excel file opens in the editor and you can make changes. You can:
+
+- delete a row by ticking the box in front of the row and pressing `Delete selected`
+- add new rows to the bottom by pressing `Add row`
+- replace the whole file by a file on your computer by pressing first `Browser`, selecting a file of the same name, press `Open` and then `Replace`
+- change sheets in the file from the tabs below the data table. This applied only to files which have multiple tabs, such as "modelspec.xlsx".
+- save the edited data by pressing `Save`
+
+### Running the model
+
+Execution tab lists tasks which you can perform ("Task to execute"). These include:
+
+- Prepare input data: Siteopt inputs need to be translated to a format which is understood by the optimization model. This task builds the input database.
+- Optimize full period: performs optimization using the full model horizon defined in modelspec.xslx. Especially for bigger models this can take 10–20 minutes or even more.
+- Optimize full period: select samples from the full model horizon defined in modelspec.xslx and then perform optimization. This is normally the faster but less accurate option.
+
+You first select a task and then press `Execute`. Before optimization you also have to select one or more scenarios. During execution the progress bar tracks the execution stage. 
+
+`Purge Output Db` clears the results database to remove clutter and save space.
+
+
+### Viewing results
+
+On top of the page you can switch to Results dashboard tab. Note that you first have to have some calculated results. Otherwise the tab shows message "Run the model to generate result files."
+
 
 ## Interpreting results
 

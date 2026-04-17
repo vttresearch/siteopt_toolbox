@@ -133,6 +133,10 @@ function add_storages(stor_file, url_in, model_length::Period)
     #read basic info
     c0 = DataFrame(XLSX.readtable(stor_file, "Sheet1") )
    
+    # for missing types assume it is an electricity storage
+     c0 = transform(c0, [:type] => ByRow(x -> ismissing(x) ?  "elec" : string(x) ) 
+            => :type )
+
     # storage unit name
     c0 = transform(c0, [:type, :block_identifier] => 
         ByRow((a,b) -> ifelse(a=="elec", "u_"*string(b)*"_stocharger", "u_"*string(b)*"_heatstocharger")) => :unit )

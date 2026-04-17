@@ -39,20 +39,21 @@ end
 """
 function add_hp_units(hp_file, url_in, model_length::Period)
 
-    #output file names
-    outfile1 = "hp_units.xlsx"
-
+ 
     #read basic info
     c0 = DataFrame(XLSX.readtable(hp_file, "Sheet1") )
 
     # create unit and node names
     c0 = transform(c0, [:type, :block_identifier] => 
-        ByRow((a,b)->ifelse(a=="cool","u_"*string(b)*"_chiller","u_"*string(b)*"_hp")) => :unit )
+        #ByRow((a,b) -> ifelse(a=="cool", "u_" * string(b) * "_chiller","u_"*string(b)*"_hp")) => :unit )
+        ByRow((a,b) -> "u_" * string(b) * "_" * string(a) * "unit") => :unit )
     c0 = transform(c0, [:block_identifier] => ByRow(x->"n_"*string(x)*"_elec") => :inputnode )
     c0 = transform(c0, [:type, :block_identifier] => 
         ByRow((a,b) -> "n_" * string(b) * "_" * string(a)) => :basenode )
-    c0 = transform(c0, [:emissionnode] => ByRow(x -> ismissing(x) ?  missing : "n_" * string(x) ) 
+    # emission node name
+        c0 = transform(c0, [:emissionnode] => ByRow(x -> ismissing(x) ?  missing : "n_" * string(x) ) 
         => :emissionnode )
+    # default groups
     c0 = transform(c0, :type => 
         ByRow(a -> ifelse(a=="cool","chillers","heat_pumps")) => :group )
 
