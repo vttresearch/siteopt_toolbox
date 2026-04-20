@@ -161,6 +161,9 @@ function add_connections(conn_file, url_in, model_length::Period)
     c0 = transform(c0, [:grid, :node2] => ByRow(connection_node_name) => :node2)
     # connection object name
     c0 = transform(c0, [:node1, :node2] => ByRow((x,y)->"c_"*x*"__"*y) => :connection )
+    # default groups
+    c0 = transform(c0, :grid => 
+        ByRow(a -> string(a) * "_grid_connection") => :group )
 
     # add alternative name if not present
     if !hasproperty(c0, :alternative_name)
@@ -190,7 +193,7 @@ function add_connections(conn_file, url_in, model_length::Period)
     # object parameters
     c1 = add_param_connection(c0, [:connection_investment_cost,
                                 :connection_investment_variable_type,
-                                :candidate_connections])
+                                :candidate_connections, :group])
     # relationships
     c2 = add_to_from_node(c0)
     c3 = add_conn_node_node(c0)
@@ -213,8 +216,7 @@ function add_connections(conn_file, url_in, model_length::Period)
     import_rel_param_2dim(url_in, c4)
 
     # 3-dim relationship parameters
-    c5 = add_connection_n2_param(c0, c3, [:fix_ratio_out_in_connection_flow] )
-    import_rel_param_3dim(url_in, c5)
+    import_rel_param_3dim(add_connection_n2_param(c0, c3, [:fix_ratio_out_in_connection_flow] ) )
 end
 
 main()

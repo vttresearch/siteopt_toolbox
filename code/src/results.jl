@@ -46,6 +46,7 @@ function summarizeresults(url_in::Union{String, Nothing},
                         recipe_file::String, 
                         scenario::Union{Vector{String}, Nothing})
   
+    # which stochastic_scenario is used to extract results?
     a = get_entities(url_out, "stochastic_scenario") 
     if length(a) == 0
         error("stochastic_scenario not found!")
@@ -58,6 +59,7 @@ function summarizeresults(url_in::Union{String, Nothing},
 
     # built-in grouping will be added to the recipe
     g = loadgrouping(url_in)
+    merge_vecdicts!(g, loadgrouping(url_in, entityclass = "connection", parameter = "connection_investment"))
     recipe = merge(recipe, Dict("default_investment_grouping" => g))
 
     weight = prepare_tb_weight(url_in)

@@ -110,8 +110,7 @@ function add_pv_units(pv_file::String, url_in, model_length::Period)
          => ByRow((x,y) -> "n_" * string(x) * "_" * string(y)) => :basenode )   
     c0 = transform(c0, [:emissionnode] => ByRow(x -> ismissing(x) ?  missing : "n_" * string(x) ) 
                         => :emissionnode )
-    insertcols!(c0, :group => "vre_production")
-
+    insertcols!(c0, :group => "VRE_units")
 
     # adjust investment costs 
     c0.unit_investment_cost .=  c0.unit_investment_cost * (model_length / Hour(8760) )
