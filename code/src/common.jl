@@ -109,6 +109,10 @@ function extract_excel_ts_name(s)
 
 end
 
+function starts_with_brace(s::String)
+    return occursin(r"^\s*\{", s)
+end
+
 """
     load_table_timeser_values(c1, directory;col= :value)
 
@@ -394,7 +398,7 @@ function add_unit_to_node(c0, relclass::String, col::Symbol)
     insertcols!(c1, 1, :relationshipclass => relclass)
     insertcols!(c1, 2, :Objectclass1 => "unit")
     insertcols!(c1, 3, :Objectclass2 => "node")
-    return unique(c1)
+    return unique(dropmissing(c1))
 end
 
 function add_object_object(c0, relclass::String, oc1, oc2, object1::Symbol, object2::Symbol)

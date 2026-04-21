@@ -71,8 +71,8 @@ function add_hp_units(hp_file, url_in, model_length::Period)
     c0.unit_investment_cost .=  c0.unit_investment_cost * (model_length / Hour(8760) )
      
     # add input ratio for source node
-    #c0 = transform(c0, :cop_profile => ByRow((x -> x / (x-1) => :source_ratio)))
-
+    c0 = transform(c0, :cop_profile => ByRow(passmissing(x -> x / (x-1))) => :source_ratio)
+    println(c0)
     # add min share of online units for emissions to work
     addedparams = Dict(:min_units_on_share => 1.0, :emission_flow_capacity => 1.0)
     c0 = augment_basetable(c0, addedparams)
@@ -86,6 +86,7 @@ function add_hp_units(hp_file, url_in, model_length::Period)
     import_relations_2dim(url_in,  
         vcat(add_unit_to_node(c0, "unit__to_node", :basenode),
             add_unit_to_node(c0, "unit__from_node", :inputnode),
+            add_unit_to_node(c0, "unit__from_node", :sourcenode),
             add_unit_to_node(c0, "unit__to_node", :emissionnode)
         )
     )
@@ -105,7 +106,10 @@ function add_hp_units(hp_file, url_in, model_length::Period)
                         )
     #unit-node-node relationships for source
     import_relations_3dim(url_in, add_unit_node_node(c0, :basenode, :sourcenode))
-
+    import_rel_param_3dim(url_in, 
+                        add_unit_node_node_param(rename(c0, :source_ratio => :fix_ratio_out_in_unit_flow), 
+                        :sourcenode, [:fix_ratio_out_in_unit_flow], directory = dirname(hp_file))
+                        )
 end
 
 main()
