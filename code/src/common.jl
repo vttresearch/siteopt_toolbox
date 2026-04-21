@@ -69,13 +69,14 @@ function add_object_object_param(c0, object1, object2, paramcols; directory = ""
 
     # text values which start with ts: indicating a timeseries
     # load the corresponding timeseries into value clumn
-    c1_str = subset(c1, :value => ByRow(x -> isa(x, String) && startswith(x, "ts:")))
-    c1_str = load_table_timeser_values_old(c1_str, directory)
+    # c1_str = subset(c1, :value => ByRow(x -> isa(x, String) && startswith(x, "ts:")))
+    # c1_str = load_table_timeser_values_old(c1_str, directory)
 
-    # only numeric or string values; combine with timeseries
-    c1 = subset(c1, :value => ByRow(x -> !(isa(x, String) && startswith(x, "ts:")) ))
-    c1 = vcat(c1, c1_str)
-
+    # # only numeric or string values; combine with timeseries
+    # c1 = subset(c1, :value => ByRow(x -> !(isa(x, String) && startswith(x, "ts:")) ))
+    # c1 = vcat(c1, c1_str)
+    c1 = load_table_timeser_values(c1, directory, col = [:value])
+    
     rename!(c1, object1 => :Object1, object2 => :Object2)
    
     return c1
@@ -243,12 +244,13 @@ function add_object_param(c0, object1, paramcols; directory = "")
 
     # text values which start with ts: indicating a timeseries
     # load the corresponding timeseries into value clumn
-    c1_str = subset(c1, :value => ByRow(x -> isa(x, String) && startswith(x, "ts:")))
-    c1_str = load_table_timeser_values_old(c1_str, directory)
+    # c1_str = subset(c1, :value => ByRow(x -> isa(x, String) && startswith(x, "ts:")))
+    # c1_str = load_table_timeser_values_old(c1_str, directory)
 
-    # only numeric or string values; combine with timeseries
-    c1 = subset(c1, :value => ByRow(x -> !(isa(x, String) && startswith(x, "ts:")) ))
-    c1 = vcat(c1, c1_str)
+    # # only numeric or string values; combine with timeseries
+    # c1 = subset(c1, :value => ByRow(x -> !(isa(x, String) && startswith(x, "ts:")) ))
+    # c1 = vcat(c1, c1_str)
+    c1 = load_table_timeser_values(c1, directory, col = [:value])
 
     rename!(c1, object1 => :Object1)
     return c1
