@@ -330,8 +330,8 @@ function add_object_object_object(c0, relclass::String, oc1, oc2, oc3, object1::
     insertcols!(c1, 1, :relationshipclass => relclass)
     insertcols!(c1, 2, :Objectclass1 => oc1)
     insertcols!(c1, 3, :Objectclass2 => oc2)
-    insertcols!(c1, 3, :Objectclass3 => oc3)
-    return c1
+    insertcols!(c1, 4, :Objectclass3 => oc3)
+    return unique(dropmissing(c1))
 end
 
 function add_unit_node_node(c0, node1::Symbol, node2::Symbol)
