@@ -70,7 +70,7 @@ function add_object_object_param(c0, object1, object2, paramcols; directory = ""
     # text values which start with ts: indicating a timeseries
     # load the corresponding timeseries into value clumn
     c1_str = subset(c1, :value => ByRow(x -> isa(x, String) && startswith(x, "ts:")))
-    c1_str = load_table_timeser_values(c1_str, directory)
+    c1_str = load_table_timeser_values_old(c1_str, directory)
 
     # only numeric or string values; combine with timeseries
     c1 = subset(c1, :value => ByRow(x -> !(isa(x, String) && startswith(x, "ts:")) ))
@@ -81,7 +81,88 @@ function add_object_object_param(c0, object1, object2, paramcols; directory = ""
     return c1
 end
 
-function load_table_timeser_values(c1_str, directory)
+"""
+    extract_excel_ts_name(s)
+
+    Extracts the timeseries parameters from excel cell input of form
+    ts:{id, column}, where id points to the timeseries csv file name and
+    column to the value column. Alternatively, ts:id is accepted if just "value" 
+    column is present in the data file.
+    returns: Tuple (id, column), or String id.
+"""
+function extract_excel_ts_name(s)
+
+     # define time series file names
+    prefix = "ts:"
+
+    if !startswith(string(s), prefix) return missing end
+
+    # remove prefix
+    s = string(s)[length(prefix)+1:end] 
+
+    if starts_with_brace(s)
+        id, col = parse_braced_pair(s)
+        return (string(id), string(col))
+    else
+        return s
+    end
+
+end
+
+"""
+    load_table_timeser_values(c1, directory;col= :value)
+
+    `c1`:: DataFrame the data table
+    `directory`::String directory of timeseries data
+
+    Converts strings in the data table formatted in special way into TimeSeries
+    by loading the data from disk. 
+
+    returns: updated data table
+
+"""
+function load_table_timeser_values(c1, directory; col::Union{Symbol, Vector{Symbol}} = :value)
+    
+    # Normalize to a vector for consistent processing
+    col = isa(col, Symbol) ? [col] : col
+    return  load_table_timeser_values(c1, directory, col)
+end
+
+function load_table_timeser_values(c1, folder, col::Symbol)
+    # define time series file names
+    prefix = "ts:"
+
+    if col == "tstype" error("column name not accepted") end
+
+    # Remove the substring from the beginning of each string
+    c1[:,:tstype] = [extract_excel_ts_name(x) for x in c1[:,col]]
+    types = unique(skipmissing(c1[:,:tstype]) )
+
+    #load timeseries
+    timeser = Dict()
+    for type in types
+        if isa(type, Tuple{String,String})
+            timeser[type] = read_timeseries(folder, type[1], type[2])
+        else
+            timeser[type] = read_timeseries(folder, type)
+        end
+    end
+
+    # replace values by timeseries
+    c1 = transform(c1, [col, :tstype] => ByRow((x,y) -> ismissing(y) ? x : timeser[y] ) =>  col)
+    select!(c1, Not(:tstype))
+    return c1
+end
+
+function load_table_timeser_values(c1, directory, cols::Vector{Symbol})
+
+    for col in cols
+        c1 = load_table_timeser_values(c1, directory, col)
+    end
+    return c1
+end
+
+function load_table_timeser_values_old(c1_str, directory)
     
     # define time series file names prefix
     prefix = "ts:"
@@ -99,7 +180,6 @@ function load_table_timeser_values(c1_str, directory)
 
     select!(c1_str, Not(:tstype))
     return c1_str
-
 end
 
 """
@@ -160,7 +240,7 @@ function add_object_param(c0, object1, paramcols; directory = "")
     # text values which start with ts: indicating a timeseries
     # load the corresponding timeseries into value clumn
     c1_str = subset(c1, :value => ByRow(x -> isa(x, String) && startswith(x, "ts:")))
-    c1_str = load_table_timeser_values(c1_str, directory)
+    c1_str = load_table_timeser_values_old(c1_str, directory)
 
     # only numeric or string values; combine with timeseries
     c1 = subset(c1, :value => ByRow(x -> !(isa(x, String) && startswith(x, "ts:")) ))
