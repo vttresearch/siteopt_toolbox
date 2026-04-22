@@ -56,7 +56,7 @@ function add_object_object_param(c0, object1, object2, paramcols; directory = ""
     requested_cols = vcat(paramcols, [:alternative_name])
     existing_columns = intersect(requested_cols, Symbol.(names(c0)))
     c1 = select(c0, object1, object2, existing_columns)
-
+    println(c1)
     # add alternative name if not present
     if !hasproperty(c1, :alternative_name)
         insertcols!(c1, :alternative_name => "Base")
@@ -112,8 +112,9 @@ function add_unit_node_node_param(c0, node2, paramcols; directory = "")
 
     c1 = add_unit_node_param(c0, paramcols, directory = directory)
     c1[:, :relationshipclass] .= "unit__node__node"
-    c2 = select(c0, :unit => :Object1, node2 => :Object3)
-    c1 = innerjoin(c1, c2, on = :Object1)
+
+    c2 = select(c0, :unit => :Object1, node2 => :Object3, :alternative_name)
+    c1 = innerjoin(c1, c2, on = [:Object1, :alternative_name])
     insertcols!(c1, 4, :Objectclass3 => "node")
     c1 = select(c1, :relationshipclass, :Objectclass1, :Objectclass2, :Objectclass3,
                 :Object1, :Object2, :Object3, :parameter_name, 
