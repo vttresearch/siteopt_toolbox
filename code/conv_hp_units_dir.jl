@@ -39,7 +39,6 @@ end
 """
 function add_hp_units(hp_file, url_in, model_length::Period)
 
- 
     #read basic info
     c0 = DataFrame(XLSX.readtable(hp_file, "Sheet1") )
 
@@ -80,8 +79,10 @@ function add_hp_units(hp_file, url_in, model_length::Period)
     import_rel_param_2dim(url_in, add_unit_node_param(c0, [:unit_capacity], directory = dirname(hp_file) ) )
 
     #emissions
+    c0 = augment_basetable(c0, Dict(:emission_type => "co2"))
     import_rel_param_2dim(url_in, add_unit_node_param_emission(c0, Dict(:investment_emission => :minimum_operating_point,
                                                 :emission_cost => :vom_cost,
+                                                :emission_type => :group,
                                                 :emission_flow_capacity => :unit_capacity))
                         )
 

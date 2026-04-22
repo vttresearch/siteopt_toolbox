@@ -12,7 +12,8 @@ turns makes group member lists.
 # Returns
 Description of the return value and its type or structure.
 """
-function loadgrouping(db::String; entityclass = "unit", parameter = "unit_investment")
+function loadgrouping(db::String; entityclass = "unit",
+                        parameter = "unit_investment")
     b = get_parameter_values(db, entityclass, "group")
     b = subset(b, :alternative => ByRow(in(["Base"])))
     
@@ -24,6 +25,23 @@ function loadgrouping(db::String; entityclass = "unit", parameter = "unit_invest
         end
     end
 
+    return g
+end
+
+function loadgrouping_2dim(db::String; entityclass = "unit__to_node",
+                        parameter = "unit_flow", resultdims = ["unit", "node"])
+    b = get_parameter_values(db, entityclass, "group")
+    b = subset(b, :alternative => ByRow(in(["Base"])))
+
+    # grouping for 2-dim entities
+    g = Dict()
+    for df in groupby(b, :value)
+        if !ismissing(df[1, :value])
+            g[df[1, :value]] = [Dict("type" => parameter, 
+                                resultdims[1] => u[1],
+                                resultdims[2] => u[2]) for u in df[:, :entity]]
+        end
+    end
     return g
 end
 
@@ -57,10 +75,13 @@ function summarizeresults(url_in::Union{String, Nothing},
     # load results recipe
     recipe = JSON.parsefile(recipe_file)
 
-    # built-in grouping will be added to the recipe
+    # built-in grouping for unit will be added to the recipe
     g = loadgrouping(url_in)
+    # built-in grouping for connections will be added to the recipe
     merge_vecdicts!(g, loadgrouping(url_in, entityclass = "connection", parameter = "connection_investment"))
     recipe = merge(recipe, Dict("default_investment_grouping" => g))
+    # grouping for emission flows
+    recipe["totals"] = merge(recipe["totals"], loadgrouping_2dim(url_in))
 
     weight = prepare_tb_weight(url_in)
 

@@ -136,9 +136,11 @@ function add_pv_units(pv_file::String, url_in, model_length::Period)
     c3 = add_unit_node_param(c0, [:unit_capacity, :vom_cost, :user_representative], directory = dirname(pv_file) )
     import_rel_param_2dim(url_in, c3, mdict)
     
-    #emissions
+    # investment supply chain emissions
+    c0 = augment_basetable(c0, Dict(:emission_type => "co2"))
     c4 = add_unit_node_param_emission(c0, Dict(:investment_emission => :minimum_operating_point,
                                                 :emission_cost => :vom_cost,
+                                                :emission_type => :group,
                                                 :emission_flow_capacity => :unit_capacity))
     
     import_rel_param_2dim(url_in, c4, mdict)
