@@ -2,6 +2,7 @@ module Sines_additional
 
 using SpineInterface
 using DataFrames, CSV, XLSX
+using Missings
 
 export add_object_param
 export add_object_object
@@ -25,6 +26,7 @@ export import_rel_param_2dim
 export import_rel_param_3dim
 export get_parameter_values
 export loadmodel_nofilter
+export load_table_timeser_values
 export summarizeresults
 
 
