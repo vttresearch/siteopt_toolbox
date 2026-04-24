@@ -426,8 +426,28 @@ You first select a task and then press `Execute`. Before optimization you also h
 
 ### Viewing results
 
-On top of the page you can switch to Results dashboard tab. Note that you first have to have some calculated results. Otherwise the tab shows message "Run the model to generate result files." The results are organized by scenario and optimization run time. 
+On top of the page you can switch to Results dashboard tab. Note that you first have to have some calculated results. Otherwise the tab shows message "Run the model to generate result files." The results are organized by scenario and optimization run time. During each optimization run, results summary is produced for all the results which have been stored in the output database. This is why you may sometimes see quite many scenarios in the figures. You can clear the output database by pressing `Purge Output Db` on the Data & execution tab.
 
+Figure: The results dashborad of the Siteopt web app. {#fig-webapp-resultsdash}
+
+![Basic example](images/results_dash.png){width="95%"}
+
+The figure above shows a screenshot of the results dashboard. There is first a dropdown box for selecting the optimization run. In scenario comparison window you see the project name and the selected run time. In "Summaries" you can select three different types of figures:
+
+- Totals summary (top-level key performance metrics)
+- Default investment grouping: total optimized investment into pre-defined entity categories
+- Custom plot where you can select the categories and scenarios included.
+
+You can turn on and off the first two figures by clicking their labels in the "Summaries" selection. Clicking the custom plot label takes you to a window where you can select the categories and scenarios included.
+
+The pre-defined entity categories include as categories:
+
+- renewable energy (VRE) units (currently not broken down)
+- heat pump and chiller units
+- connections of different grids
+- storages in different grids
+
+In the results view you cannot view detailed results such as decision variable values at specific time point. However, advanced users can modify the plot figure contents by editing output_recipe.json file in the project data folder.
 
 ## Interpreting results
 
