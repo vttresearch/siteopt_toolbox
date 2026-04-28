@@ -71,7 +71,7 @@ function add_hp_units(hp_file, url_in, model_length::Period)
      
     # add input ratio for source node
     c0 = transform(c0, :cop_profile => ByRow(passmissing(x -> x / (x-1))) => :source_ratio)
-    println(c0)
+
     # add min share of online units for emissions to work
     addedparams = Dict(:min_units_on_share => 1.0, :emission_flow_capacity => 1.0)
     c0 = augment_basetable(c0, addedparams)

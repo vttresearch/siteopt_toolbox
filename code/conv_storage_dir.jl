@@ -150,7 +150,7 @@ function add_storages(stor_file, url_in, model_length::Period)
     c0 = transform(c0, [:emissionnode] => ByRow(x -> ismissing(x) ?  missing : "n_" * string(x) ) 
             => :emissionnode )
 
-    # storage unit group
+    # storage default investment unit group
     c0 = transform(c0, :type => ByRow(a -> "storage" * "_" * string(a)) => :group )
 
     # add alternative name if not present

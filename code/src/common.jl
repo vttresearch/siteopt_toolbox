@@ -56,7 +56,7 @@ function add_object_object_param(c0, object1, object2, paramcols; directory = ""
     requested_cols = vcat(paramcols, [:alternative_name])
     existing_columns = intersect(requested_cols, Symbol.(names(c0)))
     c1 = select(c0, object1, object2, existing_columns)
-    println(c1)
+   
     # add alternative name if not present
     if !hasproperty(c1, :alternative_name)
         insertcols!(c1, :alternative_name => "Base")
