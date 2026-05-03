@@ -75,12 +75,26 @@ end
 """
 function add_diverting_units(filename, url_in, model_length::Period)
 
-    #output file names
-    outfile1 = "diverting_units.xlsx"
 
     #read basic info
     c0 = DataFrame(XLSX.readtable(filename, "Sheet1") )
    
+    # add grids to node names if they have been given
+    if hasproperty(c0, :inputgrid)
+        c0 = transform(c0, [:inputgrid, :inputnode] => 
+                ByRow((a,b) -> ismissing(a) ?  "n_" * string(b) : "n_" * string(b) * "_" * string(a) ) 
+                => :inputnode )
+    end
+    if hasproperty(c0, :outputgrid)
+        c0 = transform(c0, [:outputgrid, :outputnode] => 
+                ByRow((a,b) -> ismissing(a) ?  "n_" * string(b) : "n_" * string(b) * "_" * string(a) ) 
+                => :outputnode )
+    end
+    if hasproperty(c0, :divertinggrid)
+        c0 = transform(c0, [:divertinggrid, :divertingnode] => 
+                ByRow((a,b) -> ismissing(a) ?  "n_" * string(b) : "n_" * string(b) * "_" * string(a) ) 
+                => :divertingnode )
+    end
     # create unit names
     c0 = transform(c0, [:name] => ByRow((b)->"u_"*string(b)*"_div") => :unit )
 
