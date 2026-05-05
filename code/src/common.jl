@@ -205,7 +205,7 @@ function add_unit_node_node_param(c0, node2, paramcols; directory = "")
                 :Object1, :Object2, :Object3, :parameter_name, 
                 :alternative_name, :value)
 
-    return c1
+    return unique(dropmissing(c1))
 end
 
 """
