@@ -31,6 +31,13 @@ function main()
     add_hp_units(parsed_args["arg1"], parsed_args["arg3"], model_length)
 end
 
+function hp_unitname(type, sourcegrid, blockid)
+    if ismissing(sourcegrid)
+        "u_" * string(blockid) * "_" * string(type) * "unit"
+    else
+        "u_" * string(blockid) * "_" * string(sourcegrid) * "-to-" * string(type) * "unit"
+    end
+end
 
 """
     add_hp_units(hp_file, url_in, model_length::Period)
@@ -51,9 +58,9 @@ function add_hp_units(hp_file, url_in, model_length::Period)
     c0 = load_table_timeser_values(c0, dirname(hp_file), col = [:cop_profile])
 
     # create unit and node names
-    c0 = transform(c0, [:type, :block_identifier] => 
-        #ByRow((a,b) -> ifelse(a=="cool", "u_" * string(b) * "_chiller","u_"*string(b)*"_hp")) => :unit )
-        ByRow((a,b) -> "u_" * string(b) * "_" * string(a) * "unit") => :unit )
+    c0 = transform(c0, [:type, :sourcegrid, :block_identifier] => 
+        #ByRow((a,b) -> "u_" * string(b) * "_" * string(a) * "unit") => :unit )
+        ByRow((a,b,c) ->  hp_unitname(a, b, c)) => :unit)
     # input node is electrical    
     c0 = transform(c0, [:block_identifier] => ByRow(x-> "n_" * string(x) * "_elec") => :inputnode )
     c0 = transform(c0, [:type, :block_identifier] => 
@@ -64,7 +71,7 @@ function add_hp_units(hp_file, url_in, model_length::Period)
         c0 = transform(c0, [:emissionnode] => ByRow(x -> ismissing(x) ?  missing : "n_" * string(x) ) 
         => :emissionnode )
     # default groups
-    c0 = transform(c0, :type => ByRow(a -> ifelse(a=="cool","chillers","heat_pumps")) => :group )
+    c0 = transform(c0, :type => ByRow(a -> string(a) * "_units") => :group )
 
     # adjust investment costs 
     c0.unit_investment_cost .=  c0.unit_investment_cost * (model_length / Hour(8760) )
