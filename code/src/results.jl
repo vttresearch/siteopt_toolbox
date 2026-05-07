@@ -120,6 +120,8 @@ function summarizeresults(url_in::Union{String, Nothing},
                     a = result_connection_investment(db_out, val2["connection"], stoch_scen, scenario)
                 elseif val2["type"] == "total_costs"
                     a = result_total_cost(db_out, scenario)
+                elseif val2["type"] == "variable_costs"
+                    a = result_variable_cost(db_out, scenario)
                 else
                     println("Unknown value type $(val2["type"])")
                 end
@@ -422,6 +424,24 @@ function result_total_cost(db::Union{String, Dict},
     if !isnothing(scenario)
         b = subset(b, :alternative => ByRow(in(scenario)))
     end
+    transform!(b, :value => ByRow(x -> tssum(x) ) => :value)
+    return select(b, :alternative => :scenario, :entity, :value)
+end
+
+function result_variable_cost(db::Union{String, Dict}, scenario::Union{Vector{String}, Nothing})
+
+    b = get_parameter_values(db, "report__model", "objective_variable_om_costs")
+    c = get_parameter_values(db, "report__model", "objective_connection_flow_costs")
+    select!(b, Not(:value2))
+    select!(c, Not(:value2))
+    rename!(c, :value => :value_c)
+    b = innerjoin(b, c, on = [:entity, :alternative])
+    transform!(b, [:value, :value_c] => ByRow(+) => :value)
+
+    if !isnothing(scenario)
+        b = subset(b, :alternative => ByRow(in(scenario)))
+    end
+
     transform!(b, :value => ByRow(x -> tssum(x) ) => :value)
     return select(b, :alternative => :scenario, :entity, :value)
 end
