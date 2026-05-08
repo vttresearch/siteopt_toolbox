@@ -2,6 +2,8 @@
 
 Installing the Siteopt tool takes place mostly in the command line. You can use command shell such as **cmd** or **Windows Powershell** in Windows or terminal in Linux. You need Spine Toolbox and Julia language for running the Siteopt tool. 
 
+You may also consider installing the Siteopt web application. It provides a more familiar user interface for a casual user and easy editing of several parallel projects. It is a web app, so you need to use a browser to view the site. Supported browsers are Firefox and Chrome. Other browsers may work as well but are not supported. Instructions for installing the  Siteopt web application can be found on its [Github page](https://github.com/vttresearch/siteopt_app).
+
 ## System requirements
 
 - Windows or Linux operating system

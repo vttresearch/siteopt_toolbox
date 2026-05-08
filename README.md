@@ -2,4 +2,9 @@
 
 # Siteopt tool
 
-This is the public repository for Siteopt optimization tool.
+This is the public repository for SiteOpt optimization tool. The SiteOpt tool analyses future options of integrated energy systems in a local site with several energy vectors. It is based on an existing energy system model SpineOpt and enables the design of resilient integrated energy systems to be optimized. 
+
+Documentation can be found on the [documentation page](https://vttresearch.github.io/siteopt_toolbox/).
+
+The user is also suggested to get familiar with SiteOpt web app.
+
