@@ -1,4 +1,4 @@
-# User guide
+# SiteOpt User guide
 
 ## Introduction 
 
@@ -56,6 +56,7 @@ Block | City block or other location for units. Often used interchangeably with 
 Subunit | Unit of investment for renewable generators, storages and other unit. The user decides the size of subunit. It can be one kW of installed power but also other values are possible.
 Alternative | A distinct value for certain parameters. For example there can be Base alternative for investment cost and another alternative with lower investment cost.
 Scenario | Possible realization of all parameters. Composed of one or more alternatives. For example, a scenario may manifest lower investment cost but at the same time lower energy prices.
+Representative period | A time sample from the defined model horizon which is used to cut down solving time.
 
 Siteopt allows scenario analysis. However, scenarios are inputted in a smart way so that you only need to enter the parameters which change between scenarios. There's no need to repeat every parameter value for every scenario. The following picture shows how alternatives are used to help scenario analysis.
 
@@ -68,7 +69,7 @@ In the picture the scenario "My scenario" contains two alternatives in addition 
 
 ## Preparing the input data 
 
-The input is mostly given as Microsoft Excel files. Timeseries files are given in comma separated value (CSV) format. The following input files are expected to lie in the **current_input** folder:
+The input is mostly given as Microsoft Excel files. Timeseries files are given in comma separated value (CSV) format. You can check the **example_data** subfolder and copy the files to **current_input** folder. The following input files are expected to lie in the **current_input** folder:
 
  Subfolder    | Filename |Notes
 -------------|----------|----------
@@ -85,8 +86,11 @@ The input is mostly given as Microsoft Excel files. Timeseries files are given i
    | scenarios.xlsx  |  study scenarios definition 
  
 !!! info "Important Information"
-    It is recommended that you start with an example data set an modify it as needed. 
+    It is recommended that you start with the example data set or another dataset provided by an expert user and modify it as needed. 
 
+!!! info "Important Information"
+    If you use the Siteopt web application, you do not need to manually touch the files. The web application does the file management for you. 
+	
 In addition there are two JSON files in the root folder : **repr_settings_elexia.json** and **representative_periods_template.json**. The user is normally not expected to touch these.
 
 Not all of the files are expected to containt data. In that case just leave the header row (first row) in the file. In addition to the above mentioned files, the user can also add additional timeseries as CSV files. They can be referenced from the Excel files as explained below.
@@ -104,25 +108,24 @@ Table: Nodes table format
 | node             | x        | Node name or block name |
 | grid             | x        | The type of energy transferred: "elec", "heat" or "cool" |
 | alternative_name | x        | The alternative which the given values refer to (normally "Base"). Can be left empty if no values are given. |
-| balance_type     |          | Can define the node as free node if "balance_type_none" is given. Normally balance accounting is forced in a node, so that energy is not created or does not disappear. "balance_type_none" disables the balance accounting. |
+| free_node     |          | Can define the node as free node. Normally balance accounting is forced in a node, so that energy is not created or does not disappear. An "X" disables the balance accounting. |
 | demand           |          | Demand of energy or material in the node. If constant, just input a number. If it is a timeseries, follow the notation given in section "Entering data". |
+| representative_node    |         | An "X" takes the demand timeseries into account when choosing representative periods |
 
-Node names should be unique. However, you can use the same name in different grids. Normally nodes keep track of energy balance. However, if one declares **balance_type_none** for balance_type then no such condition is enforced and a "free" node is created.
+Node names should be unique. However, you can use the same name in different grids. Normally nodes keep track of energy balance. However, if one declares **free node** then no such condition is enforced. You should use this option for nodes which act as an interface to the external world, e.g. point of common coupling.
 
 If you wish to define values (e.g. demand) for different alternatives, add a separate row for each node and alternative. Notice that demand time series can also be inputted as shown in the next section.
 
 !!! info "Important Information"
     Write the grid names exactly the same way in all tables. 
 	
-!!! info "Important Information"
-    The "balance_type_none" value for balance_type should be spelled exactly like here.
 
 Table: Example Nodes table
 
-| node           | grid | alternative_name | balance_type | demand |
-|------------------|----------|-------------|---|---|
-| n1             | elec        |  | | |
-| n2             | elec        | Base | | ts:demand2 |
+| node           | grid | alternative_name | free_node | demand | representative_node    |
+|------------------|----------|-------------|---|---|---|
+| n1             | elec        |  | | | X |
+| n2             | elec        | Base | | ts:demand2 |---|
 
 ### Demand data
 
@@ -140,7 +143,7 @@ Objectclass | x | "node" without parentheses
 Parameter_name | x | "demand" without parentheses
 alternative | x | The alternative which the given values refer to (normally "Base" without parentheses)
 time | x | Timestamp in ISO8601 format YYYY-MM-DDTHH\:mm\:SS
-n_1_elec |  | Any following columns should have header name of the node in SpineOpt format. It should be preceeded by "n_" then have the cityblock name followed by the grid name e.g. "_elec". The column then contains the actual values.
+n_1_elec |  | Any following columns should have header name of the node in SpineOpt format. It should be preceeded by "n_" then have the block name followed by the grid name e.g. "_elec". The column then contains the actual values.
 
 It is probably obvious to the user that these files are not meant to be populated manually but using spreadsheet software or other software for processing time series data. Note that you don't **need** to input demand data via these files. You can also specify timeseries in the nodes input table. In that case you need a separate file for each node and grid.
 
@@ -308,7 +311,7 @@ For durations the data should be entered in format xU where x is an integer and 
 
 ## Using Siteopt via Spine Toolbox
 
-You can use Siteopt in two ways: via Spine Toolbox or via web browser. Here the first method is explained.
+You can use Siteopt in two ways: via Spine Toolbox or via SiteOpt web application. Here the first method is explained.
 
 ### Introduction to Spine Toolbox
 
@@ -381,7 +384,7 @@ You can also select the `Extract results` component, which builds an Excel summa
 
 ## Using Siteopt via the Siteopt web app
 
-The Siteopt web app provides a more intuitive user interface for Siteopt. It is used via a web browser. The installation steps have been explained in the installation section of the documentation. In the figure below you can see the application window.
+The Siteopt web app provides a more intuitive user interface for Siteopt. It is used via a web browser. It uses the same input data as the basic SiteOpt but the data is entered via its interface (you can also import Excel files if you have them ready) The installation steps have been explained in the installation section of the documentation. In the figure below you can see the application window.
 
 
 Figure: The main window of the Siteopt web app with the data and execution tab open. {#fig-webapp-mainwin}
@@ -401,18 +404,21 @@ Select the dataset and project name and press "Ok". The project appears as a new
 !!! info "Important Information"
     When running the development version you must have access to the Git repository holding the Dokken datasets to use them. If you use the production version, the datasets are already included in your software. 
 
+If you click the hamburger icon in the top right corner of the window, you can see all your saved projects. This includes the ones which you previously closed. There you can delete projects permanantly or reopen them.
+
 ### Editing data
 
 The main window of the Siteopt web app with normally has the data and execution tab open. This tab contains two panes: Data editor and Execution. Data editor lets you view and edit the input data files in the project. These are precisely the files described above. For example, to edit VRE production units, click `Production` button and select "pv-input.xlsx". The Excel file opens in the editor and you can make changes. You can:
 
-- delete a row by ticking the box in front of the row and pressing `Delete selected`
+- edit individual cells
 - copy and paste values to/from individual cells
+- delete a row by ticking the box in front of the row and pressing `Delete selected`
 - add new rows to the bottom by pressing `Add row`
 - replace the whole file by a file on your computer by pressing first `Browse`, selecting a file of the same name, press `Open` and then `Replace`
 - change sheets in the file from the tabs below the data table. This applied only to files which have multiple tabs, such as "modelspec.xlsx".
 - save the edited data by pressing `Save` (or CTRL-S)
 
-You will notice that some cells accepts text values, others numeric values (or timeseries references preceeded by "ts:"), and still others a selection of predefined values.
+You will notice that some cells accepts text values, others numeric values (or timeseries references preceeded by "ts:"), and still others a selection of predefined values. If you make a reference to a time series, there is a button which allows you to upload the corresponding CSV file.
 
 ### Running the model
 
@@ -450,9 +456,14 @@ The pre-defined entity categories include as categories:
 - connections of different grids
 - storages in different grids
 
-In the results view you cannot view detailed results such as decision variable values at specific time point. However, advanced users can modify the plot figure contents by editing output_recipe.json file in the project data folder.
+The top-level key performance metrics include:
 
-## Interpreting results
+- total costs of the defined system
+- variable costs of the defined system (includes connection flow costs and emissions costs)
+- supply chain CO<sub>2</sub> emissions originating from plant investments
+- your project settings may have other metrics included, such as emissions related to purchased electricity
+
+In the results view you cannot view detailed results such as decision variable values at specific time point. However, advanced users can modify the plot figure contents by editing output_recipe.json file in the project data folder.
 
 
 
