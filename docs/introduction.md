@@ -106,7 +106,7 @@ Table: Nodes table format
 | Column           | Required | Description |
 |------------------|----------|-------------|
 | node             | x        | Node name or block name |
-| grid             | x        | The type of energy transferred: "elec", "heat" or "cool" |
+| grid             | x        | The type of energy or material transferred: "elec", "heat" or "cool" |
 | alternative_name | x        | The alternative which the given values refer to (normally "Base"). Can be left empty if no values are given. |
 | free_node     |          | Can define the node as free node. Normally balance accounting is forced in a node, so that energy is not created or does not disappear. An "X" disables the balance accounting. |
 | demand           |          | Demand of energy or material in the node. If constant, just input a number. If it is a timeseries, follow the notation given in section "Entering data". |
@@ -234,7 +234,10 @@ efficiency |  | Transfer efficiency (e.g. 0.95 meaning 95 %) dictates how much o
 
 ### Storages table
 
-In **storages-input.xlsx** the user defines electricity, heat and cold storages.
+In **storages-input.xlsx** the user defines electricity, heat and cold storages. The input table format is shown below.
+
+Table: Storage unit input data table format.
+
 
 Column    | Required | Description
  -------------|----------|----------
@@ -254,7 +257,23 @@ The storage table is more complex than the other tables because the power conver
 
 ### Diverting units table
 
-At the time diverting units are mostly used for internal accounting purposes of the optimization model because the underlying SpineOpt model does not account for emissions. Nothing prevents their use by the user. The user should, however, tolerate the bit more complex notation used for these units.
+Diverting units create side streams from energy or material flow. They are e.g. used for internal emission accounting purposes of the optimization model. The input table format is shown below.
+
+Table: Diverting unit input data table format.
+
+Column    | Required | Description
+ -------------|----------|----------
+name | x | Name of the unit
+inputgrid | x | Name of the grid where the input comes from
+inputnode | x | Name of the node within the input grid
+outputgrid |  | Name of the grid where the main output goes to
+outputnode | x | Name of the node within the output grid where the main output goes to
+divertinggrid | x | Name of the grid where the side stream goes to
+divertingnode | x | NName of the node where the side stream goes to
+alternative_name | x | The alternative to which the parameters apply to
+diversionfactor | x | The magnitude of the side stream compared to main input 
+vom_cost | x | The variable cost arising from the side stream 
+
 
 
 ### Modelspec table
@@ -311,7 +330,7 @@ For durations the data should be entered in format xU where x is an integer and 
 
 ## Using Siteopt via Spine Toolbox
 
-You can use Siteopt in two ways: via Spine Toolbox or via SiteOpt web application. Here the first method is explained.
+You can use Siteopt in two ways: via Spine Toolbox or via SiteOpt web application. Here the first method is explained. Refer to the installation section of the documentation to find out how to install Siteopt for Spine Toolbox.
 
 ### Introduction to Spine Toolbox
 
@@ -359,11 +378,11 @@ Figure: The button used to execute the selected component(s) is "execute selecti
 
 ![Toolbox execute toolbar](images/toolbox_execute_toolbar.png){width="300"}
 
-Building the database can take several minutes.
+Building the database can take several minutes. When all the components within your selection turn green, the database has been finished.
 
 ### Running representative periods selection
 
-Representative periods are a way to simplify long‑term energy system studies without losing the big picture. Instead of simulating every hour of an entire year — which would be extremely heavy to compute — the year is broken into a small number of “typical” days that capture the main patterns in demand and renewable generation. Think of it like choosing a few key scenes from a movie that still let you understand the whole story. In Siteopt, you can either use representative periods or not. If you decide to use them, select and run (press Execute selection) the `Select repr periods` component right of the Input data.
+Representative periods are a way to simplify long‑term energy system studies without losing the big picture. Instead of simulating every hour of an entire year — which would be extremely heavy to compute — the year is broken into a small number of “typical” days that capture the main patterns in demand and renewable generation. Think of it like choosing a few key scenes from a movie that still let you understand the whole story. In Siteopt, you can either use representative periods or not. If you decide to use them, select and run (press Execute selection) the `Select repr periods` component right of the Input data. When the `Select repr periods` component has turned green, the selection has been finished.
 
 Figure: To select representative periods, select the `Select repr periods` component right of the Input data by using left mouse button. {#fig-repre-periods}
 
@@ -386,7 +405,6 @@ You can also select the `Extract results` component, which builds an Excel summa
 
 The Siteopt web app provides a more intuitive user interface for Siteopt. It is used via a web browser. It uses the same input data as the basic SiteOpt but the data is entered via its interface (you can also import Excel files if you have them ready) The installation steps have been explained in the installation section of the documentation. In the figure below you can see the application window.
 
-
 Figure: The main window of the Siteopt web app with the data and execution tab open. {#fig-webapp-mainwin}
 
 ![Basic example](images/webapp_mainwin.png){width="95%"}
@@ -404,7 +422,7 @@ Select the dataset and project name and press "Ok". The project appears as a new
 !!! info "Important Information"
     When running the development version you must have access to the Git repository holding the Dokken datasets to use them. If you use the production version, the datasets are already included in your software. 
 
-If you click the hamburger icon in the top right corner of the window, you can see all your saved projects. This includes the ones which you previously closed. There you can delete projects permanantly or reopen them.
+If you click the hamburger icon in the top right corner of the window, you can see all your saved projects. This includes the ones which you previously closed. There you can delete projects permanently or reopen them.
 
 ### Editing data
 
@@ -418,7 +436,9 @@ The main window of the Siteopt web app with normally has the data and execution 
 - change sheets in the file from the tabs below the data table. This applied only to files which have multiple tabs, such as "modelspec.xlsx".
 - save the edited data by pressing `Save` (or CTRL-S)
 
-You will notice that some cells accepts text values, others numeric values (or timeseries references preceeded by "ts:"), and still others a selection of predefined values. If you make a reference to a time series, there is a button which allows you to upload the corresponding CSV file.
+You will notice that some cells accepts text values, others numeric values (or timeseries references preceeded by "ts:"), and still others a selection of predefined values. If you make a reference to a time series, there is a button which allows you to upload the corresponding CSV file. A wrong type of data causes the cell to be highlighted. You will also see an exclamation mark next to the file name in the data editor.
+
+Refer to the guidelines in the “Preparing input data” section for the required data‑input format.
 
 ### Running the model
 
@@ -428,7 +448,7 @@ Execution tab lists tasks which you can perform ("Task to execute"). These inclu
 - Optimize full period: performs optimization using the full model horizon defined in modelspec.xslx. Especially for bigger models this can take 10–20 minutes or even more.
 - Optimize full period: select samples from the full model horizon defined in modelspec.xslx and then perform optimization. This is normally the faster but less accurate option.
 
-You first select a task and then press `Execute`. Before optimization you also have to select one or more scenarios. During execution the progress bar tracks the execution stage. 
+You first select a task and then press `Execute`. You have to prepare input data before running optimization. You also have to prepare input data each time you make changes to the input data files. Before optimization you also have to select one or more scenarios. During execution the progress bar tracks the execution stage. 
 
 `Purge Output Db` clears the results database to remove clutter and save space.
 
@@ -437,7 +457,7 @@ You first select a task and then press `Execute`. Before optimization you also h
 
 On top of the page you can switch to Results dashboard tab. Note that you first have to have some calculated results. Otherwise the tab shows message "Run the model to generate result files." The results are organized by scenario and optimization run time. During each optimization run, results summary is produced for all the results which have been stored in the output database. This is why you may sometimes see quite many scenarios in the figures. You can clear the output database by pressing `Purge Output Db` on the Data & execution tab.
 
-Figure: The results dashborad of the Siteopt web app. {#fig-webapp-resultsdash}
+Figure: The results dashboard of the Siteopt web app. {#fig-webapp-resultsdash}
 
 ![Basic example](images/results_dash.png){width="95%"}
 
@@ -464,7 +484,5 @@ The top-level key performance metrics include:
 - your project settings may have other metrics included, such as emissions related to purchased electricity
 
 In the results view you cannot view detailed results such as decision variable values at specific time point. However, advanced users can modify the plot figure contents by editing output_recipe.json file in the project data folder.
-
-
 
 
