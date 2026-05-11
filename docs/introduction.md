@@ -322,7 +322,7 @@ You will need different types of data for different parameter indices and values
 | Duration     | 3h  | Represents a time duration. The unit can be either `Y` (for year), `M` (for month), `D` (for day), `h` (for hour), `m` (for minute), or `s` (for second). |
 | timeseries     | ts:elec7       | always begin with `ts:` |
 
-For datetimes such as time stamps the recommended format is ISO8601 (e.g. 2020-03-01T01:00). In case of timeseries, the actual timeseries data should be placed in a CSV file in the input data folder (same folder as the referencing Excel file). The file should have two columns which have column titles "time" and "value". File name should have the format ts_ + time series name + .csv. For example if you write ts:elec7 in the input data table, file name ts_elec7.csv is expected. Note that Siteopt does not make daylight saving time adjustments.
+For datetimes such as time stamps the recommended format is ISO8601 (e.g. 2020-03-01T01:00). In case of timeseries, the actual timeseries data should be placed in a CSV file (text file where column are separated by commas) in the input data folder (same folder as the referencing Excel file). If you use the SiteOpt web application, there is a button which allows you to select a CSV file on your computer and upload it. The file should have two columns which have column titles "time" and "value". File name should have the format ts_ + time series name + .csv. For example if you write ts:elec7 in the input data table, file name ts_elec7.csv is expected. Note that Siteopt does not make daylight saving time adjustments.
 
 ![Basic example](images/timeseries.svg){title="Example time series file. Columns should be separated by commas."}
 
@@ -433,9 +433,10 @@ The main window of the Siteopt web app with normally has the data and execution 
 - delete a row by ticking the box in front of the row and pressing `Delete selected`
 - add new rows to the bottom by pressing `Add row`
 - replace the whole file by a file on your computer by pressing first `Browse`, selecting a file of the same name, press `Open` and then `Replace`
-- change sheets in the file from the tabs below the data table. This applied only to files which have multiple tabs, such as "modelspec.xlsx".
+- upload a time series file in CSV format by first selecting the folder it goes to from a dropdown menu. The folder should be the same one where it is referenced. `Upload CSV` adds the file to the project.
+- change sheets in the file from the tabs below the data table. This applied only to files which have multiple sheets, such as "modelspec.xlsx".
 - save the edited data by pressing `Save` (or CTRL-S)
-
+- discard the edits by selecting some other file and clicking `discard` when prompted.
 You will notice that some cells accepts text values, others numeric values (or timeseries references preceeded by "ts:"), and still others a selection of predefined values. If you make a reference to a time series, there is a button which allows you to upload the corresponding CSV file. A wrong type of data causes the cell to be highlighted. You will also see an exclamation mark next to the file name in the data editor.
 
 Refer to the guidelines in the “Preparing input data” section for the required data‑input format.
@@ -452,6 +453,8 @@ You first select a task and then press `Execute`. You have to prepare input data
 
 `Purge Output Db` clears the results database to remove clutter and save space.
 
+!!! info "Important Information"
+    When Optimizing with full period the solution can be slow. However it is safe to use this option with the example model and other small models where there are not many nodes and the time horizon is short. 
 
 ### Viewing results
 
