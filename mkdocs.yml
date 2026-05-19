@@ -1,6 +1,6 @@
-site_name: Siteopt
+site_name: SiteOpt
 site_url: https://vttresearch.github.io/siteopt_toolbox/
-site_description: Project documentation for Siteopt
+site_description: Project documentation for SiteOpt
 site_author: VTT DOES Team
 
 repo_name: vttresearch/siteopt_toolbox
@@ -12,7 +12,7 @@ copyright: Copyright &copy; 2024 - 2026 VTT - Design and Operation of Energy Sys
 
 theme:
   name: material
-  logo: images/buildingicon.png
+  logo: images/siteoptlogo2.png
   features:
     - content.code.copy
 nav:

@@ -134,9 +134,7 @@ function load_table_timeser_values(c1, directory; col::Union{Symbol, Vector{Symb
 end
 
 function load_table_timeser_values(c1, folder, col::Symbol)
-    # define time series file names
-    prefix = "ts:"
-
+    
     if col == "tstype" error("column name not accepted") end
 
     # Remove the substring from the beginning of each string
