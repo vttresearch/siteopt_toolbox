@@ -2,32 +2,32 @@
 
 ## Introduction 
 
-Siteopt can represent detailed interactions between buildings, local energy production, storage, and the wider grid, allowing planners to explore how different technologies and operating strategies perform over time. By capturing temporal variability such as hourly demand, weather‑driven renewable output, and dynamic electricity prices, Siteopt helps identify cost‑efficient, low‑carbon solutions for heating, cooling, and electricity supply. Its modular structure also makes it easy to test future scenarios, compare investment options for sustainable district‑level energy planning.
+SiteOpt can represent detailed interactions between buildings, local energy production, storage, and the wider grid, allowing planners to explore how different technologies and operating strategies perform over time. By capturing temporal variability such as hourly demand, weather‑driven renewable output, and dynamic electricity prices, SiteOpt helps identify cost‑efficient, low‑carbon solutions for heating, cooling, and electricity supply. Its modular structure also makes it easy to test future scenarios, compare investment options for sustainable district‑level energy planning.
  
 ## Standard workflow
 
-The standard workflow for Siteopt usage can be outlined as follows:
+The standard workflow for SiteOpt usage can be outlined as follows:
 
 * Visualizing the model topology and needed entities in one's own mind or paper
-* Preparing the input data in form of excel files and CSV files
-* Moving the input files to the **current_input** folder of a Siteopt installation
-* Starting Spine Toolbox and building the model database
-* Optionally selecting representative time periods
-* Running optimization
-* Compiling result summary
+* Starting SiteOpt
+* Preparing the input data in form of tabular data (Excel files when using SiteOpt via Spine Toolbox) and CSV files
+* Building the model database
+* Running optimization and compiling result summary
 * Analyzing results
+
+As mentioned on the main page of the documentation, SiteOpt has two user interfaces, Spine Toolbox and the web application. There are small practical differences in the workflow. For example, with the web application, you input the data directly in the user interface, whereas with the Toolbox you prepare input files using Microsoft Excel or other compatible editor.
 
 ## Visualizing the model topology and needed entities
 
-It is important to understand the way energy systems are abstracted in Siteopt. Abstraction can be a bit daunting at first but it allows the Siteopt to model a wider variety of systems instead of limiting to a very restricted set of components. The key idea in the abstraction is that Siteopt uses only a few simple basic components but parameters are used to modify them so that they can resemble various real life components. Let us now see what these basic components are and what they can be used for. Let us use the following simple example system for this.
+It is important to understand the way energy systems are abstracted in SiteOpt. Abstraction can be a bit daunting at first but it allows the SiteOpt to model a wider variety of systems instead of limiting to a very restricted set of components. The key idea in the abstraction is that SiteOpt uses only a few simple basic components but parameters are used to modify them so that they can resemble various real life components. Let us now see what these basic components are and what they can be used for. Let us use the following simple example system for this.
 
 Figure: Example energy system with two loads. {#fig-energy}
 
 ![Basic example](images/basic_example.svg){title=""}
 
-In the example you can see different Siteopt components. They have been described in the table below.
+In the example you can see different SiteOpt components. Let's see what they mean. Look at the table below.
 
-Table: Siteopt components.
+Table: SiteOpt components.
 
  Component    | Example icon | Description 
 --------------|----------|----------
@@ -38,6 +38,8 @@ Connection | ![Connection icon](images/connectionicon.svg){ width="80" } | Conne
 Storage | ![Storage icon](images/storageicon.svg){ width="80" } | Storages allow energy storage. They can be storages for heat, electricity or cold.
 Diverting unit | ![Diverting icon](images/divertingicon.svg){ width="80" } | unit which produces side streams such as emissions.
 
+We see that this example system draws electrical energy from the power grid to two loads via connections. The first electrical load node further supplies a radiator unit which supplies a heat load node. The  first electrical load node is also connected to a electrical energy storage. The second electrical load node is partly supplied by a PV unit.
+
 Note that in the [example system](#fig-energy) the power grid and loads are also nodes. This is precisely what we mean by using a restricted set of components to model many different real-world items. With these components it is possible to model quite a few different systems. The user should rely on these components when visualizing the model topology. In practise, the recommended steps are:
 
 - Decide the energy vectors which are taken into account: electricity, heat or cooling
@@ -47,7 +49,9 @@ Note that in the [example system](#fig-energy) the power grid and loads are also
 
 ## Important concepts
 
-Table: Important concepts in Siteopt
+To work effectively with the system, it’s important to understand a set of core concepts that define how inputs are organized and how the optimization behaves. The following table lists these core concepts.
+
+Table: Important concepts in SiteOpt
 
 Concept   |  Description 
 --------------|----------
@@ -58,7 +62,7 @@ Alternative | A distinct value for certain parameters. For example there can be 
 Scenario | Possible realization of all parameters. Composed of one or more alternatives. For example, a scenario may manifest lower investment cost but at the same time lower energy prices.
 Representative period | A time sample from the defined model horizon which is used to cut down solving time.
 
-Siteopt allows scenario analysis. However, scenarios are inputted in a smart way so that you only need to enter the parameters which change between scenarios. There's no need to repeat every parameter value for every scenario. The following picture shows how alternatives are used to help scenario analysis.
+SiteOpt allows scenario analysis. However, scenarios are inputted in a smart way so that you only need to enter the parameters which change between scenarios. There's no need to repeat every parameter value for every scenario. The following picture shows how alternatives are used to help scenario analysis.
 
 Figure: Parameter values used in the optimization are different in each scenario. Scenarios contain alternatives in certain order. Parameters may hold a different value for each alternative. The alternative with the highest order prevails. {#fig-simple-system}
 
@@ -69,7 +73,9 @@ In the picture the scenario "My scenario" contains two alternatives in addition 
 
 ## Preparing the input data 
 
-The input is mostly given as Microsoft Excel files. Timeseries files are given in comma separated value (CSV) format. You can check the **example_data** subfolder and copy the files to **current_input** folder. The following input files are expected to lie in the **current_input** folder:
+The input is mostly given as Microsoft Excel files. Timeseries files are given in comma separated value (CSV) format. When using SiteOpt via **Toolbox**, you can check the **example_data** subfolder and copy the files to **current_input** folder. The input files in the table below are expected to lie in the **current_input** folder. When using SiteOpt via the **Web app**, you do not need to manually touch the files. The web application does the file management for you. You can edit data directly in the user interface or upload input files if you have already prepared them.
+
+Table: List of required input files for SiteOpt.
 
  Subfolder    | Filename |Notes
 -------------|----------|----------
@@ -88,14 +94,177 @@ The input is mostly given as Microsoft Excel files. Timeseries files are given i
 !!! info "Important Information"
     It is recommended that you start with the example data set or another dataset provided by an expert user and modify it as needed. 
 
-!!! info "Important Information"
-    If you use the Siteopt web application, you do not need to manually touch the files. The web application does the file management for you. 
-	
+
 In addition there are two JSON files in the root folder : **repr_settings_elexia.json** and **representative_periods_template.json**. The user is normally not expected to touch these.
 
 Not all of the files are expected to containt data. In that case just leave the header row (first row) in the file. In addition to the above mentioned files, the user can also add additional timeseries as CSV files. They can be referenced from the Excel files as explained below.
 
-In the following we will go through each of the files and show how to fill them.
+For detailed instructions on how to fill the data tables, see the section [Input data format](#input-data-format-reference).
+
+
+## Using SiteOpt via Spine Toolbox
+
+You can use SiteOpt in two ways: via Spine Toolbox or via SiteOpt web application. Here the first method is explained. Refer to the installation section of the documentation to find out how to install SiteOpt for Spine Toolbox.
+
+### Introduction to Spine Toolbox
+
+Spine Toolbox is an application, which provides means to define, manage, and execute complex data processing and computation workflows, such as energy system models. It is used as the platform for SiteOpt but it can be used for other purposes. For the interested user, the documentation can be found in [Spine Toolbox documentation](https://spine-toolbox.readthedocs.io/en/latest/index.html).
+
+### Starting SiteOpt
+
+When using SiteOpt via Spine Toolbox first start the toolbox. Run the commands
+
+```
+conda activate spinetb
+spinetoolbox
+```
+
+The first time you start the application you will see the main window like this:
+
+Figure: Spine Toolbox main window.
+
+![Spine toolbox main window](images/toolbox_window.png){width="100%"}
+
+Then inside Spine Toolbox:
+
+- Open the project folder where you have downloaded SiteOpt_toolbox: File -> Open project…
+- Navigate to the folder where you have downloaded SiteOpt_toolbox
+- Press Ok
+- If you get a notification to upgrade databases, just upgrade them
+- Make sure you also remembered to set Julia settings as described in Installation->Adjust toolbox settings
+
+### Building the database for optimization
+
+The SiteOpt inputs need to be translated to a format which is understood by the optimization model. This should be done each time you change the inputs (i.e. the Excel files described above or the time series CSV files).
+
+- Close the input Excel files
+- Observe the Design view window in the toolbox
+- Using left mouse button held, select everything to the left of the pink ”Input data” box (see figure). It does not matter if you select the blue components or not.
+- In the top toolbox press Execute Selection
+- Wait until all the hammer tools have a green check mark
+- Red cross in tool icon means an error
+
+Figure: To create the input database for optimization, select the red and burgundy components to the left of the Input data by using left mouse button held. {#fig-input-prepa}
+
+![SiteOpt input preparation selection](images/toolbox_input_prepa.png){width="95%"}
+
+Figure: The button used to execute the selected component(s) is "execute selection". {#fig-toolbox-execute}
+
+![Toolbox execute toolbar](images/toolbox_execute_toolbar.png){width="300"}
+
+Building the database can take several minutes. When all the components within your selection turn green, the database has been finished.
+
+### Running representative periods selection
+
+Representative periods are a way to simplify long‑term energy system studies without losing the big picture. Instead of simulating every hour of an entire year — which would be extremely heavy to compute — the year is broken into a small number of “typical” days that capture the main patterns in demand and renewable generation. Think of it like choosing a few key scenes from a movie that still let you understand the whole story. In SiteOpt, you can either use representative periods or not. If you decide to use them, select and run (press Execute selection) the `Select repr periods` component right of the Input data. When the `Select repr periods` component has turned green, the selection has been finished.
+
+Figure: To select representative periods, select the `Select repr periods` component right of the Input data by using left mouse button. {#fig-repre-periods}
+
+![SiteOpt represenative periods selection](images/toolbox_repre_selection.png){width="400"}
+
+
+### Running optimization
+
+Optimization of the model can be started by selecting the `Optimize` tool in Toolbox and clicking "Execute selection" in the toolbar. Before this, click the data path coming to the `Optimize` tool from the left. In the link properties window you can now see the scenarios which are selected for optimization. Select the ones you want. If the properties window is not visible, select View menu -> Dock widgets->Link properties.
+
+Figure: To optimize, select the `Optimize` component using left mouse button. {#fig-optimize}
+
+![SiteOpt optimization](images/toolbox_optim.png){width="400"}
+
+Running the optimization can take anything from a few minutes to tens of minutes. Reducing the number of nodes and optimized units as well as increasing time resolution can reduce the running time.
+
+You can also select the `Extract results` component, which builds an Excel summary of the results, at the same time with optimization or after it. The Excel summary can be accessed by right-clicking the `Extract results` component and selecting "Open results directory". There the results have been arranged according to the run time.
+
+## Using SiteOpt via the SiteOpt web app
+
+The SiteOpt web app provides a more intuitive user interface for SiteOpt. It is used via a web browser. It uses the same input data as the basic SiteOpt but the data is entered via its interface (you can also import Excel files if you have them ready) The installation steps have been explained in the installation section of the documentation. In the figure below you can see the application window.
+
+Figure: The main window of the SiteOpt web app with the data and execution tab open. {#fig-webapp-mainwin}
+
+![Basic example](images/webapp_mainwin.png){width="95%"}
+
+### Creating projects
+
+On top of the window, you can see that there is a tab called "myex6". This is the project name. You can have many projects, each with their own set of input data and results. You can create a new project by pressing the `New project` button. The program asks which dataset you want to copy as basis. The options are:
+
+- Dokken dataset describing Elexia Dokken pilot;
+- Dokken light dataset describing Elexia Dokken pilot (a more compact dataset resulting in a smaller model and shorter run times)
+- small example dataset useful for learning
+
+Select the dataset and project name and press "Ok". The project appears as a new tab. You can remove project tab from the window by pressing the X button
+
+!!! info "Important Information"
+    When running the development version you must have access to the Git repository holding the Dokken datasets to use them. If you use the production version, the datasets are already included in your software. 
+
+If you click the hamburger icon in the top right corner of the window, you can see all your saved projects. This includes the ones which you previously closed. There you can delete projects permanently or reopen them.
+
+### Editing data
+
+The main window of the SiteOpt web app with normally has the data and execution tab open. This tab contains two panes: Data editor and Execution. Data editor lets you view and edit the input data files in the project. These are precisely the files described above. For example, to edit VRE production units, click `Production` button and select "pv-input.xlsx". The Excel file opens in the editor and you can make changes. You can:
+
+- edit individual cells
+- copy and paste values to/from individual cells
+- delete a row by ticking the box in front of the row and pressing `Delete selected`
+- add new rows to the bottom by pressing `Add row`
+- replace the whole file by a file on your computer by pressing first `Browse`, selecting a file of the same name, press `Open` and then `Replace`
+- upload a time series file in CSV format by first selecting the folder it goes to from a dropdown menu. The folder should be the same one where it is referenced. `Upload CSV` adds the file to the project.
+- change sheets in the file from the tabs below the data table. This applied only to files which have multiple sheets, such as "modelspec.xlsx".
+- save the edited data by pressing `Save` (or CTRL-S)
+- discard the edits by selecting some other file and clicking `discard` when prompted.
+You will notice that some cells accepts text values, others numeric values (or timeseries references preceeded by "ts:"), and still others a selection of predefined values. If you make a reference to a time series, there is a button which allows you to upload the corresponding CSV file. A wrong type of data causes the cell to be highlighted. You will also see an exclamation mark next to the file name in the data editor.
+
+Refer to the guidelines in the “Preparing input data” section for the required data‑input format.
+
+### Running the model
+
+Execution tab lists tasks which you can perform ("Task to execute"). These include:
+
+- Prepare input data: SiteOpt inputs need to be translated to a format which is understood by the optimization model. This task builds the input database.
+- Optimize full period: performs optimization using the full model horizon defined in modelspec.xslx. Especially for bigger models this can take 10–20 minutes or even more.
+- Optimize full period: select samples from the full model horizon defined in modelspec.xslx and then perform optimization. This is normally the faster but less accurate option.
+
+You first select a task and then press `Execute`. You have to prepare input data before running optimization. You also have to prepare input data each time you make changes to the input data files. Before optimization you also have to select one or more scenarios. During execution the progress bar tracks the execution stage. 
+
+`Purge Output Db` clears the results database to remove clutter and save space.
+
+!!! info "Important Information"
+    When Optimizing with full period the solution can be slow. However it is safe to use this option with the example model and other small models where there are not many nodes and the time horizon is short. 
+
+### Viewing results
+
+On top of the page you can switch to Results dashboard tab. Note that you first have to have some calculated results. Otherwise the tab shows message "Run the model to generate result files." The results are organized by scenario and optimization run time. During each optimization run, results summary is produced for all the results which have been stored in the output database. This is why you may sometimes see quite many scenarios in the figures. You can clear the output database by pressing `Purge Output Db` on the Data & execution tab.
+
+Figure: The results dashboard of the SiteOpt web app. {#fig-webapp-resultsdash}
+
+![Basic example](images/results_dash.png){width="95%"}
+
+The figure above shows a screenshot of the results dashboard. There is first a dropdown box for selecting the optimization run. In scenario comparison window you see the project name and the selected run time. In "Summaries" you can select three different types of figures:
+
+- Totals summary (top-level key performance metrics)
+- Default investment grouping: total optimized investment into pre-defined entity categories
+- Custom plot where you can select the categories and scenarios included.
+
+You can turn on and off the first two figures by clicking their labels in the "Summaries" selection. Clicking the custom plot label takes you to a window where you can select the categories and scenarios included.
+
+The pre-defined entity categories include as categories:
+
+- renewable energy (VRE) units (currently not broken down)
+- heat pump and chiller units
+- connections of different grids
+- storages in different grids
+
+The top-level key performance metrics include:
+
+- total costs of the defined system
+- variable costs of the defined system (includes connection flow costs and emissions costs)
+- supply chain CO<sub>2</sub> emissions originating from plant investments
+- your project settings may have other metrics included, such as emissions related to purchased electricity
+
+In the results view you cannot view detailed results such as decision variable values at specific time point. However, advanced users can modify the plot figure contents by editing output_recipe.json file in the project data folder.
+
+## Input data format reference
+
+In the following we will go through each of the input files and show how to fill them.
 
 ### The nodes table
 
@@ -169,8 +338,11 @@ There are also data related to the supply chain carbon dioxide emissions of the 
 
 Column    | Required | Description
  -------------|----------|----------
+emissionnode |  | You are expected to enter the name of a free node which collects the emissions
 investment_emission |  | The hourly carbon dioxide emission arising from one subunit (e.g. kg/hour)
 emission_cost |  | The cost of these carbon dioxide emissions (e.g. €/kg)
+
+The emission nodes currently do not belong to any grid, so leave the grid column empty when defining them in the nodes table.
 
 If you wish to define parameter values for different alternatives, add a separate row for each unit and alternative. Below you can see an example of what the renewable production units table can look like. In this example, the unit is producting electricity and the capacity factor (production profile) is given as time series (in a CSV file). The cost of one subunit is 100 monetary units per year and the maximum number of subunits is 40.
 
@@ -181,7 +353,7 @@ Table: Example renewable units table
 |b1 | elec | basic_pv | Base | ts:pv | 100 | 40 | |
 
 !!! info "Important Information"
-    In Siteopt the user should decide the units of measurement. For example the user for power can be kW or MW. Currency unit can be € or Norwegian krone. Any any case, units should be used consistently. 
+    In SiteOpt the user should decide the units of measurement. For example the user for power can be kW or MW. Currency unit can be € or Norwegian krone. Any any case, units should be used consistently. 
 	
 
 ### Heat pumps and chiller units table
@@ -193,9 +365,14 @@ Column    | Required | Description
 block_identifier | x | City block name
 type | x | The type of energy produced: "heat" or "cool" without parentheses
 alternative_name | x | The alternative which the given values refer to (normally "Base" without parentheses)
+sourcegrid |  | The grid where energy is drawn from for the unit. It can be left empty if you wish to disregard the source (e.g. ambient air).
 unit_capacity | x | The capacity of one subunit (e.g. kilowatts). Normally here one enters the time series for the capacity factor of the unit.
 unit_investment_cost |  | The investment cost of one subunit as annualized cost (e.g. €/kW/year if subunit is 1 kW).
 cop_profile | x | The coefficient of performance (COP) factor (unitless)
+candidate_units |  | The maximum number of subunits which can be built.
+
+In addition there are also data related to the supply chain carbon dioxide emissions of the production units. They are defined the same way as for renewable production units.
+
 
 ### Group potentials table
 
@@ -215,7 +392,7 @@ For example, if you wish to create an aggregated investment constraint which per
 
 ### Connections table
 
-In Siteopt and SpineOpt connections are entities which can transfer energy and material from one node to another. These include power lines and pipelines. However, as Siteopt works in an abstract level, it does not require that you specify what type of real infrastructure the connection represents. Instead you enter parameters which determine how these connection behave.
+In SiteOpt and SpineOpt connections are entities which can transfer energy and material from one node to another. These include power lines and pipelines. However, as SiteOpt works in an abstract level, it does not require that you specify what type of real infrastructure the connection represents. Instead you enter parameters which determine how these connection behave.
 
 In **connections_input.xlsx** each row represents one connection entity. The header row shows what is expected on each column. The columns are as follows:
 
@@ -244,7 +421,7 @@ Column    | Required | Description
 block_identifier | x | Block name (node name).
 type | x | The type of energy produced: "heat" or "cool" 
 alternative_name | x | The alternative which the given values refer to (normally "Base")
-node_state_cap | x | Storage capacity (e.g. kWh) of one storage subunit
+capacity | x | Storage capacity (e.g. kWh) of one storage subunit
 max_charging | x | Charging capacity (e.g. kW) of one storage subunit
 max_discharging | x |Discharging capacity (e.g. kW) of one storage subunit
 demand  |  | Possible energy demand drawn directly from the storage
@@ -252,8 +429,11 @@ unit_investment_cost | x | Annualized investment cost of the charger/discharger 
 storage_investment_cost | x | Annualized investment cost of storage section (per subunit)
 candidate_units | x | Maximum number of charger/discharger subunits
 candidate_storages | x | Maximum number of storage section subunits
+storage_investment_variable_type | x | Decides whether fractional subunits can be built.
 
 The storage table is more complex than the other tables because the power conversion section (charger and discharger) is defined separately from the actual storage. Thus an investment cost is given both from the storage **capacity** and charger **power**. These are given for one subunit on an annual basis as usual. The maximum number of subunits is be given both for the storage section and charger section. Normally it is convenient to define one subunit as kW or MW for charger and kWh or MWh for the storage section but they may also be defined e.g. according to certain battery model if it is convenient for the user.
+
+Also the storage table contains the columns related to investment emissions. See the section about production units table for instructions on how to fill them.
 
 ### Diverting units table
 
@@ -288,7 +468,7 @@ parameter_name | x | either `model_start` or `model_end`
 alternative_name | x | The alternative which the given values refer to (normally `Base`)
 parameter_value | x | The model start or end time in YYYY-MM-DDTHH\:mm\:ss format
 
-In other words, here you adjust which parts of the given time series are used for optimization. **params_1d_durations** sheet contain data about the time resolution used by optimization. Normally it contains two rows. One of the rows determines the time resolution used in the day-to-day optimization of the system. The other defines how often investments can be made. Presently Siteopt supports only a single investment for each entity, so the time resolution for investments should be longer than the model horizon.
+In other words, here you adjust which parts of the given time series are used for optimization. **params_1d_durations** sheet contain data about the time resolution used by optimization. Normally it contains two rows. One of the rows determines the time resolution used in the day-to-day optimization of the system. The other defines how often investments can be made. Presently SiteOpt supports only a single investment for each entity, so the time resolution for investments should be longer than the model horizon.
 
 Column    | Required | Description
  -------------|----------|----------
@@ -310,7 +490,7 @@ Figure: Inputting alternatives for each scenario. One first has to list each alt
 
 ![Scenario input table](images/scenariotable.png){width="400"}
 
-## Entering data
+### Entering data
 
 You will need different types of data for different parameter indices and values. The following datatypes can be entered in the input tables.
 
@@ -322,170 +502,9 @@ You will need different types of data for different parameter indices and values
 | Duration     | 3h  | Represents a time duration. The unit can be either `Y` (for year), `M` (for month), `D` (for day), `h` (for hour), `m` (for minute), or `s` (for second). |
 | timeseries     | ts:elec7       | always begin with `ts:` |
 
-For datetimes such as time stamps the recommended format is ISO8601 (e.g. 2020-03-01T01:00). In case of timeseries, the actual timeseries data should be placed in a CSV file (text file where column are separated by commas) in the input data folder (same folder as the referencing Excel file). If you use the SiteOpt web application, there is a button which allows you to select a CSV file on your computer and upload it. The file should have two columns which have column titles "time" and "value". File name should have the format ts_ + time series name + .csv. For example if you write ts:elec7 in the input data table, file name ts_elec7.csv is expected. Note that Siteopt does not make daylight saving time adjustments.
+For datetimes such as time stamps the recommended format is ISO8601 (e.g. 2020-03-01T01:00). In case of timeseries, the actual timeseries data should be placed in a CSV file (text file where column are separated by commas) in the input data folder (same folder as the referencing Excel file). If you use the SiteOpt web application, there is a button which allows you to select a CSV file on your computer and upload it. The file should have two columns which have column titles "time" and "value". File name should have the format ts_ + time series name + .csv. For example if you write ts:elec7 in the input data table, file name ts_elec7.csv is expected. Note that SiteOpt does not make daylight saving time adjustments.
 
 ![Basic example](images/timeseries.svg){title="Example time series file. Columns should be separated by commas."}
 
 For durations the data should be entered in format xU where x is an integer and U is either Y (for year), M (for month), D (for day), h (for hour), m (for minute), or s (for second). For example "60m".
-
-## Using Siteopt via Spine Toolbox
-
-You can use Siteopt in two ways: via Spine Toolbox or via SiteOpt web application. Here the first method is explained. Refer to the installation section of the documentation to find out how to install Siteopt for Spine Toolbox.
-
-### Introduction to Spine Toolbox
-
-Spine Toolbox is an application, which provides means to define, manage, and execute complex data processing and computation workflows, such as energy system models. It is used as the platform for Siteopt but it can be used for other purposes. For the interested user, the documentation can be found in [Spine Toolbox documentation](https://spine-toolbox.readthedocs.io/en/latest/index.html).
-
-### Starting Siteopt
-
-When using Siteopt via Spine Toolbox first start the toolbox. Run the commands
-
-```
-conda activate spinetb
-spinetoolbox
-```
-
-The first time you start the application you will see the main window like this:
-
-Figure: Spine Toolbox main window.
-
-![Spine toolbox main window](images/toolbox_window.png){width="100%"}
-
-Then inside Spine Toolbox:
-
-- Open the project folder where you have downloaded Siteopt_toolbox: File -> Open project…
-- Navigate to the folder where you have downloaded Siteopt_toolbox
-- Press Ok
-- If you get a notification to upgrade databases, just upgrade them
-- Make sure you also remembered to set Julia settings as described in Installation->Adjust toolbox settings
-
-### Building the database for optimization
-
-The Siteopt inputs need to be translated to a format which is understood by the optimization model. This should be done each time you change the inputs (i.e. the Excel files described above or the time series CSV files).
-
-- Close the input Excel files
-- Observe the Design view window in the toolbox
-- Using left mouse button held, select everything to the left of the pink ”Input data” box (see figure). It does not matter if you select the blue components or not.
-- In the top toolbox press Execute Selection
-- Wait until all the hammer tools have a green check mark
-- Red cross in tool icon means an error
-
-Figure: To create the input database for optimization, select the red and burgundy components to the left of the Input data by using left mouse button held. {#fig-input-prepa}
-
-![Siteopt input preparation selection](images/toolbox_input_prepa.png){width="95%"}
-
-Figure: The button used to execute the selected component(s) is "execute selection". {#fig-toolbox-execute}
-
-![Toolbox execute toolbar](images/toolbox_execute_toolbar.png){width="300"}
-
-Building the database can take several minutes. When all the components within your selection turn green, the database has been finished.
-
-### Running representative periods selection
-
-Representative periods are a way to simplify long‑term energy system studies without losing the big picture. Instead of simulating every hour of an entire year — which would be extremely heavy to compute — the year is broken into a small number of “typical” days that capture the main patterns in demand and renewable generation. Think of it like choosing a few key scenes from a movie that still let you understand the whole story. In Siteopt, you can either use representative periods or not. If you decide to use them, select and run (press Execute selection) the `Select repr periods` component right of the Input data. When the `Select repr periods` component has turned green, the selection has been finished.
-
-Figure: To select representative periods, select the `Select repr periods` component right of the Input data by using left mouse button. {#fig-repre-periods}
-
-![Siteopt represenative periods selection](images/toolbox_repre_selection.png){width="400"}
-
-
-### Running optimization
-
-Optimization of the model can be started by selecting the `Optimize` tool in Toolbox and clicking "Execute selection" in the toolbar. Before this, click the data path coming to the `Optimize` tool from the left. In the link properties window you can now see the scenarios which are selected for optimization. Select the ones you want. If the properties window is not visible, select View menu -> Dock widgets->Link properties.
-
-Figure: To optimize, select the `Optimize` component using left mouse button. {#fig-optimize}
-
-![Siteopt optimization](images/toolbox_optim.png){width="400"}
-
-Running the optimization can take anything from a few minutes to tens of minutes. Reducing the number of nodes and optimized units as well as increasing time resolution can reduce the running time.
-
-You can also select the `Extract results` component, which builds an Excel summary of the results, at the same time with optimization or after it. The Excel summary can be accessed by right-clicking the `Extract results` component and selecting "Open results directory". There the results have been arranged according to the run time.
-
-## Using Siteopt via the Siteopt web app
-
-The Siteopt web app provides a more intuitive user interface for Siteopt. It is used via a web browser. It uses the same input data as the basic SiteOpt but the data is entered via its interface (you can also import Excel files if you have them ready) The installation steps have been explained in the installation section of the documentation. In the figure below you can see the application window.
-
-Figure: The main window of the Siteopt web app with the data and execution tab open. {#fig-webapp-mainwin}
-
-![Basic example](images/webapp_mainwin.png){width="95%"}
-
-### Creating projects
-
-On top of the window, you can see that there is a tab called "myex6". This is the project name. You can have many projects, each with their own set of input data and results. You can create a new project by pressing the `New project` button. The program asks which dataset you want to copy as basis. The options are:
-
-- Dokken dataset describing Elexia Dokken pilot;
-- Dokken light dataset describing Elexia Dokken pilot (a more compact dataset resulting in a smaller model and shorter run times)
-- small example dataset useful for learning
-
-Select the dataset and project name and press "Ok". The project appears as a new tab. You can remove project tab from the window by pressing the X button
-
-!!! info "Important Information"
-    When running the development version you must have access to the Git repository holding the Dokken datasets to use them. If you use the production version, the datasets are already included in your software. 
-
-If you click the hamburger icon in the top right corner of the window, you can see all your saved projects. This includes the ones which you previously closed. There you can delete projects permanently or reopen them.
-
-### Editing data
-
-The main window of the Siteopt web app with normally has the data and execution tab open. This tab contains two panes: Data editor and Execution. Data editor lets you view and edit the input data files in the project. These are precisely the files described above. For example, to edit VRE production units, click `Production` button and select "pv-input.xlsx". The Excel file opens in the editor and you can make changes. You can:
-
-- edit individual cells
-- copy and paste values to/from individual cells
-- delete a row by ticking the box in front of the row and pressing `Delete selected`
-- add new rows to the bottom by pressing `Add row`
-- replace the whole file by a file on your computer by pressing first `Browse`, selecting a file of the same name, press `Open` and then `Replace`
-- upload a time series file in CSV format by first selecting the folder it goes to from a dropdown menu. The folder should be the same one where it is referenced. `Upload CSV` adds the file to the project.
-- change sheets in the file from the tabs below the data table. This applied only to files which have multiple sheets, such as "modelspec.xlsx".
-- save the edited data by pressing `Save` (or CTRL-S)
-- discard the edits by selecting some other file and clicking `discard` when prompted.
-You will notice that some cells accepts text values, others numeric values (or timeseries references preceeded by "ts:"), and still others a selection of predefined values. If you make a reference to a time series, there is a button which allows you to upload the corresponding CSV file. A wrong type of data causes the cell to be highlighted. You will also see an exclamation mark next to the file name in the data editor.
-
-Refer to the guidelines in the “Preparing input data” section for the required data‑input format.
-
-### Running the model
-
-Execution tab lists tasks which you can perform ("Task to execute"). These include:
-
-- Prepare input data: Siteopt inputs need to be translated to a format which is understood by the optimization model. This task builds the input database.
-- Optimize full period: performs optimization using the full model horizon defined in modelspec.xslx. Especially for bigger models this can take 10–20 minutes or even more.
-- Optimize full period: select samples from the full model horizon defined in modelspec.xslx and then perform optimization. This is normally the faster but less accurate option.
-
-You first select a task and then press `Execute`. You have to prepare input data before running optimization. You also have to prepare input data each time you make changes to the input data files. Before optimization you also have to select one or more scenarios. During execution the progress bar tracks the execution stage. 
-
-`Purge Output Db` clears the results database to remove clutter and save space.
-
-!!! info "Important Information"
-    When Optimizing with full period the solution can be slow. However it is safe to use this option with the example model and other small models where there are not many nodes and the time horizon is short. 
-
-### Viewing results
-
-On top of the page you can switch to Results dashboard tab. Note that you first have to have some calculated results. Otherwise the tab shows message "Run the model to generate result files." The results are organized by scenario and optimization run time. During each optimization run, results summary is produced for all the results which have been stored in the output database. This is why you may sometimes see quite many scenarios in the figures. You can clear the output database by pressing `Purge Output Db` on the Data & execution tab.
-
-Figure: The results dashboard of the Siteopt web app. {#fig-webapp-resultsdash}
-
-![Basic example](images/results_dash.png){width="95%"}
-
-The figure above shows a screenshot of the results dashboard. There is first a dropdown box for selecting the optimization run. In scenario comparison window you see the project name and the selected run time. In "Summaries" you can select three different types of figures:
-
-- Totals summary (top-level key performance metrics)
-- Default investment grouping: total optimized investment into pre-defined entity categories
-- Custom plot where you can select the categories and scenarios included.
-
-You can turn on and off the first two figures by clicking their labels in the "Summaries" selection. Clicking the custom plot label takes you to a window where you can select the categories and scenarios included.
-
-The pre-defined entity categories include as categories:
-
-- renewable energy (VRE) units (currently not broken down)
-- heat pump and chiller units
-- connections of different grids
-- storages in different grids
-
-The top-level key performance metrics include:
-
-- total costs of the defined system
-- variable costs of the defined system (includes connection flow costs and emissions costs)
-- supply chain CO<sub>2</sub> emissions originating from plant investments
-- your project settings may have other metrics included, such as emissions related to purchased electricity
-
-In the results view you cannot view detailed results such as decision variable values at specific time point. However, advanced users can modify the plot figure contents by editing output_recipe.json file in the project data folder.
-
 
