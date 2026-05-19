@@ -177,7 +177,9 @@ You can also select the `Extract results` component, which builds an Excel summa
 
 ## Using SiteOpt via the SiteOpt web app
 
-The SiteOpt web app provides a more intuitive user interface for SiteOpt. It is used via a web browser. It uses the same input data as the basic SiteOpt but the data is entered via its interface (you can also import Excel files if you have them ready) The installation steps have been explained in the installation section of the documentation. In the figure below you can see the application window.
+The SiteOpt web app provides a more intuitive user interface for SiteOpt. It is used via a web browser. It uses the same input data as the basic SiteOpt but the data is entered via its interface (you can also import Excel files if you have them ready) The installation steps have been explained in the installation section of the documentation. 
+
+In the figure below you can see the application window. It consists of two tabs: Data & execution and results. The Data & execution tab is for editing input data and running the tool. The results tab then presents the results as graphs. Also, on the upper level there is the project tab. Each project has its own data and results tabs. This will be explained next.
 
 Figure: The main window of the SiteOpt web app with the data and execution tab open. {#fig-webapp-mainwin}
 
@@ -198,6 +200,11 @@ Select the dataset and project name and press "Ok". The project appears as a new
 
 If you click the hamburger icon in the top right corner of the window, you can see all your saved projects. This includes the ones which you previously closed. There you can delete projects permanently or reopen them.
 
+Figure: The project selector window of the SiteOpt web app.
+
+![Project selector](images/webapp_projectselector.png){width="85%"}
+
+
 ### Editing data
 
 The main window of the SiteOpt web app with normally has the data and execution tab open. This tab contains two panes: Data editor and Execution. Data editor lets you view and edit the input data files in the project. These are precisely the files described above. For example, to edit VRE production units, click `Production` button and select "pv-input.xlsx". The Excel file opens in the editor and you can make changes. You can:
@@ -211,7 +218,12 @@ The main window of the SiteOpt web app with normally has the data and execution 
 - change sheets in the file from the tabs below the data table. This applied only to files which have multiple sheets, such as "modelspec.xlsx".
 - save the edited data by pressing `Save` (or CTRL-S)
 - discard the edits by selecting some other file and clicking `discard` when prompted.
+
 You will notice that some cells accepts text values, others numeric values (or timeseries references preceeded by "ts:"), and still others a selection of predefined values. If you make a reference to a time series, there is a button which allows you to upload the corresponding CSV file. A wrong type of data causes the cell to be highlighted. You will also see an exclamation mark next to the file name in the data editor.
+
+Figure: The data editor window of the SiteOpt web app. {#fig-webapp-editwin}
+
+![Editing window](images/webapp_editwin.png){width="95%"}
 
 Refer to the guidelines in the “Preparing input data” section for the required data‑input format.
 
