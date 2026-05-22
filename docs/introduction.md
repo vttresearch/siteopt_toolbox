@@ -112,7 +112,7 @@ Spine Toolbox is an application, which provides means to define, manage, and exe
 
 ### Starting SiteOpt
 
-When using SiteOpt via Spine Toolbox first start the toolbox. Run the commands
+When using SiteOpt via Spine Toolbox first start the toolbox. Run the commands (using Cmd or Powershell in Windows or shell in Linux)
 
 ```
 conda activate spinetb
@@ -179,6 +179,22 @@ You can also select the `Extract results` component, which builds an Excel summa
 
 The SiteOpt web app provides a more intuitive user interface for SiteOpt. It is used via a web browser. It uses the same input data as the basic SiteOpt but the data is entered via its interface (you can also import Excel files if you have them ready) The installation steps have been explained in the installation section of the documentation. 
 
+### Basics
+
+You start SiteOpt web app by first starting Docker Desktop, start command prompt in the folder where you have installed SiteOpt web app, and then run the command
+
+```
+docker compose up
+```
+
+and point your browser to **http://localhost/**. There is also a "developer version" of the tool. The starting procedure is slightly different for this. Refer to the [web app installation instructions](https://github.com/vttresearch/siteopt_app).
+
+You first enter a login page as shown below. Choose a user name and password and click `Create user`. Later you just click `Login`. There can be many users and each user has her own datasets.
+
+Figure: The login window of the SiteOpt web app. {#fig-webapp-login}
+
+![Webapp login](images/webapp_loginpage.png){width="65%"}
+
 In the figure below you can see the application window. It consists of two tabs: Data & execution and results. The Data & execution tab is for editing input data and running the tool. The results tab then presents the results as graphs. Also, on the upper level there is the project tab. Each project has its own data and results tabs. This will be explained next.
 
 Figure: The main window of the SiteOpt web app with the data and execution tab open. {#fig-webapp-mainwin}
@@ -242,6 +258,10 @@ You first select a task and then press `Execute`. You have to prepare input data
 !!! info "Important Information"
     When Optimizing with full period the solution can be slow. However it is safe to use this option with the example model and other small models where there are not many nodes and the time horizon is short. 
 
+!!! info "Important Information"
+    Remember to update input database (prepare input data) each time you make changes to the input data files. 
+	
+	
 ### Viewing results
 
 On top of the page you can switch to Results dashboard tab. Note that you first have to have some calculated results. Otherwise the tab shows message "Run the model to generate result files." The results are organized by scenario and optimization run time. During each optimization run, results summary is produced for all the results which have been stored in the output database. This is why you may sometimes see quite many scenarios in the figures. You can clear the output database by pressing `Purge Output Db` on the Data & execution tab.
@@ -271,6 +291,7 @@ The top-level key performance metrics include:
 - variable costs of the defined system (includes connection flow costs and emissions costs)
 - supply chain CO<sub>2</sub> emissions originating from plant investments
 - your project settings may have other metrics included, such as emissions related to purchased electricity
+Notice that the metrics are calculated for the model period. In other words, if you have set model_start and model_end parameters in modelspec.xlsx so that the model spans one year, then the values are calculated for one year period. Using represenative periods does not change this, although the result will be approximated.
 
 In the results view you cannot view detailed results such as decision variable values at specific time point. However, advanced users can modify the plot figure contents by editing output_recipe.json file in the project data folder.
 
@@ -297,16 +318,15 @@ Node names should be unique. However, you can use the same name in different gri
 
 If you wish to define values (e.g. demand) for different alternatives, add a separate row for each node and alternative. Notice that demand time series can also be inputted as shown in the next section.
 
-!!! info "Important Information"
-    Write the grid names exactly the same way in all tables. 
-	
+
+The table below shows an example nodes table. There we define two electrical nodes where node **n1** is an electrical bus with no demand. **n2** has demand in timeseries format, and file ts_demand2.csv should be present in the nodes folder. This timeseries is used when selecting representative periods. 
 
 Table: Example Nodes table
 
-| node           | grid | alternative_name | free_node | demand | representative_node    |
-|------------------|----------|-------------|---|---|---|
-| n1             | elec        |  | | | X |
-| n2             | elec        | Base | | ts:demand2 |---|
+| node           | grid     | alternative_name | free_node | demand | representative_node    |
+|----------------|----------|-------------|---|---|---|
+| n1             | elec     | Base        |   |   | |
+| n2             | elec     | Base        |   | ts:demand2 |-X-|
 
 ### Demand data
 
@@ -508,7 +528,7 @@ You will need different types of data for different parameter indices and values
 
 | Type        | Example |Notes|
 |-------------|----------|----------|
-| text        | n_7_elec   | use letters, numbers and underscores |
+| text        | n_7_elec   | use letters, numbers, dashes, plus-signs and underscores |
 | number     | 7.1       | scientific notation such as 1.0e3 is also allowed |
 | Datetime     | 2025-12-31T13:00:00  | Format YYYY-MM-DDTHH\:mm\:ss |
 | Duration     | 3h  | Represents a time duration. The unit can be either `Y` (for year), `M` (for month), `D` (for day), `h` (for hour), `m` (for minute), or `s` (for second). |
