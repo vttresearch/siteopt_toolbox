@@ -6,5 +6,5 @@ This is the public repository for SiteOpt optimization tool. The SiteOpt tool an
 
 Documentation can be found on the [documentation page](https://vttresearch.github.io/siteopt_toolbox/).
 
-The user is also suggested to get familiar with SiteOpt web app.
+The user is also suggested to get familiar with SiteOpt web app. It provides a more convenient integrated user interface to SiteOpt. Siteopt web application can be found on its [Github page](https://github.com/vttresearch/siteopt_app).
 

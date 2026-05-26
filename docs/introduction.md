@@ -189,7 +189,7 @@ docker compose up
 
 and point your browser to **http://localhost/**. There is also a "developer version" of the tool. The starting procedure is slightly different for this. Refer to the [web app installation instructions](https://github.com/vttresearch/siteopt_app).
 
-You first enter a login page as shown below. Choose a user name and password and click `Create user`. Later you just click `Login`. There can be many users and each user has her own datasets.
+You first enter a login page as shown below. Choose a user name and password and click `Create user`. Later you just click `Login`. There can be many users and each user has her own datasets. Logging out is possible from the upper right corner of the main window.
 
 Figure: The login window of the SiteOpt web app. {#fig-webapp-login}
 
@@ -319,7 +319,7 @@ Node names should be unique. However, you can use the same name in different gri
 If you wish to define values (e.g. demand) for different alternatives, add a separate row for each node and alternative. Notice that demand time series can also be inputted as shown in the next section.
 
 
-The table below shows an example nodes table. There we define two electrical nodes where node **n1** is an electrical bus with no demand. **n2** has demand in timeseries format, and file ts_demand2.csv should be present in the nodes folder. This timeseries is used when selecting representative periods. 
+The table below shows an example nodes table. There we define two electrical nodes where node **n1** is an electrical bus with no demand. **n2** has demand in timeseries format, and file ts_demand2.csv should be present in the nodes folder. This timeseries is used when selecting representative periods. In the alternative **newalt** the demand of node **n2** has been changed to another timeseries.
 
 Table: Example Nodes table
 
@@ -327,6 +327,7 @@ Table: Example Nodes table
 |----------------|----------|-------------|---|---|---|
 | n1             | elec     | Base        |   |   | |
 | n2             | elec     | Base        |   | ts:demand2 |-X-|
+| n2             | elec     | newalt      |   | ts:demand2b |-X-|
 
 ### Demand data
 
@@ -349,18 +350,18 @@ n_1_elec |  | Any following columns should have header name of the node in Spine
 It is probably obvious to the user that these files are not meant to be populated manually but using spreadsheet software or other software for processing time series data. Note that you don't **need** to input demand data via these files. You can also specify timeseries in the nodes input table. In that case you need a separate file for each node and grid.
 
 
-
 ### Production units table
 
 In **pv_units.xlsx** the user defines renewable generation units such as PV units and wind turbines or solar collectors.
 
+Table: Renewable production units table format
 
 Column    | Required | Description
  -------------|----------|----------
-block_identifier | x | City block name
-grid | x | The type of energy produced: "elec", "heat" or "cool" (without parentheses)
-name | x | The name of the unit, which can be the same if the unit exists in many blocks
-alternative_name | x | The alternative which the given values refer to (normally "Base" without parentheses)
+block_identifier | x | Node name
+grid | x | The type of energy produced: "elec", "heat" or "cool" (without quotation marks)
+name | x | The name of the unit, which should be different if there are different units in the same block.
+alternative_name | x | The alternative which the given values refer to (normally "Base" without quotation marks)
 unit_capacity | x | The capacity of one subunit (e.g. kilowatts). Normally here one enters the time series for the capacity factor of the unit.
 unit_investment_cost |  | The investment cost of one subunit as annualized cost (e.g. €/kW/year if subunit is 1 kW).
 candidate_units |  | The maximum number of subunits which can be built.
@@ -376,13 +377,14 @@ emission_cost |  | The cost of these carbon dioxide emissions (e.g. €/kg)
 
 The emission nodes currently do not belong to any grid, so leave the grid column empty when defining them in the nodes table.
 
-If you wish to define parameter values for different alternatives, add a separate row for each unit and alternative. Below you can see an example of what the renewable production units table can look like. In this example, the unit is producting electricity and the capacity factor (production profile) is given as time series (in a CSV file). The cost of one subunit is 100 monetary units per year and the maximum number of subunits is 40.
+If you wish to define parameter values for different alternatives, add a separate row for each unit and alternative. Below you can see an example of what the renewable production units table can look like. In this example, the unit is producting electricity and the capacity factor (production profile) is given as time series (in a CSV file). The cost of one subunit is 100 monetary units per year and the maximum number of subunits is 40 (10 subunits in alternative **newalt**).
 
 Table: Example renewable units table
 
 |block_identifier  | grid | name | alternative_name | unit_capacity | unit_investment_cost | candidate_units | representative_unit |
 |------------------|------|------|-----------------|------------|------------|-----------|-----------|
 |b1 | elec | basic_pv | Base | ts:pv | 100 | 40 | |
+|b1 | elec | basic_pv | newalt | ts:pv | 100 | 10 | |
 
 !!! info "Important Information"
     In SiteOpt the user should decide the units of measurement. For example the user for power can be kW or MW. Currency unit can be € or Norwegian krone. Any any case, units should be used consistently. 
@@ -392,11 +394,13 @@ Table: Example renewable units table
 
 In **hp_units.xlsx** the user defines heat pumps and chillers. Unlike renewable generation units (defined in **pv_units.xlsx**) these technologies require electricity to operate.
 
+Table: Heat pump and chiller table format
+
 Column    | Required | Description
  -------------|----------|----------
 block_identifier | x | City block name
-type | x | The type of energy produced: "heat" or "cool" without parentheses
-alternative_name | x | The alternative which the given values refer to (normally "Base" without parentheses)
+type | x | The type of energy produced: "heat" or "cool" without quotation marks
+alternative_name | x | The alternative which the given values refer to (normally "Base" without quotation marks)
 sourcegrid |  | The grid where energy is drawn from for the unit. It can be left empty if you wish to disregard the source (e.g. ambient air).
 unit_capacity | x | The capacity of one subunit (e.g. kilowatts). Normally here one enters the time series for the capacity factor of the unit.
 unit_investment_cost |  | The investment cost of one subunit as annualized cost (e.g. €/kW/year if subunit is 1 kW).
@@ -410,13 +414,14 @@ In addition there are also data related to the supply chain carbon dioxide emiss
 
 Normally, investments into different VRE units are independent. However, if for example they share the same area, potentials for certain groups of units can be defined. In **group_potential.xlsx** the user defines aggregated renewable unit investment potentials for PV units and wind turbines or solar collectors. 
 
+Table: Group potentials table format
 
 Column    | Required | Description
  -------------|----------|----------
-block_identifier | x | City block name
-grid | x | The type of energy produced: "elec", "heat" or "cool" (without parentheses)
+block_identifier | x | Node name
+grid | x | The type of energy produced: "elec", "heat" or "cool" (without quotation marks)
 name | x | The name of the unit, which can be the same if the unit exists in many blocks
-alternative_name | x | The alternative which the given values refer to (normally "Base" without parentheses)
+alternative_name | x | The alternative which the given values refer to (normally "Base" without quotation marks)
 group | x | The name of the group for which an investment constraint is given. Can be selected freely.
 candidate_units | x | The quantity of total invested subunits allotted to this group.
 
@@ -432,13 +437,24 @@ In **connections_input.xlsx** each row represents one connection entity. The hea
  -------------|----------|----------
 node1 | x | The originating city block of the connection.
 node2  | x | The destination city block of the connection.
-grid | x | The type of energy transferred: "elec"  (electricity), "heat" (heating) or "cool" (cooling) .
+grid | x | The type of energy transferred: "elec" (electricity), "heat" (heating) or "cool" (cooling) .
 alternative_name | x | The alternative which the given values refer to (normally "Base").
 connection_flow_cost |  | The unit cost of energy or material transfer, e.g. €/kWh.
 connection_flow_cost.mul |  | Multiplier for the unit cost of energy or material transfer, e.g. to convert between units between the model and input data.
 connection_flow_cost_reverse |  | The unit cost of energy or material transfer in reverse direction (i.e. from node 2 to node 1).
 connection_flow_cost_reverse.mul |  | Multiplier for the unit cost of energy or material transfer in reverse direction
+connection_capacity | X | Capacity of one subunit of connections. Total capacity if there are no candidate connections.
+connection_investment_cost | | Annual investment cost of one subunit of connections. Can be empty if investments are not targeted.
+candidate_connections | | Maximum number of subunits of connections which can be invested
 efficiency |  | Transfer efficiency (e.g. 0.95 meaning 95 %) dictates how much of the transfed quantity reaches the destination and how much is lost.
+
+It is important that you keep in mind the choices for capacity (e.g. connection_capacity) and energy variables (e.g. connection_flow_cost).
+
+node1 | node2 | grid | alternative_name | connection_flow_cost | connection_flow_cost.mul | connection_flow_cost_reverse | connection_flow_cost_reverse.mul | connection_capacity | connection_investment_cost | candidate_connections | efficiency
+------|--------|------|------------------|-----------------------|---------------------------|-------------------------------|-----------------------------------|----------------------|-----------------------------|------------------------|-----------
+A1    | B3     | elec | Base             | 0.12                  |                           | 0.14                          |                                   | 1.0                  | 120                        | 3                      | 0.95
+C1    | D1     | heat | Base             | 0.05                  |                           | 0.06                          |                                   | 15.0                 |                             |                        | 0.90
+E1    | F2     | cool | Base             | 0.08                  |                           | 0.09                          |                                   | 1.0                  | 90                         | 7                      | 0.92
 
 
 ### Storages table
@@ -487,7 +503,6 @@ diversionfactor | x | The magnitude of the side stream compared to main input
 vom_cost | x | The variable cost arising from the side stream 
 
 
-
 ### Modelspec table
 
 The **modelspec.xlsx** file contains five sheets but only two of them are normally needed by the user. **params_1d_datetime** contain the following data about the model time horizon:
@@ -500,7 +515,9 @@ parameter_name | x | either `model_start` or `model_end`
 alternative_name | x | The alternative which the given values refer to (normally `Base`)
 parameter_value | x | The model start or end time in YYYY-MM-DDTHH\:mm\:ss format
 
-In other words, here you adjust which parts of the given time series are used for optimization. **params_1d_durations** sheet contain data about the time resolution used by optimization. Normally it contains two rows. One of the rows determines the time resolution used in the day-to-day optimization of the system. The other defines how often investments can be made. Presently SiteOpt supports only a single investment for each entity, so the time resolution for investments should be longer than the model horizon.
+In other words, here you adjust which parts of the given time series are used for optimization. As suggested by the sheet name, the values are given as datetimes. The longer the model horizon, the more reliable the results will be. Notice that the time series which you use must cover the model horizon.
+
+**params_1d_durations** sheet contain data about the time resolution used by optimization. Normally it contains two rows. One of the rows determines the time resolution used in the day-to-day optimization of the system. The other defines how often investments can be made. Presently SiteOpt supports only a single investment for each entity, so the time resolution for investments should be longer than the model horizon.
 
 Column    | Required | Description
  -------------|----------|----------
@@ -510,7 +527,7 @@ parameter_name | x | enter text `resolution`
 lternative_name | x | The alternative which the given values refer to (normally `Base`)
 parameter_value | x | The model time resolution (normally 1 hour `1 h`for `myblock` and 1 year `1 Y` for `myinvestmentblock`
 
-It is suggested that you keep the values as  `1 h`for `myblock` but you may increase the value to several hours to speed up computation. For `myinvestmentblock` you can use e.g. `1 Y`.
+It is suggested that you keep the values as `1 h`for `myblock` but you may increase the value to several hours to speed up computation. For `myinvestmentblock` you can use e.g. `1 Y` (keep it longer than the model horizon).
 
 ### Scenarios table 
 
@@ -536,7 +553,7 @@ You will need different types of data for different parameter indices and values
 
 For datetimes such as time stamps the recommended format is ISO8601 (e.g. 2020-03-01T01:00). In case of timeseries, the actual timeseries data should be placed in a CSV file (text file where column are separated by commas) in the input data folder (same folder as the referencing Excel file). If you use the SiteOpt web application, there is a button which allows you to select a CSV file on your computer and upload it. The file should have two columns which have column titles "time" and "value". File name should have the format ts_ + time series name + .csv. For example if you write ts:elec7 in the input data table, file name ts_elec7.csv is expected. Note that SiteOpt does not make daylight saving time adjustments.
 
-![Basic example](images/timeseries.svg){title="Example time series file. Columns should be separated by commas."}
+![Example time series file](images/timeseries.svg){title="Example time series file. Columns should be separated by commas."}
 
 For durations the data should be entered in format xU where x is an integer and U is either Y (for year), M (for month), D (for day), h (for hour), m (for minute), or s (for second). For example "60m".
 
