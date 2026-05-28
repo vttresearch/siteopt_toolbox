@@ -450,6 +450,8 @@ efficiency |  | Transfer efficiency (e.g. 0.95 meaning 95 %) dictates how much o
 
 It is important that you keep in mind the choices for capacity (e.g. connection_capacity) and energy variables (e.g. connection_flow_cost).
 
+The following shows an example connections table. For example node A1 is connected to node B3 in electricity grid. It is a connection which can be dimensioned by the tool, with maximum 3 subunits, each having a capacity of 1 power unit.
+
 node1 | node2 | grid | alternative_name | connection_flow_cost | connection_flow_cost.mul | connection_flow_cost_reverse | connection_flow_cost_reverse.mul | connection_capacity | connection_investment_cost | candidate_connections | efficiency
 ------|--------|------|------------------|-----------------------|---------------------------|-------------------------------|-----------------------------------|----------------------|-----------------------------|------------------------|-----------
 A1    | B3     | elec | Base             | 0.12                  |                           | 0.14                          |                                   | 1.0                  | 120                        | 3                      | 0.95
