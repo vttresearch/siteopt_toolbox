@@ -105,7 +105,7 @@ function summarizeresults(url_in::Union{String, Nothing},
                 elseif val2["type"] == "connection_flow"
                     a = result_connection_flow(db_out, weight, val2["connection"], val2["node"], stoch_scen, scenario)
                 elseif val2["type"] == "connection_flow_cost"
-                    a = result_connection_flow_costs(url_in, url_out, val2["connection"], val2["node"], scenario)
+                    a = result_connection_flow_costs(url_in, url_out, weight, val2["connection"], val2["node"], get(val2, "direction", "to_node"), stoch_scen, scenario)
                 elseif val2["type"] == "unit_investment_cost"
                     a = result_unit_investment_costs(url_in, url_out, val2["unit"], scenario)
                 elseif val2["type"] == "connection_investment_cost"
@@ -198,7 +198,7 @@ function result_connection_flow_costs(url_in::String, url_out::String,
 
     for s in scenario
         v = get_parameter_values_scenario(url_in, "connection__to_node", 
-            [con, node], "connection_flow_cost", s)
+            [con, node], "connection_flow_cost", bare_scenario(s))
         select!(v, :value)
         insertcols!(v, :scenario => s)
         a = vcat(a,v)
@@ -211,6 +211,32 @@ function result_connection_flow_costs(url_in::String, url_out::String,
     
     ab = innerjoin(a,b, on = :scenario => :alternative)
     transform!(ab, [:value_a, :value] => ByRow((a, b) -> tssum(a * b)) => :value)
+    
+    return select(ab, :scenario, :entity, :value)
+end
+
+function result_connection_flow_costs(url_in::String, url_out::String, weight::Union{TimeSeries,Nothing},
+    con::String, node::String,  direction::String, stoch_scen::String, scenario::Vector{String})
+
+    a = DataFrame(scenario = [], value= [])
+
+    weight = something(weight, 1.0)
+
+    for s in scenario
+        v = get_parameter_values_scenario(url_in, "connection__" * direction, 
+            [con, node], "connection_flow_cost", s)
+        select!(v, :value)
+        insertcols!(v, :scenario => s)
+        a = vcat(a,v)
+    end
+        
+    rename!(a, :value => :value_a)
+
+    b = get_parameter_values(url_out, "report__connection__node__direction__stochastic_scenario", 
+        ["report1", con, node, direction, stoch_scen], "connection_flow")
+    
+    ab = innerjoin(a,b, on = :scenario => :alternative)
+    transform!(ab, [:value_a, :value] => ByRow((a, b) -> tssum(a * b * weight)) => :value)
     
     return select(ab, :scenario, :entity, :value)
 end

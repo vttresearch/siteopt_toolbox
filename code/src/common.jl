@@ -515,7 +515,7 @@ The function returns scenario name without the suffixes added by Spine TOolbox.
 """
 function bare_scenario(s::String)
     if occursin("__", s)
-        return split(s, "__")[1]
+        return String(split(s, "__")[1])
     else
         return s
     end
