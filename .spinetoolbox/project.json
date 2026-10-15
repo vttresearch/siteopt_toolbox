@@ -871,7 +871,7 @@
             "description": "",
             "x": 465.04130765617765,
             "y": -1096.1975122001902,
-            "specification": "Load Template (local)",
+            "specification": "Load template",
             "execute_in_work": true,
             "cmd_line_args": [
                 {

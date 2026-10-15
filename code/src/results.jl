@@ -224,7 +224,7 @@ function result_connection_flow_costs(url_in::String, url_out::String, weight::U
 
     for s in scenario
         v = get_parameter_values_scenario(url_in, "connection__" * direction, 
-            [con, node], "connection_flow_cost", s)
+            [con, node], "connection_flow_cost", bare_scenario(s))
         select!(v, :value)
         insertcols!(v, :scenario => s)
         a = vcat(a,v)

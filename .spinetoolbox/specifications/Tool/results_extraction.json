@@ -2,10 +2,7 @@
     "name": "Results extraction",
     "tooltype": "julia",
     "includes": [
-        "conv_results.jl",
-        "db.jl",
-        "common.jl",
-        "results.jl"
+        "conv_results.jl"
     ],
     "description": "",
     "inputfiles": [],

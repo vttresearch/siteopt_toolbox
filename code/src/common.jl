@@ -510,7 +510,8 @@ end
 """
     bare_scenario(s)
 
-The function returns scenario name without the suffixes added by Spine TOolbox.
+    The function returns scenario name without the suffixes added by Spine Toolbox.
+    E.g., Base__Run_Spineopt@2026-07-12T00:30:00 becomes Base.
 
 """
 function bare_scenario(s::String)
