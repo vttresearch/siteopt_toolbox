@@ -1,0 +1,42 @@
+ 
+/* Better table styling for Material MkDocs */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0;
+  font-size: 1.00em;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 10px 12px;
+  text-align: left;
+}
+
+th {
+  background-color: #f5f5f5;
+  font-weight: 600;
+}
+
+tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+tr:hover {
+  background-color: #f0f8ff; /* subtle highlight on hover */
+}
+
+/* Make tables scrollable on small screens */
+.table-wrapper {
+  overflow-x: auto;
+}
+
+/* Increase table font size */
+.md-typeset table {
+    font-size: 1.0rem; /* adjust to taste */
+}
+
+/* Optional: increase header size too */
+.md-typeset table th {
+    font-size: 0.9rem;
+}
